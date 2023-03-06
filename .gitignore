@@ -1,1 +1,6 @@
 Plugins/
+.vs/
+Intermediate/
+Saved/
+*.sln
+.vsconfig
