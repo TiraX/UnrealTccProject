@@ -1,5 +1,6 @@
 Plugins/
 .vs/
+Binaries/
 Intermediate/
 Saved/
 *.sln
