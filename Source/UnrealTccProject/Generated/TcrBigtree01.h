@@ -30,7 +30,11 @@ public:
 
 	virtual void Execute(UTccNode* InNode) override;
 
-	UPROPERTY()
-	UTccNode* tcc_sphere1;
+	// Width
+	UPROPERTY(EditAnywhere)
+	float W = 2.000000f;
+
+	UPROPERTY(Transient)
+	UTccNode* tcc_sphere1 = nullptr;
 
 };

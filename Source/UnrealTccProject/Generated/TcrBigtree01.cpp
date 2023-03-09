@@ -11,6 +11,8 @@
 void UTcrBigtree01::Execute(UTccNode* InNode) 
 {
 	{
+		UTccSphere* Define = Cast<UTccSphere>(tcc_sphere1->GetDefine());
+		Define->Rad = FVector3f(W, 0.500000f, 0.500000f);
 		tcc_sphere1->Cook();
 	}
 	InNode->SetGeoResult(OUT_BigTree_01, tcc_sphere1->GetGeoResult(0));
