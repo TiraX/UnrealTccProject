@@ -7,6 +7,7 @@
 {
 	MaxInputs = 0;
 	tcc_sphere1 = UTccNode::CreateNodeWithDefine<UTccSphere>(this, TEXT("tcc_sphere1"));
+	tcc_unreal_material1 = UTccNode::CreateNodeWithDefine<UTccUnrealMaterial>(this, TEXT("tcc_unreal_material1"));
 }
 void UTcrBigtree01::Execute(UTccNode* InNode) 
 {
@@ -15,6 +16,12 @@ void UTcrBigtree01::Execute(UTccNode* InNode)
 		Define->Rad = FVector3f(W, 0.500000f, 0.500000f);
 		tcc_sphere1->Cook();
 	}
-	InNode->SetGeoResult(OUT_BigTree_01, tcc_sphere1->GetGeoResult(0));
+	{
+		tcc_unreal_material1->SetInput(0, tcc_sphere1);
+		UTccUnrealMaterial* Define = Cast<UTccUnrealMaterial>(tcc_unreal_material1->GetDefine());
+		Define->MatPath = TEXT("/Game/MI_Red.MI_Red");
+		tcc_unreal_material1->Cook();
+	}
+	InNode->SetGeoResult(OUT_BigTree_01, tcc_unreal_material1->GetGeoResult(0));
 }
 

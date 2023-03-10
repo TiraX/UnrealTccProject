@@ -17,7 +17,7 @@ class UNREALTCCPROJECT_API UTcrBigtree01 : public UTccRecipeDefine
 public:
 	enum EOutputs
 	{
-		OUT_BigTree_01,  // From tcc_sphere1
+		OUT_BigTree_01,  // From tcc_unreal_material1
 		OUT_Count,
 	};
 
@@ -36,5 +36,8 @@ public:
 
 	UPROPERTY(Transient)
 	UTccNode* tcc_sphere1 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcc_unreal_material1 = nullptr;
 
 };
