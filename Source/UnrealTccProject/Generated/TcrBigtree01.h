@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "TccNode.h"
 #include "TccRecipeDefine.h"
-#include "Vex.h"
-#include "HScript.h"
 #include "TccRamp.h"
 #include "TcrBigtree01.generated.h"
 
@@ -17,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrBigtree01 : public UTccRecipeDefine
 public:
 	enum EOutputs
 	{
-		OUT_BigTree_01,  // From tcc_unreal_material1
+		OUT_BigTree_01,  // From merge_trunk_and_leaf
 		OUT_Count,
 	};
 
@@ -35,9 +33,45 @@ public:
 	float W = 2.000000f;
 
 	UPROPERTY(Transient)
-	UTccNode* tcc_sphere1 = nullptr;
+	UTccNode* tcr_trunk_generator1 = nullptr;
 
 	UPROPERTY(Transient)
-	UTccNode* tcc_unreal_material1 = nullptr;
+	UTccNode* root = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcr_branch_generator1 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcr_branch_generator2 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcc_merge1 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcr_tree_skin1 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* pack_trunk = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* for_variation_number = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* calc_seed = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcr_bigtree01_subbranches1 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* pack_branch_instance = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* add_instance_attrib = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* tcr_leaf_generator_with_variations2 = nullptr;
+
+	UPROPERTY(Transient)
+	UTccNode* merge_trunk_and_leaf = nullptr;
 
 };
