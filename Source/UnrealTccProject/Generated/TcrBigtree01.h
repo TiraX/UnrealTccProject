@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrBigtree01 : public UTccRecipeDefine
 public:
 	enum EOutputs
 	{
-		OUT_BigTree_01,  // From tcc_unreal_material1
+		OUT_BigTree_01,  // From merge_trunk_and_leaf
 		OUT_Count,
 	};
 
@@ -27,15 +27,36 @@ public:
 	UTcrBigtree01() ;
 
 	virtual FTccNodePtr CreateNode() override;
+	virtual void SyncParams(FTccNodePtr InNode) override;
 
 	// Width
 	UPROPERTY(EditAnywhere)
 	float W = 2.000000f;
 
+	// Yaw
+	UPROPERTY(EditAnywhere)
+	float Yaw = 137.500000f;
+
+	// Pitch
+	UPROPERTY(EditAnywhere)
+	float Pitch = 0.000000f;
+
+	// Rotate
+	UPROPERTY(EditAnywhere)
+	FVector3f R = FVector3f(0.000000f, 0.000000f, 0.000000f);
+
 };
 
-class FTccSphere;
-class FTccUnrealMaterial;
+class FTcrTrunkGenerator;
+class FTcrBranchGenerator;
+class FTccMerge;
+class FTcrTreeSkin;
+class FTccForBlock;
+class FTccVex;
+class FTcrBigtree01Subbranches;
+class FTccPack;
+class FTcrLeafGeneratorWithVariations;
+class FTccUnpack;
 class UNREALTCCPROJECT_API FTcrBigtree01 : public FTccNode
 {
 public:
@@ -47,9 +68,44 @@ public:
 	// Width
 	float W = 2.000000f;
 
-	FTccSphere* tcc_sphere1 = nullptr;
+	// Yaw
+	float Yaw = 137.500000f;
 
-	FTccUnrealMaterial* tcc_unreal_material1 = nullptr;
+	// Pitch
+	float Pitch = 0.000000f;
+
+	// Rotate
+	FVector3f R = FVector3f(0.000000f, 0.000000f, 0.000000f);
+
+	FTcrTrunkGenerator* tcr_trunk_generator1 = nullptr;
+
+	FTcrBranchGenerator* root = nullptr;
+
+	FTcrBranchGenerator* tcr_branch_generator1 = nullptr;
+
+	FTcrBranchGenerator* tcr_branch_generator2 = nullptr;
+
+	FTccMerge* tcc_merge1 = nullptr;
+
+	FTcrTreeSkin* tcr_tree_skin1 = nullptr;
+
+	FTccForBlock* for_variation_number = nullptr;
+
+	FTccVex* calc_seed = nullptr;
+
+	FTcrBigtree01Subbranches* tcr_bigtree01_subbranches1 = nullptr;
+
+	FTccPack* pack_branch_instance = nullptr;
+
+	FTccVex* add_instance_attrib = nullptr;
+
+	FTcrLeafGeneratorWithVariations* tcr_leaf_generator_with_variations2 = nullptr;
+
+	FTccUnpack* tcc_unpack2 = nullptr;
+
+	FTccUnpack* tcc_unpack3 = nullptr;
+
+	FTccMerge* merge_trunk_and_leaf = nullptr;
 
 };
 
