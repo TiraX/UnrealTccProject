@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrBigtree01 : public UTccRecipeDefine
 public:
 	enum EOutputs
 	{
-		OUT_BigTree_01,  // From merge_trunk_and_leaf
+		OUT_BigTree_01,  // From tcr_leaf_generator_with_variations2
 		OUT_Count,
 	};
 
@@ -49,14 +49,11 @@ public:
 
 class FTcrTrunkGenerator;
 class FTcrBranchGenerator;
-class FTccMerge;
-class FTcrTreeSkin;
 class FTccForBlock;
 class FTccVex;
 class FTcrBigtree01Subbranches;
 class FTccPack;
 class FTcrLeafGeneratorWithVariations;
-class FTccUnpack;
 class UNREALTCCPROJECT_API FTcrBigtree01 : public FTccNode
 {
 public:
@@ -79,15 +76,7 @@ public:
 
 	FTcrTrunkGenerator* tcr_trunk_generator1 = nullptr;
 
-	FTcrBranchGenerator* root = nullptr;
-
 	FTcrBranchGenerator* tcr_branch_generator1 = nullptr;
-
-	FTcrBranchGenerator* tcr_branch_generator2 = nullptr;
-
-	FTccMerge* tcc_merge1 = nullptr;
-
-	FTcrTreeSkin* tcr_tree_skin1 = nullptr;
 
 	FTccForBlock* for_variation_number = nullptr;
 
@@ -100,12 +89,6 @@ public:
 	FTccVex* add_instance_attrib = nullptr;
 
 	FTcrLeafGeneratorWithVariations* tcr_leaf_generator_with_variations2 = nullptr;
-
-	FTccUnpack* tcc_unpack2 = nullptr;
-
-	FTccUnpack* tcc_unpack3 = nullptr;
-
-	FTccMerge* merge_trunk_and_leaf = nullptr;
 
 };
 

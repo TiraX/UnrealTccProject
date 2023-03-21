@@ -25,6 +25,10 @@
 		{
 			"Name": "ComputeFramework",
 			"Enabled": true
+		},
+		{
+			"Name": "RenderDocPlugin",
+			"Enabled": true
 		}
 	]
 }
