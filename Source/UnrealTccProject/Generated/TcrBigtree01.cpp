@@ -47,6 +47,8 @@ void UTcrBigtree01::SyncParams(FTccNodePtr InNode)
 	tcc_merge1->InitMultiRefs(false); // RefCount = 1
 	tcr_tree_skin1 = new FTcrTreeSkin();
 	tcr_tree_skin1->InitMultiRefs(false); // RefCount = 1
+	tcc_unreal_material5 = new FTccUnrealMaterial();
+	tcc_unreal_material5->InitMultiRefs(false); // RefCount = 1
 	pack_trunk = new FTccPack();
 	pack_trunk->InitMultiRefs(false); // RefCount = 1
 	for_variation_number = new FTccForBlock();
@@ -56,6 +58,8 @@ void UTcrBigtree01::SyncParams(FTccNodePtr InNode)
 		calc_seed->InitMultiRefs(false); // RefCount = 1
 		tcr_bigtree01_subbranches1 = new FTcrBigtree01Subbranches();
 		tcr_bigtree01_subbranches1->InitMultiRefs(false); // RefCount = 1
+		tcc_unreal_material4 = new FTccUnrealMaterial();
+		tcc_unreal_material4->InitMultiRefs(false); // RefCount = 1
 		pack_branch_instance = new FTccPack();
 		pack_branch_instance->InitMultiRefs(false); // RefCount = 1
 		add_instance_attrib = new FTccVex();
@@ -73,10 +77,12 @@ void UTcrBigtree01::SyncParams(FTccNodePtr InNode)
 	delete tcr_branch_generator2; 
 	delete tcc_merge1; 
 	delete tcr_tree_skin1; 
+	delete tcc_unreal_material5; 
 	delete pack_trunk; 
 	delete for_variation_number; 
 		delete calc_seed; 
 		delete tcr_bigtree01_subbranches1; 
+		delete tcc_unreal_material4; 
 		delete pack_branch_instance; 
 		delete add_instance_attrib; 
 	delete tcr_leaf_generator_with_variations2; 
@@ -183,7 +189,12 @@ void FTcrBigtree01::Cook()
 		tcr_tree_skin1->Cook();
 	}
 	{
-		pack_trunk->SetInput(0, tcr_tree_skin1);
+		tcc_unreal_material5->SetInput(0, tcr_tree_skin1);
+		tcc_unreal_material5->MatPath = TEXT("/Game/MI_Red.MI_Red");
+		tcc_unreal_material5->Cook();
+	}
+	{
+		pack_trunk->SetInput(0, tcc_unreal_material5);
 		pack_trunk->Cook();
 	}
 	{
@@ -220,7 +231,13 @@ void FTcrBigtree01::Cook()
 				}
 				
 				{
-					pack_branch_instance->SetInput(0, tcr_bigtree01_subbranches1);
+					tcc_unreal_material4->SetInput(0, tcr_bigtree01_subbranches1);
+					tcc_unreal_material4->MatPath = TEXT("/Game/MI_Red.MI_Red");
+					tcc_unreal_material4->Cook();
+				}
+				
+				{
+					pack_branch_instance->SetInput(0, tcc_unreal_material4);
 					pack_branch_instance->Cook();
 				}
 				

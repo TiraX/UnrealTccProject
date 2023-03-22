@@ -51,6 +51,7 @@ class FTcrTrunkGenerator;
 class FTcrBranchGenerator;
 class FTccMerge;
 class FTcrTreeSkin;
+class FTccUnrealMaterial;
 class FTccPack;
 class FTccForBlock;
 class FTccVex;
@@ -88,6 +89,8 @@ public:
 
 	FTcrTreeSkin* tcr_tree_skin1 = nullptr;
 
+	FTccUnrealMaterial* tcc_unreal_material5 = nullptr;
+
 	FTccPack* pack_trunk = nullptr;
 
 	FTccForBlock* for_variation_number = nullptr;
@@ -95,6 +98,8 @@ public:
 	FTccVex* calc_seed = nullptr;
 
 	FTcrBigtree01Subbranches* tcr_bigtree01_subbranches1 = nullptr;
+
+	FTccUnrealMaterial* tcc_unreal_material4 = nullptr;
 
 	FTccPack* pack_branch_instance = nullptr;
 
