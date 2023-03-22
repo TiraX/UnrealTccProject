@@ -50,6 +50,8 @@ void UTcrLeafGeneratorWithVariations::SyncParams(FTccNodePtr InNode)
 	foreach_branch2->InitInputsCount(2);
 		add_density1 = new FTccVex();
 		add_density1->InitMultiRefs(false); // RefCount = 1
+		calc_seed = new FTccVex();
+		calc_seed->InitMultiRefs(false); // RefCount = 1
 		tcc_scatter5 = new FTccScatter();
 		tcc_scatter5->InitMultiRefs(false); // RefCount = 1
 		delete_density2 = new FTccAttribDelete();
@@ -89,6 +91,7 @@ void UTcrLeafGeneratorWithVariations::SyncParams(FTccNodePtr InNode)
 	delete tcc_attrib_promote1; 
 	delete foreach_branch2; 
 		delete add_density1; 
+		delete calc_seed; 
 		delete tcc_scatter5; 
 		delete delete_density2; 
 		delete tcc_sort3; 
@@ -185,10 +188,25 @@ void FTcrLeafGeneratorWithVariations::Cook()
 				}
 				
 				{
-					tcc_scatter5->SetInput(0, add_density1);
+					calc_seed->SetInput(0, add_density1);
+					calc_seed->SetInput(1, nullptr);
+					calc_seed->Cook();
+					{
+						FTccGeometryPtr Geo0 = calc_seed->GetGeoResult(0);
+						FTccAttribPtr attr_seed = Geo0->AddDetailAttrib("seed", FTccAttrib::EAttrType::I);
+						const int32 seed = BranchSeed;
+						const int32 iter = _iteration;
+						int32& _seed = attr_seed->GetData<int32>()[0];
+						_seed = seed + iter + 712;
+					}
+				}
+				
+				{
+					tcc_scatter5->SetInput(0, calc_seed);
+					FTccGeometryPtr Geo0 = tcc_scatter5->GetInput(0)->GetGeoResult(0);
 					tcc_scatter5->Usedensityattrib = 1;
 					tcc_scatter5->Npts = int32(Npts);
-					tcc_scatter5->ScatterSeed = int32(BranchSeed);
+					tcc_scatter5->ScatterSeed = int32(hs_detail(Geo0, "seed", 0));
 					tcc_scatter5->Cook();
 				}
 				

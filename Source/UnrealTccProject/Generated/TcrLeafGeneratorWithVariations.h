@@ -134,6 +134,8 @@ public:
 
 	FTccVex* add_density1 = nullptr;
 
+	FTccVex* calc_seed = nullptr;
+
 	FTccScatter* tcc_scatter5 = nullptr;
 
 	FTccAttribDelete* delete_density2 = nullptr;
