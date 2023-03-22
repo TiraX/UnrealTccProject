@@ -99,6 +99,8 @@ public:
 
 	FTcrBigtree01Subbranches* tcr_bigtree01_subbranches1 = nullptr;
 
+	FTccVex* calc_name = nullptr;
+
 	FTccUnrealMaterial* tcc_unreal_material4 = nullptr;
 
 	FTccPack* pack_branch_instance = nullptr;
