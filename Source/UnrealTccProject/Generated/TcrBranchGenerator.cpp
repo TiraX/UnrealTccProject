@@ -246,11 +246,11 @@ void FTcrBranchGenerator::Cook()
 					add_density_calc_dir->Cook();
 					{
 						FTccGeometryPtr Geo0 = add_density_calc_dir->GetGeoResult(0);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_density = Geo0->AddPointAttrib("density", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_tangent = Geo0->AddPointAttrib("tangent", FTccAttrib::EAttrType::F3);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+						FTccAttribPtr attr_density = Geo0->AddPointAttrib("density", ETccAttribType::F);
+						FTccAttribPtr attr_tangent = Geo0->AddPointAttrib("tangent", ETccAttribType::F3);
 						const FVector2f percent = Gpercent;
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -322,9 +322,9 @@ void FTcrBranchGenerator::Cook()
 					calc_rotation1->Cook();
 					{
 						FTccGeometryPtr Geo0 = calc_rotation1->GetGeoResult(0);
-						FTccAttribPtr attr_tangent = Geo0->AddPointAttrib("tangent", FTccAttrib::EAttrType::F3);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_orient = Geo0->AddPointAttrib("orient", FTccAttrib::EAttrType::F4);
+						FTccAttribPtr attr_tangent = Geo0->AddPointAttrib("tangent", ETccAttribType::F3);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+						FTccAttribPtr attr_orient = Geo0->AddPointAttrib("orient", ETccAttribType::F4);
 						const float angle_step = vex_radians(Yaw);
 						const FVector2f pitch_r = vex_radians(PitchR);
 						const int32 gseed = BranchSeed;
@@ -336,7 +336,7 @@ void FTcrBranchGenerator::Cook()
 						const float num_pt_inv = 1.0f / vex_npoints(Geo0);
 						const float max_u = vex_detail(Geo0, "max_curveu");
 						const float min_u = vex_detail(Geo0, "min_curveu");
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -387,9 +387,9 @@ void FTcrBranchGenerator::Cook()
 					calc_scale->Cook();
 					{
 						FTccGeometryPtr Geo0 = calc_scale->GetGeoResult(0);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_pscale = Geo0->AddPointAttrib("pscale", FTccAttrib::EAttrType::F);
-						const int32 _numpt = Geo0->GetPointsCount();
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+						FTccAttribPtr attr_pscale = Geo0->AddPointAttrib("pscale", ETccAttribType::F);
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -421,8 +421,8 @@ void FTcrBranchGenerator::Cook()
 		{
 			FTccGeometryPtr Geo0 = add_primattrib_level->GetGeoResult(0);
 			FTccGeometryPtr Geo1 = GetInput(0)->GetGeoResult(0);
-			FTccAttribPtr attr_level = Geo0->AddPrimAttrib("level", FTccAttrib::EAttrType::I);
-			const int32 _numprim = Geo0->GetPrimsCount();
+			FTccAttribPtr attr_level = Geo0->AddPrimAttrib("level", ETccAttribType::I);
+			const int32 _numprim = Geo0->GetNumPrims();
 			for(int32 i = 0; i < _numprim; i++)
 			{
 				const int32 _primnum = i;
@@ -437,10 +437,10 @@ void FTcrBranchGenerator::Cook()
 		calc_radius->Cook();
 		{
 			FTccGeometryPtr Geo0 = calc_radius->GetGeoResult(0);
-			FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-			FTccAttribPtr attr_radius = Geo0->AddPointAttrib("radius", FTccAttrib::EAttrType::F);
+			FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+			FTccAttribPtr attr_radius = Geo0->AddPointAttrib("radius", ETccAttribType::F);
 			const float radius_scale = RadiusScale;
-			const int32 _numpt = Geo0->GetPointsCount();
+			const int32 _numpt = Geo0->GetNumPoints();
 			for(int32 i = 0; i < _numpt; i++)
 			{
 				const int32 _ptnum = i;
@@ -483,11 +483,11 @@ void FTcrBranchGenerator::Cook()
 					curl_noise->Cook();
 					{
 						FTccGeometryPtr Geo0 = curl_noise->GetGeoResult(0);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
 						const float freq = Freq;
 						const float amp = Amp;
 						const int32 seed = BranchSeed;
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -521,7 +521,7 @@ void FTcrBranchGenerator::Cook()
 		inc_curr_level->Cook();
 		{
 			FTccGeometryPtr Geo0 = inc_curr_level->GetGeoResult(0);
-			FTccAttribPtr attr_curr_level = Geo0->AddDetailAttrib("curr_level", FTccAttrib::EAttrType::I);
+			FTccAttribPtr attr_curr_level = Geo0->AddDetailAttrib("curr_level", ETccAttribType::I);
 			int32& _curr_level = attr_curr_level->GetData<int32>()[0];
 			_curr_level += 1;
 		}

@@ -40,8 +40,12 @@ void UTcrBigtree01Subbranches::SyncParams(FTccNodePtr InNode)
 	sub_branch1->InitMultiRefs(true); // RefCount = 2
 	sub_tree_skin = new FTcrTreeSkin();
 	sub_tree_skin->InitMultiRefs(false); // RefCount = 1
+	material_red = new FTccUnrealMaterial();
+	material_red->InitMultiRefs(false); // RefCount = 1
 	tcr_simple_leaf1 = new FTcrSimpleLeaf();
 	tcr_simple_leaf1->InitMultiRefs(false); // RefCount = 1
+	material_green = new FTccUnrealMaterial();
+	material_green->InitMultiRefs(false); // RefCount = 1
 	sub_leaf = new FTcrLeafGenerator();
 	sub_leaf->InitMultiRefs(false); // RefCount = 1
 	tcc_merge1 = new FTccMerge();
@@ -55,7 +59,9 @@ void UTcrBigtree01Subbranches::SyncParams(FTccNodePtr InNode)
 	delete trunk_laydown; 
 	delete sub_branch1; 
 	delete sub_tree_skin; 
+	delete material_red; 
 	delete tcr_simple_leaf1; 
+	delete material_green; 
 	delete sub_leaf; 
 	delete tcc_merge1; 
 	delete tcc_unpack1; 
@@ -112,6 +118,11 @@ void FTcrBigtree01Subbranches::Cook()
 		sub_tree_skin->Cook();
 	}
 	{
+		material_red->SetInput(0, sub_tree_skin);
+		material_red->MatPath = TEXT("/Game/MI_Red.MI_Red");
+		material_red->Cook();
+	}
+	{
 		tcr_simple_leaf1->Shape = ETccRampInterp::Linear;
 		tcr_simple_leaf1->Shape.ResizeRampPoints(7);
 		tcr_simple_leaf1->Shape.AddRampPoint(0.0000f, 0.0885f);
@@ -125,8 +136,13 @@ void FTcrBigtree01Subbranches::Cook()
 		tcr_simple_leaf1->Cook();
 	}
 	{
+		material_green->SetInput(0, tcr_simple_leaf1);
+		material_green->MatPath = TEXT("/Game/M_DefaultLit.M_DefaultLit");
+		material_green->Cook();
+	}
+	{
 		sub_leaf->SetInput(0, sub_branch1);
-		sub_leaf->SetInput(1, tcr_simple_leaf1);
+		sub_leaf->SetInput(1, material_green);
 		sub_leaf->ScaleRamp = ETccRampInterp::Linear;
 		sub_leaf->ScaleRamp.ResizeRampPoints(2);
 		sub_leaf->ScaleRamp.AddRampPoint(0.0000f, 1.0000f);
@@ -145,7 +161,7 @@ void FTcrBigtree01Subbranches::Cook()
 		sub_leaf->Cook();
 	}
 	{
-		tcc_merge1->SetInput(0, sub_tree_skin);
+		tcc_merge1->SetInput(0, material_red);
 		tcc_merge1->SetInput(1, sub_leaf);
 		tcc_merge1->Cook();
 	}

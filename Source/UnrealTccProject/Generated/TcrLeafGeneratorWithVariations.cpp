@@ -147,11 +147,11 @@ void FTcrLeafGeneratorWithVariations::Cook()
 					add_density1->Cook();
 					{
 						FTccGeometryPtr Geo0 = add_density1->GetGeoResult(0);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_density = Geo0->AddPointAttrib("density", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_branch_dir = Geo0->AddPointAttrib("branch_dir", FTccAttrib::EAttrType::F3);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+						FTccAttribPtr attr_density = Geo0->AddPointAttrib("density", ETccAttribType::F);
+						FTccAttribPtr attr_branch_dir = Geo0->AddPointAttrib("branch_dir", ETccAttribType::F3);
 						const FVector2f percent = Gpercent;
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -193,7 +193,7 @@ void FTcrLeafGeneratorWithVariations::Cook()
 					calc_seed->Cook();
 					{
 						FTccGeometryPtr Geo0 = calc_seed->GetGeoResult(0);
-						FTccAttribPtr attr_seed = Geo0->AddDetailAttrib("seed", FTccAttrib::EAttrType::I);
+						FTccAttribPtr attr_seed = Geo0->AddDetailAttrib("seed", ETccAttribType::I);
 						const int32 seed = BranchSeed;
 						const int32 iter = _iteration;
 						int32& _seed = attr_seed->GetData<int32>()[0];
@@ -248,8 +248,8 @@ void FTcrLeafGeneratorWithVariations::Cook()
 								default_dir->Cook();
 								{
 									FTccGeometryPtr Geo0 = default_dir->GetGeoResult(0);
-									FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", FTccAttrib::EAttrType::F);
-									const int32 _numpt = Geo0->GetPointsCount();
+									FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", ETccAttribType::F);
+									const int32 _numpt = Geo0->GetNumPoints();
 									for(int32 i = 0; i < _numpt; i++)
 									{
 										const int32 _ptnum = i;
@@ -273,8 +273,8 @@ void FTcrLeafGeneratorWithVariations::Cook()
 								mirror_dir_pos->Cook();
 								{
 									FTccGeometryPtr Geo0 = mirror_dir_pos->GetGeoResult(0);
-									FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", FTccAttrib::EAttrType::F);
-									const int32 _numpt = Geo0->GetPointsCount();
+									FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", ETccAttribType::F);
+									const int32 _numpt = Geo0->GetNumPoints();
 									for(int32 i = 0; i < _numpt; i++)
 									{
 										const int32 _ptnum = i;
@@ -289,8 +289,8 @@ void FTcrLeafGeneratorWithVariations::Cook()
 								mirror_dir_neg->Cook();
 								{
 									FTccGeometryPtr Geo0 = mirror_dir_neg->GetGeoResult(0);
-									FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", FTccAttrib::EAttrType::F);
-									const int32 _numpt = Geo0->GetPointsCount();
+									FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", ETccAttribType::F);
+									const int32 _numpt = Geo0->GetNumPoints();
 									for(int32 i = 0; i < _numpt; i++)
 									{
 										const int32 _ptnum = i;
@@ -324,10 +324,10 @@ void FTcrLeafGeneratorWithVariations::Cook()
 					calc_rotation2->Cook();
 					{
 						FTccGeometryPtr Geo0 = calc_rotation2->GetGeoResult(0);
-						FTccAttribPtr attr_branch_dir = Geo0->AddPointAttrib("branch_dir", FTccAttrib::EAttrType::F3);
-						FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_orient = Geo0->AddPointAttrib("orient", FTccAttrib::EAttrType::F4);
+						FTccAttribPtr attr_branch_dir = Geo0->AddPointAttrib("branch_dir", ETccAttribType::F3);
+						FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", ETccAttribType::F);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+						FTccAttribPtr attr_orient = Geo0->AddPointAttrib("orient", ETccAttribType::F4);
 						const int32 gseed = BranchSeed;
 						const int32 iter = _iteration;
 						const float max_u = vex_detail(Geo0, "max_curveu");
@@ -337,7 +337,7 @@ void FTcrLeafGeneratorWithVariations::Cook()
 						const float pitch = vex_radians(Pitch);
 						const float pitch_rand = vex_radians(PitchRand);
 						const float roll = vex_radians(Roll);
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -381,12 +381,12 @@ void FTcrLeafGeneratorWithVariations::Cook()
 					apply_scale->Cook();
 					{
 						FTccGeometryPtr Geo0 = apply_scale->GetGeoResult(0);
-						FTccAttribPtr attr_pscale = Geo0->AddPointAttrib("pscale", FTccAttrib::EAttrType::F);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
+						FTccAttribPtr attr_pscale = Geo0->AddPointAttrib("pscale", ETccAttribType::F);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
 						const int32 iter = _iteration;
 						const FVector2f s = Scale;
 						const int32 along_curve = EnableScaleCurve;
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -409,10 +409,10 @@ void FTcrLeafGeneratorWithVariations::Cook()
 					{
 						FTccGeometryPtr Geo0 = add_instance_id1->GetGeoResult(0);
 						FTccGeometryPtr Geo2 = block_input1->GetGeoResult(0);
-						FTccAttribPtr attr_instance_id = Geo0->AddPointAttrib("instance_id", FTccAttrib::EAttrType::I);
+						FTccAttribPtr attr_instance_id = Geo0->AddPointAttrib("instance_id", ETccAttribType::I);
 						const int32 max_instance_id = vex_detaili(Geo2, "max_instance_id");
 						const int32 iter = _iteration;
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;

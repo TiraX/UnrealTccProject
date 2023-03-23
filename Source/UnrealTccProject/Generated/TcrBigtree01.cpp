@@ -60,8 +60,6 @@ void UTcrBigtree01::SyncParams(FTccNodePtr InNode)
 		tcr_bigtree01_subbranches1->InitMultiRefs(false); // RefCount = 1
 		calc_name = new FTccVex();
 		calc_name->InitMultiRefs(false); // RefCount = 1
-		tcc_unreal_material4 = new FTccUnrealMaterial();
-		tcc_unreal_material4->InitMultiRefs(false); // RefCount = 1
 		pack_branch_instance = new FTccPack();
 		pack_branch_instance->InitMultiRefs(false); // RefCount = 1
 		add_instance_attrib = new FTccVex();
@@ -85,7 +83,6 @@ void UTcrBigtree01::SyncParams(FTccNodePtr InNode)
 		delete calc_seed; 
 		delete tcr_bigtree01_subbranches1; 
 		delete calc_name; 
-		delete tcc_unreal_material4; 
 		delete pack_branch_instance; 
 		delete add_instance_attrib; 
 	delete tcr_leaf_generator_with_variations2; 
@@ -219,7 +216,7 @@ void FTcrBigtree01::Cook()
 					calc_seed->Cook();
 					{
 						FTccGeometryPtr Geo0 = calc_seed->GetGeoResult(0);
-						FTccAttribPtr attr_gseed = Geo0->AddDetailAttrib("gseed", FTccAttrib::EAttrType::I);
+						FTccAttribPtr attr_gseed = Geo0->AddDetailAttrib("gseed", ETccAttribType::I);
 						int32& _gseed = attr_gseed->GetData<int32>()[0];
 						int32 iter = _iteration;
 						_gseed = iter * 2 + 4;
@@ -239,7 +236,7 @@ void FTcrBigtree01::Cook()
 					calc_name->Cook();
 					{
 						FTccGeometryPtr Geo0 = calc_name->GetGeoResult(0);
-						FTccAttribPtr attr_name = Geo0->AddDetailAttrib("name", FTccAttrib::EAttrType::S);
+						FTccAttribPtr attr_name = Geo0->AddDetailAttrib("name", ETccAttribType::S);
 						FString& _name = attr_name->GetData<FString>()[0];
 						int32 iter = _iteration;
 						_name = vex_sprintf(TEXT("sub_branch%02d"), iter);
@@ -247,13 +244,7 @@ void FTcrBigtree01::Cook()
 				}
 				
 				{
-					tcc_unreal_material4->SetInput(0, calc_name);
-					tcc_unreal_material4->MatPath = TEXT("/Game/MI_Red.MI_Red");
-					tcc_unreal_material4->Cook();
-				}
-				
-				{
-					pack_branch_instance->SetInput(0, tcc_unreal_material4);
+					pack_branch_instance->SetInput(0, calc_name);
 					FTccGeometryPtr Geo0 = pack_branch_instance->GetInput(0)->GetGeoResult(0);
 					pack_branch_instance->GeoName = hs_details(Geo0, "name");
 					pack_branch_instance->Cook();
@@ -265,8 +256,8 @@ void FTcrBigtree01::Cook()
 					add_instance_attrib->Cook();
 					{
 						FTccGeometryPtr Geo0 = add_instance_attrib->GetGeoResult(0);
-						FTccAttribPtr attr_instance_id = Geo0->AddPackedGeoAttrib("instance_id", FTccAttrib::EAttrType::I);
-						const int32 _numpacked = Geo0->GetPackedGeoCount();
+						FTccAttribPtr attr_instance_id = Geo0->AddPackedGeoAttrib("instance_id", ETccAttribType::I);
+						const int32 _numpacked = Geo0->GetNumPackedGeos();
 						for(int32 i = 0; i < _numpacked; i++)
 						{
 							const int32 _packednum = i;

@@ -93,10 +93,10 @@ void FTcrSimpleLeaf::Cook()
 		leaf_shape3->Cook();
 		{
 			FTccGeometryPtr Geo0 = leaf_shape3->GetGeoResult(0);
-			FTccAttribPtr attr_uv = Geo0->AddPointAttrib("uv", FTccAttrib::EAttrType::F2);
+			FTccAttribPtr attr_uv = Geo0->AddPointAttrib("uv", ETccAttribType::F2);
 			const FVector2f s = Size;
 			const float shrink = _shrink;
-			const int32 _numpt = Geo0->GetPointsCount();
+			const int32 _numpt = Geo0->GetNumPoints();
 			for(int32 i = 0; i < _numpt; i++)
 			{
 				const int32 _ptnum = i;

@@ -101,8 +101,6 @@ public:
 
 	FTccVex* calc_name = nullptr;
 
-	FTccUnrealMaterial* tcc_unreal_material4 = nullptr;
-
 	FTccPack* pack_branch_instance = nullptr;
 
 	FTccVex* add_instance_attrib = nullptr;

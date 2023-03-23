@@ -39,6 +39,7 @@ class FTcrTrunkGenerator;
 class FTccTransform;
 class FTcrBranchGenerator;
 class FTcrTreeSkin;
+class FTccUnrealMaterial;
 class FTcrSimpleLeaf;
 class FTcrLeafGenerator;
 class FTccMerge;
@@ -62,7 +63,11 @@ public:
 
 	FTcrTreeSkin* sub_tree_skin = nullptr;
 
+	FTccUnrealMaterial* material_red = nullptr;
+
 	FTcrSimpleLeaf* tcr_simple_leaf1 = nullptr;
+
+	FTccUnrealMaterial* material_green = nullptr;
 
 	FTcrLeafGenerator* sub_leaf = nullptr;
 

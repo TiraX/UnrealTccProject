@@ -103,11 +103,11 @@ void FTcrTrunkGenerator::Cook()
 					curl_noise->Cook();
 					{
 						FTccGeometryPtr Geo0 = curl_noise->GetGeoResult(0);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
+						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
 						const float freq = Freq;
 						const float amp = Amp;
 						const int32 seed = Nseed;
-						const int32 _numpt = Geo0->GetPointsCount();
+						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
 							const int32 _ptnum = i;
@@ -137,9 +137,9 @@ void FTcrTrunkGenerator::Cook()
 		calc_radius->Cook();
 		{
 			FTccGeometryPtr Geo0 = calc_radius->GetGeoResult(0);
-			FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", FTccAttrib::EAttrType::F);
-			FTccAttribPtr attr_radius = Geo0->AddPointAttrib("radius", FTccAttrib::EAttrType::F);
-			const int32 _numpt = Geo0->GetPointsCount();
+			FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+			FTccAttribPtr attr_radius = Geo0->AddPointAttrib("radius", ETccAttribType::F);
+			const int32 _numpt = Geo0->GetNumPoints();
 			for(int32 i = 0; i < _numpt; i++)
 			{
 				const int32 _ptnum = i;
