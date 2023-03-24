@@ -29,21 +29,13 @@ public:
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
 
-	// Width
+	// Radius
 	UPROPERTY(EditAnywhere)
-	float W = 2.000000f;
+	float Radius = 3.000000f;
 
-	// Yaw
+	// Leaf Density
 	UPROPERTY(EditAnywhere)
-	float Yaw = 137.500000f;
-
-	// Pitch
-	UPROPERTY(EditAnywhere)
-	float Pitch = 0.000000f;
-
-	// Rotate
-	UPROPERTY(EditAnywhere)
-	FVector3f R = FVector3f(0.000000f, 0.000000f, 0.000000f);
+	int32 LeafDens = 4;
 
 };
 
@@ -65,17 +57,11 @@ public:
 
 	virtual void Cook() override;
 
-	// Width
-	float W = 2.000000f;
+	// Radius
+	float Radius = 3.000000f;
 
-	// Yaw
-	float Yaw = 137.500000f;
-
-	// Pitch
-	float Pitch = 0.000000f;
-
-	// Rotate
-	FVector3f R = FVector3f(0.000000f, 0.000000f, 0.000000f);
+	// Leaf Density
+	int32 LeafDens = 4;
 
 	FTcrTrunkGenerator* tcr_trunk_generator1 = nullptr;
 

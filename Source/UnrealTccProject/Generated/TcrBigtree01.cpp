@@ -26,10 +26,8 @@ FTccNodePtr UTcrBigtree01::CreateNode()
 void UTcrBigtree01::SyncParams(FTccNodePtr InNode) 
 {
 	TSharedPtr<FTcrBigtree01> Node = StaticCastSharedPtr<FTcrBigtree01>(InNode);
-	Node->W = W;
-	Node->Yaw = Yaw;
-	Node->Pitch = Pitch;
-	Node->R = R;
+	Node->Radius = Radius;
+	Node->LeafDens = LeafDens;
 }
 
  FTcrBigtree01::FTcrBigtree01() 
@@ -98,7 +96,7 @@ void FTcrBigtree01::Cook()
 		tcr_trunk_generator1->RscaleAlongCurve.AddRampPoint(0.5366f, 0.4167f);
 		tcr_trunk_generator1->RscaleAlongCurve.AddRampPoint(1.0000f, 0.3542f);
 		tcr_trunk_generator1->Length = 20.000000f;
-		tcr_trunk_generator1->Radius = 3.000000f;
+		tcr_trunk_generator1->Radius = float(Radius);
 		tcr_trunk_generator1->Segs = 20;
 		tcr_trunk_generator1->Amp = 0.315000f;
 		tcr_trunk_generator1->EnableBend = 1;
@@ -283,7 +281,7 @@ void FTcrBigtree01::Cook()
 		tcr_leaf_generator_with_variations2->ScaleRamp.AddRampPoint(0.7038f, 0.7333f);
 		tcr_leaf_generator_with_variations2->ScaleRamp.AddRampPoint(1.0000f, 0.2667f);
 		tcr_leaf_generator_with_variations2->BranchSeed = 5;
-		tcr_leaf_generator_with_variations2->Npts = 4;
+		tcr_leaf_generator_with_variations2->Npts = int32(LeafDens);
 		tcr_leaf_generator_with_variations2->Gpercent = FVector2f(0.100000f, 0.800000f);
 		tcr_leaf_generator_with_variations2->YawRange = FVector2f(15.000000f, 60.000000f);
 		tcr_leaf_generator_with_variations2->Scale = FVector2f(0.630000f, 0.630000f);
