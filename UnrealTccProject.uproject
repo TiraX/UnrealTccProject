@@ -29,6 +29,10 @@
 		{
 			"Name": "RenderDocPlugin",
 			"Enabled": true
+		},
+		{
+			"Name": "DeformerGraph",
+			"Enabled": true
 		}
 	]
 }

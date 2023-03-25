@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "TccNode.h"
-#include "TccRecipeDefine.h"
+#include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
 #include "TcrTrunkGenerator.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrTrunkGenerator : public UTccRecipeDefine
+class UNREALTCCPROJECT_API UTcrTrunkGenerator : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:

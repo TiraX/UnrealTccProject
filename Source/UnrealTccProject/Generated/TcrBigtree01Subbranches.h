@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "TccNode.h"
-#include "TccRecipeDefine.h"
+#include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
 #include "TcrBigtree01Subbranches.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrBigtree01Subbranches : public UTccRecipeDefine
+class UNREALTCCPROJECT_API UTcrBigtree01Subbranches : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:

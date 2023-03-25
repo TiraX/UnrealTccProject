@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "TccNode.h"
-#include "TccRecipeDefine.h"
+#include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
 #include "TcrLeafGenerator.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrLeafGenerator : public UTccRecipeDefine
+class UNREALTCCPROJECT_API UTcrLeafGenerator : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:
