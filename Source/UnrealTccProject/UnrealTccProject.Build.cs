@@ -12,6 +12,7 @@ public class UnrealTccProject : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
 				"UnrealTcc",
+				"ComputeFramework",
 		});
 
 		// Uncomment if you are using Slate UI
