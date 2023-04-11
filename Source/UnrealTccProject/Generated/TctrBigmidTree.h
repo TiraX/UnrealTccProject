@@ -27,7 +27,7 @@ public:
 
 	UTctrBigmidTree() ;
 
-	virtual void FillComputeGraph(UTccComputeGraph* InComputeGraph) override;
+	virtual void FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex = -1,TObjectPtr<UTexture2D> OutTexture = nullptr) override;
 
 	// Resolution
 	UPROPERTY(EditAnywhere)

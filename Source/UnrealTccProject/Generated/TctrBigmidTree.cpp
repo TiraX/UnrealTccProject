@@ -12,17 +12,15 @@
  UTctrBigmidTree::UTctrBigmidTree() 
 {
 	tct_cells_3 = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 1
-	// TexCookResults.resize(OUT_Count);
+	InitTextures(OUT_Count);
 }
-void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph) 
+void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 
 {
 	{
-		tct_cells_3->FillComputeGraph(InComputeGraph);
+		tct_cells_3->FillComputeGraph(InComputeGraph, OUT_Height_Trunk, Textures[OUT_Height_Trunk]); 
 	}
-	/*
-	TexCookResults[OUT_Height_Trunk] = tct_cells_3->GetTexResult(0);
+	// Textures[OUT_Height_Trunk] = tct_cells_3->GetTexResult(0);
 	// Send results to cook cache earlier
-	TccEngine::Get()->GetCookCache()->CacheRecipe(this); 
-	// */
+	// TccEngine::Get()->GetCookCache()->CacheRecipe(this); 
 }
 
