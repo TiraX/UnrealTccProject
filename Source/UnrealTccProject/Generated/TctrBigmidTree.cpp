@@ -14,13 +14,17 @@
 	tct_cells_3 = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 1
 	InitTextures(OUT_Count);
 }
+void UTctrBigmidTree::UpdateParameters() 
+{
+	{
+		tct_cells_3->Seed = int32(Seed);
+		tct_cells_3->Scale = int32(Scale);
+	}
+}
 void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 
 {
 	{
 		tct_cells_3->FillComputeGraph(InComputeGraph, OUT_Height_Trunk, Textures[OUT_Height_Trunk]); 
 	}
-	// Textures[OUT_Height_Trunk] = tct_cells_3->GetTexResult(0);
-	// Send results to cook cache earlier
-	// TccEngine::Get()->GetCookCache()->CacheRecipe(this); 
 }
 

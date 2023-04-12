@@ -27,11 +27,20 @@ public:
 
 	UTctrBigmidTree() ;
 
+	virtual void UpdateParameters() override;
 	virtual void FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex = -1,TObjectPtr<UTexture2D> OutTexture = nullptr) override;
 
 	// Resolution
 	UPROPERTY(EditAnywhere)
 	FIntVector2 Res = FIntVector2(2048, 2048);
+
+	// TestSeed
+	UPROPERTY(EditAnywhere)
+	int32 Seed = 0;
+
+	// TestScale
+	UPROPERTY(EditAnywhere)
+	int32 Scale = 32;
 
 	UPROPERTY(Transient)
 	UTctCells1* tct_cells_3 = nullptr;
