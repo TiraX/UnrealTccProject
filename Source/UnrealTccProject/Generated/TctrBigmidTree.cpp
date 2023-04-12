@@ -11,20 +11,31 @@
 
  UTctrBigmidTree::UTctrBigmidTree() 
 {
-	tct_cells_3 = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 1
+	InitNetworkNodes(NumNodes);
+	NetworkNodes[tct_cells_3] = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 2
+	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 1
 	InitTextures(OUT_Count);
 }
 void UTctrBigmidTree::UpdateParameters() 
 {
 	{
-		tct_cells_3->Seed = int32(Seed);
-		tct_cells_3->Scale = int32(Scale);
+		UTctCells1* _tct_cells_3 = Cast<UTctCells1>(NetworkNodes[tct_cells_3]);
+		_tct_cells_3->Seed = int32(Seed);
+		_tct_cells_3->Scale = int32(Scale);
+	}
+	{
+		UTctNormalMap* _tct_normal_map1 = Cast<UTctNormalMap>(NetworkNodes[tct_normal_map1]);
+		_tct_normal_map1->Intensity = 12.000000f;
 	}
 }
 void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 
 {
 	{
-		tct_cells_3->FillComputeGraph(InComputeGraph, OUT_Height_Trunk, Textures[OUT_Height_Trunk]); 
+		NetworkNodes[tct_cells_3]->FillComputeGraph(InComputeGraph, OUT_Height_Trunk, Textures[OUT_Height_Trunk]); 
+	}
+	{
+		NetworkNodes[tct_normal_map1]->SetInput(0, NetworkNodes[tct_cells_3]);
+		NetworkNodes[tct_normal_map1]->FillComputeGraph(InComputeGraph, OUT_Normal_Trunk, Textures[OUT_Normal_Trunk]); 
 	}
 }
 

@@ -8,7 +8,6 @@
 #include "TccRamp.h"
 #include "TctrBigmidTree.generated.h"
 
-class UTctCells1;
 UCLASS()
 class UNREALTCCPROJECT_API UTctrBigmidTree : public UTccRecipeTexDefine
 {
@@ -16,12 +15,20 @@ class UNREALTCCPROJECT_API UTctrBigmidTree : public UTccRecipeTexDefine
 public:
 	enum EOutputs
 	{
+		OUT_Normal_Trunk,  // From tct_normal_map1
 		OUT_Height_Trunk,  // From tct_cells_3
 		OUT_Count,
+	};
+	enum ENetworkNodes
+	{
+		tct_cells_3,
+		tct_normal_map1,
+		NumNodes,
 	};
 
 	const FString SOutputs[OUT_Count] = 
 	{
+		TEXT("OUT_Normal_Trunk"),
 		TEXT("OUT_Height_Trunk"),
 	};
 
@@ -41,9 +48,6 @@ public:
 	// TestScale
 	UPROPERTY(EditAnywhere)
 	int32 Scale = 32;
-
-	UPROPERTY(Transient)
-	UTctCells1* tct_cells_3 = nullptr;
 
 };
 
