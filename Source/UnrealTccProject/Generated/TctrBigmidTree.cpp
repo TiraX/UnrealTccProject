@@ -25,7 +25,7 @@ void UTctrBigmidTree::UpdateParameters()
 	}
 	{
 		UTctNormalMap* _tct_normal_map1 = Cast<UTctNormalMap>(NetworkNodes[tct_normal_map1]);
-		_tct_normal_map1->Intensity = 12.000000f;
+		_tct_normal_map1->Intensity = float(Intensity);
 	}
 }
 void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 

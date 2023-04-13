@@ -49,5 +49,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Scale = 32;
 
+	// TestIntensity
+	UPROPERTY(EditAnywhere)
+	float Intensity = 12.000000f;
+
 };
 
