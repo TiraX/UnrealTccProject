@@ -15,7 +15,9 @@ class UNREALTCCPROJECT_API UTctrBigmidTree : public UTccRecipeTexDefine
 public:
 	enum EOutputs
 	{
+		OUT_Albedo_Trunk,  // From tct_invert1
 		OUT_Normal_Trunk,  // From tct_normal_map1
+		OUT_AO_Trunk,  // From tct_ambient_occlusion1
 		OUT_Height_Trunk,  // From tct_cells_3
 		OUT_Count,
 	};
@@ -23,12 +25,16 @@ public:
 	{
 		tct_cells_3,
 		tct_normal_map1,
+		tct_ambient_occlusion1,
+		tct_invert1,
 		NumNodes,
 	};
 
 	const FString SOutputs[OUT_Count] = 
 	{
+		TEXT("OUT_Albedo_Trunk"),
 		TEXT("OUT_Normal_Trunk"),
+		TEXT("OUT_AO_Trunk"),
 		TEXT("OUT_Height_Trunk"),
 	};
 

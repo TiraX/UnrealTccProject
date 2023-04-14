@@ -12,8 +12,10 @@
  UTctrBigmidTree::UTctrBigmidTree() 
 {
 	InitNetworkNodes(NumNodes);
-	NetworkNodes[tct_cells_3] = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 2
-	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 1
+	NetworkNodes[tct_cells_3] = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 3
+	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 2
+	NetworkNodes[tct_ambient_occlusion1] = CreateDefaultSubobject<UTctAmbientOcclusion>("tct_ambient_occlusion1", true); // RefCount = 2
+	NetworkNodes[tct_invert1] = CreateDefaultSubobject<UTctInvert>("tct_invert1", true); // RefCount = 1
 	InitTextures(OUT_Count);
 }
 void UTctrBigmidTree::UpdateParameters() 
@@ -22,10 +24,19 @@ void UTctrBigmidTree::UpdateParameters()
 		UTctCells1* _tct_cells_3 = Cast<UTctCells1>(NetworkNodes[tct_cells_3]);
 		_tct_cells_3->Seed = int32(Seed);
 		_tct_cells_3->Scale = int32(Scale);
+		_tct_cells_3->Size = FIntVector2(Res.X, Res.Y);
 	}
 	{
 		UTctNormalMap* _tct_normal_map1 = Cast<UTctNormalMap>(NetworkNodes[tct_normal_map1]);
 		_tct_normal_map1->Intensity = float(Intensity);
+	}
+	{
+		UTctAmbientOcclusion* _tct_ambient_occlusion1 = Cast<UTctAmbientOcclusion>(NetworkNodes[tct_ambient_occlusion1]);
+		_tct_ambient_occlusion1->Intensity = 0.045600f;
+		_tct_ambient_occlusion1->AngleStep = float(3.14159f * 2.0f / _tct_ambient_occlusion1->Dirs);
+		_tct_ambient_occlusion1->SearchStep = FVector2f(_tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.X, _tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.Y);
+	}
+	{
 	}
 }
 void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 
@@ -36,6 +47,15 @@ void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 In
 	{
 		NetworkNodes[tct_normal_map1]->SetInput(0, NetworkNodes[tct_cells_3]);
 		NetworkNodes[tct_normal_map1]->FillComputeGraph(InComputeGraph, OUT_Normal_Trunk, Textures[OUT_Normal_Trunk]); 
+	}
+	{
+		NetworkNodes[tct_ambient_occlusion1]->SetInput(0, NetworkNodes[tct_cells_3]);
+		NetworkNodes[tct_ambient_occlusion1]->SetInput(1, NetworkNodes[tct_normal_map1]);
+		NetworkNodes[tct_ambient_occlusion1]->FillComputeGraph(InComputeGraph, OUT_AO_Trunk, Textures[OUT_AO_Trunk]); 
+	}
+	{
+		NetworkNodes[tct_invert1]->SetInput(0, NetworkNodes[tct_ambient_occlusion1]);
+		NetworkNodes[tct_invert1]->FillComputeGraph(InComputeGraph, OUT_Albedo_Trunk, Textures[OUT_Albedo_Trunk]); 
 	}
 }
 
