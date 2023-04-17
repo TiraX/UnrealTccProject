@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTctrBigmidTree : public UTccRecipeTexDefine
 public:
 	enum EOutputs
 	{
-		OUT_Albedo_Trunk,  // From tct_invert1
+		OUT_Albedo_Trunk,  // From tct_hsv1
 		OUT_Normal_Trunk,  // From tct_normal_map1
 		OUT_AO_Trunk,  // From tct_ambient_occlusion1
 		OUT_Height_Trunk,  // From tct_cells_3
@@ -26,7 +26,8 @@ public:
 		tct_cells_3,
 		tct_normal_map1,
 		tct_ambient_occlusion1,
-		tct_invert1,
+		tct_gradient_map1,
+		tct_hsv1,
 		NumNodes,
 	};
 

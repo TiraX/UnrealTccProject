@@ -15,7 +15,8 @@
 	NetworkNodes[tct_cells_3] = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 3
 	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 2
 	NetworkNodes[tct_ambient_occlusion1] = CreateDefaultSubobject<UTctAmbientOcclusion>("tct_ambient_occlusion1", true); // RefCount = 2
-	NetworkNodes[tct_invert1] = CreateDefaultSubobject<UTctInvert>("tct_invert1", true); // RefCount = 1
+	NetworkNodes[tct_gradient_map1] = CreateDefaultSubobject<UTctGradientMap>("tct_gradient_map1", true); // RefCount = 1
+	NetworkNodes[tct_hsv1] = CreateDefaultSubobject<UTctHsv>("tct_hsv1", true); // RefCount = 1
 	InitTextures(OUT_Count);
 }
 void UTctrBigmidTree::UpdateParameters() 
@@ -37,6 +38,25 @@ void UTctrBigmidTree::UpdateParameters()
 		_tct_ambient_occlusion1->SearchStep = FVector2f(_tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.X, _tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.Y);
 	}
 	{
+		UTctGradientMap* _tct_gradient_map1 = Cast<UTctGradientMap>(NetworkNodes[tct_gradient_map1]);
+		_tct_gradient_map1->Color = ETccRampInterp::Linear;
+		_tct_gradient_map1->Color.ResizeRampPoints(10);
+		_tct_gradient_map1->Color.AddRampPoint(0.0000f, FVector3f(0.1680f, 0.0912f, 0.0761f));
+		_tct_gradient_map1->Color.AddRampPoint(0.1633f, FVector3f(0.3607f, 0.2157f, 0.1778f));
+		_tct_gradient_map1->Color.AddRampPoint(0.2741f, FVector3f(0.3030f, 0.1853f, 0.1185f));
+		_tct_gradient_map1->Color.AddRampPoint(0.4636f, FVector3f(0.3776f, 0.2366f, 0.1820f));
+		_tct_gradient_map1->Color.AddRampPoint(0.5889f, FVector3f(0.2150f, 0.1776f, 0.0903f));
+		_tct_gradient_map1->Color.AddRampPoint(0.7114f, FVector3f(0.3540f, 0.2285f, 0.1614f));
+		_tct_gradient_map1->Color.AddRampPoint(0.8047f, FVector3f(0.2350f, 0.1587f, 0.1091f));
+		_tct_gradient_map1->Color.AddRampPoint(0.8863f, FVector3f(0.2944f, 0.2289f, 0.1322f));
+		_tct_gradient_map1->Color.AddRampPoint(0.9475f, FVector3f(0.2810f, 0.1962f, 0.1250f));
+		_tct_gradient_map1->Color.AddRampPoint(1.0000f, FVector3f(0.2350f, 0.1562f, 0.1192f));
+	}
+	{
+		UTctHsv* _tct_hsv1 = Cast<UTctHsv>(NetworkNodes[tct_hsv1]);
+		_tct_hsv1->Hue = 0.152000f;
+		_tct_hsv1->Sat = -0.307000f;
+		_tct_hsv1->Value = 0.123000f;
 	}
 }
 void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 
@@ -54,8 +74,12 @@ void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 In
 		NetworkNodes[tct_ambient_occlusion1]->FillComputeGraph(InComputeGraph, OUT_AO_Trunk, Textures[OUT_AO_Trunk]); 
 	}
 	{
-		NetworkNodes[tct_invert1]->SetInput(0, NetworkNodes[tct_ambient_occlusion1]);
-		NetworkNodes[tct_invert1]->FillComputeGraph(InComputeGraph, OUT_Albedo_Trunk, Textures[OUT_Albedo_Trunk]); 
+		NetworkNodes[tct_gradient_map1]->SetInput(0, NetworkNodes[tct_ambient_occlusion1]);
+		NetworkNodes[tct_gradient_map1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		NetworkNodes[tct_hsv1]->SetInput(0, NetworkNodes[tct_gradient_map1]);
+		NetworkNodes[tct_hsv1]->FillComputeGraph(InComputeGraph, OUT_Albedo_Trunk, Textures[OUT_Albedo_Trunk]); 
 	}
 }
 
