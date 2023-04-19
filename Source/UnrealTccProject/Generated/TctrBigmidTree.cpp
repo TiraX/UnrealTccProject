@@ -12,32 +12,240 @@
  UTctrBigmidTree::UTctrBigmidTree() 
 {
 	InitNetworkNodes(NumNodes);
-	NetworkNodes[tct_cells_3] = CreateDefaultSubobject<UTctCells1>("tct_cells_3", true); // RefCount = 3
+	NetworkNodes[tct_anistropic_noise1] = CreateDefaultSubobject<UTctAnistropicNoise>("tct_anistropic_noise1", true); // RefCount = 1
+	NetworkNodes[tct_anistropic_noise1]->CreateHelperNodes();
+	NetworkNodes[tct_cells_1] = CreateDefaultSubobject<UTctCells1>("tct_cells_1", true); // RefCount = 1
+	NetworkNodes[tct_cells_1]->CreateHelperNodes();
+	NetworkNodes[tct_level3] = CreateDefaultSubobject<UTctLevel>("tct_level3", true); // RefCount = 1
+	NetworkNodes[tct_level3]->CreateHelperNodes();
+	NetworkNodes[tct_directional_warp1] = CreateDefaultSubobject<UTctDirectionalWarp>("tct_directional_warp1", true); // RefCount = 2
+	NetworkNodes[tct_directional_warp1]->CreateHelperNodes();
+	NetworkNodes[tct_edge_detect1] = CreateDefaultSubobject<UTctEdgeDetect>("tct_edge_detect1", true); // RefCount = 1
+	NetworkNodes[tct_edge_detect1]->CreateHelperNodes();
+	NetworkNodes[tct_quantize_greyscale1] = CreateDefaultSubobject<UTctQuantizeGreyscale>("tct_quantize_greyscale1", true); // RefCount = 1
+	NetworkNodes[tct_quantize_greyscale1]->CreateHelperNodes();
+	NetworkNodes[tct_edge_detect2] = CreateDefaultSubobject<UTctEdgeDetect>("tct_edge_detect2", true); // RefCount = 1
+	NetworkNodes[tct_edge_detect2]->CreateHelperNodes();
+	NetworkNodes[multiply] = CreateDefaultSubobject<UTctBlend>("multiply", true); // RefCount = 2
+	NetworkNodes[multiply]->CreateHelperNodes();
+	NetworkNodes[tct_edge_detect3] = CreateDefaultSubobject<UTctEdgeDetect>("tct_edge_detect3", true); // RefCount = 1
+	NetworkNodes[tct_edge_detect3]->CreateHelperNodes();
+	NetworkNodes[tct_bevel1] = CreateDefaultSubobject<UTctBevel>("tct_bevel1", true); // RefCount = 1
+	NetworkNodes[tct_bevel1]->CreateHelperNodes();
+	NetworkNodes[tct_auto_level1] = CreateDefaultSubobject<UTctAutoLevel>("tct_auto_level1", true); // RefCount = 1
+	NetworkNodes[tct_auto_level1]->CreateHelperNodes();
+	NetworkNodes[tct_cells_2] = CreateDefaultSubobject<UTctCells1>("tct_cells_2", true); // RefCount = 1
+	NetworkNodes[tct_cells_2]->CreateHelperNodes();
+	NetworkNodes[tct_level1] = CreateDefaultSubobject<UTctLevel>("tct_level1", true); // RefCount = 1
+	NetworkNodes[tct_level1]->CreateHelperNodes();
+	NetworkNodes[bevel1] = CreateDefaultSubobject<UTctDistance>("bevel1", true); // RefCount = 1
+	NetworkNodes[bevel1]->CreateHelperNodes();
+	NetworkNodes[multiply1] = CreateDefaultSubobject<UTctBlend>("multiply1", true); // RefCount = 1
+	NetworkNodes[multiply1]->CreateHelperNodes();
+	NetworkNodes[tct_level2] = CreateDefaultSubobject<UTctLevel>("tct_level2", true); // RefCount = 1
+	NetworkNodes[tct_level2]->CreateHelperNodes();
+	NetworkNodes[tct_height_blend1] = CreateDefaultSubobject<UTctHeightBlend>("tct_height_blend1", true); // RefCount = 1
+	NetworkNodes[tct_height_blend1]->CreateHelperNodes();
+	NetworkNodes[tct_directional_noise_4] = CreateDefaultSubobject<UTctDirectionalNoise4>("tct_directional_noise_4", true); // RefCount = 2
+	NetworkNodes[tct_directional_noise_4]->CreateHelperNodes();
+	NetworkNodes[tct_slope_blur1] = CreateDefaultSubobject<UTctSlopeBlur>("tct_slope_blur1", true); // RefCount = 1
+	NetworkNodes[tct_slope_blur1]->CreateHelperNodes();
+	NetworkNodes[tct_blend1] = CreateDefaultSubobject<UTctBlend>("tct_blend1", true); // RefCount = 3
+	NetworkNodes[tct_blend1]->CreateHelperNodes();
 	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 2
+	NetworkNodes[tct_normal_map1]->CreateHelperNodes();
 	NetworkNodes[tct_ambient_occlusion1] = CreateDefaultSubobject<UTctAmbientOcclusion>("tct_ambient_occlusion1", true); // RefCount = 2
+	NetworkNodes[tct_ambient_occlusion1]->CreateHelperNodes();
 	NetworkNodes[tct_gradient_map1] = CreateDefaultSubobject<UTctGradientMap>("tct_gradient_map1", true); // RefCount = 1
+	NetworkNodes[tct_gradient_map1]->CreateHelperNodes();
 	NetworkNodes[tct_hsv1] = CreateDefaultSubobject<UTctHsv>("tct_hsv1", true); // RefCount = 1
+	NetworkNodes[tct_hsv1]->CreateHelperNodes();
 	InitTextures(OUT_Count);
 }
 void UTctrBigmidTree::UpdateParameters() 
 {
 	{
-		UTctCells1* _tct_cells_3 = Cast<UTctCells1>(NetworkNodes[tct_cells_3]);
-		_tct_cells_3->Seed = int32(Seed);
-		_tct_cells_3->Scale = int32(Scale);
-		_tct_cells_3->Size = FIntVector2(Res.X, Res.Y);
+		// Node: tct_anistropic_noise1
+		UTctAnistropicNoise* _tct_anistropic_noise1 = Cast<UTctAnistropicNoise>(NetworkNodes[tct_anistropic_noise1]);
+		_tct_anistropic_noise1->Xamount = 3;
+		_tct_anistropic_noise1->Yamount = 24;
+		_tct_anistropic_noise1->Rotate = 1;
+		_tct_anistropic_noise1->Contrast = 0.067000f;
+		_tct_anistropic_noise1->XamountInv = float(1.0f / _tct_anistropic_noise1->Xamount);
+		_tct_anistropic_noise1->YamountInv = float(1.0f / _tct_anistropic_noise1->Yamount);
+		_tct_anistropic_noise1->Size = FIntVector2(Res.X, Res.Y);
+		_tct_anistropic_noise1->UpdateHelperNodeParameters();
 	}
 	{
+		// Node: tct_cells_1
+		UTctCells1* _tct_cells_1 = Cast<UTctCells1>(NetworkNodes[tct_cells_1]);
+		_tct_cells_1->Scale = 12;
+		_tct_cells_1->Size = FIntVector2(Res.X, Res.Y);
+		_tct_cells_1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_level3
+		UTctLevel* _tct_level3 = Cast<UTctLevel>(NetworkNodes[tct_level3]);
+		_tct_level3->InputLevel = FVector2f(0.600000f, 1.000000f);
+		_tct_level3->SetInput(0, NetworkNodes[tct_cells_1]);
+		_tct_level3->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_directional_warp1
+		UTctDirectionalWarp* _tct_directional_warp1 = Cast<UTctDirectionalWarp>(NetworkNodes[tct_directional_warp1]);
+		_tct_directional_warp1->Intensity = 3.120000f;
+		_tct_directional_warp1->Dir = FVector2f(cos(_tct_directional_warp1->Angle), sin(_tct_directional_warp1->Angle));
+		_tct_directional_warp1->SetInput(0, NetworkNodes[tct_anistropic_noise1]);
+		_tct_directional_warp1->SetInput(1, NetworkNodes[tct_level3]);
+		_tct_directional_warp1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_edge_detect1
+		UTctEdgeDetect* _tct_edge_detect1 = Cast<UTctEdgeDetect>(NetworkNodes[tct_edge_detect1]);
+		_tct_edge_detect1->EdgeWidth = 1.600000f;
+		_tct_edge_detect1->SetInput(0, NetworkNodes[tct_directional_warp1]);
+		_tct_edge_detect1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_quantize_greyscale1
+		UTctQuantizeGreyscale* _tct_quantize_greyscale1 = Cast<UTctQuantizeGreyscale>(NetworkNodes[tct_quantize_greyscale1]);
+		_tct_quantize_greyscale1->Quantize = 4;
+		_tct_quantize_greyscale1->PixelStep = float(1.0f / (_tct_quantize_greyscale1->Quantize - 1));
+		_tct_quantize_greyscale1->PixelStepInv = float(_tct_quantize_greyscale1->Quantize - 1);
+		_tct_quantize_greyscale1->PixelOffset = float(_tct_quantize_greyscale1->PixelStep * 0.5f);
+		_tct_quantize_greyscale1->SetInput(0, NetworkNodes[tct_directional_warp1]);
+		_tct_quantize_greyscale1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_edge_detect2
+		UTctEdgeDetect* _tct_edge_detect2 = Cast<UTctEdgeDetect>(NetworkNodes[tct_edge_detect2]);
+		_tct_edge_detect2->EdgeWidth = 1.300000f;
+		_tct_edge_detect2->SetInput(0, NetworkNodes[tct_quantize_greyscale1]);
+		_tct_edge_detect2->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: multiply
+		UTctBlend* _multiply = Cast<UTctBlend>(NetworkNodes[multiply]);
+		_multiply->Mode = UTctBlend::Multiply;
+		_multiply->M = FVector4f(cos( - _multiply->R) / _multiply->Sx, sin( - _multiply->R) / _multiply->Sy, -sin( - _multiply->R) / _multiply->Sx, cos( - _multiply->R) / _multiply->Sy);
+		_multiply->SetInput(0, NetworkNodes[tct_edge_detect1]);
+		_multiply->SetInput(1, NetworkNodes[tct_edge_detect2]);
+		_multiply->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_edge_detect3
+		UTctEdgeDetect* _tct_edge_detect3 = Cast<UTctEdgeDetect>(NetworkNodes[tct_edge_detect3]);
+		_tct_edge_detect3->EdgeWidth = 2.600000f;
+		_tct_edge_detect3->Roundness = 1.200000f;
+		_tct_edge_detect3->SetInput(0, NetworkNodes[multiply]);
+		_tct_edge_detect3->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_bevel1
+		UTctBevel* _tct_bevel1 = Cast<UTctBevel>(NetworkNodes[tct_bevel1]);
+		_tct_bevel1->Distance = 0.150000f;
+		_tct_bevel1->SetInput(0, NetworkNodes[tct_edge_detect3]);
+		_tct_bevel1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_auto_level1
+		UTctAutoLevel* _tct_auto_level1 = Cast<UTctAutoLevel>(NetworkNodes[tct_auto_level1]);
+		_tct_auto_level1->SetInput(0, NetworkNodes[tct_bevel1]);
+	}
+	{
+		// Node: tct_cells_2
+		UTctCells1* _tct_cells_2 = Cast<UTctCells1>(NetworkNodes[tct_cells_2]);
+		_tct_cells_2->Scale = 10;
+		_tct_cells_2->Size = FIntVector2(Res.X, Res.Y);
+		_tct_cells_2->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_level1
+		UTctLevel* _tct_level1 = Cast<UTctLevel>(NetworkNodes[tct_level1]);
+		_tct_level1->InputLevel = FVector2f(0.200000f, 0.600000f);
+		_tct_level1->SetInput(0, NetworkNodes[tct_cells_2]);
+		_tct_level1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: bevel1
+		UTctDistance* _bevel1 = Cast<UTctDistance>(NetworkNodes[bevel1]);
+		_bevel1->Distance = float(0.25f * Res.X / 2);
+		_bevel1->SetInput(0, NetworkNodes[multiply]);
+		_bevel1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: multiply1
+		UTctBlend* _multiply1 = Cast<UTctBlend>(NetworkNodes[multiply1]);
+		_multiply1->Opacity = 0.353900f;
+		_multiply1->Mode = UTctBlend::Multiply;
+		_multiply1->M = FVector4f(cos( - _multiply1->R) / _multiply1->Sx, sin( - _multiply1->R) / _multiply1->Sy, -sin( - _multiply1->R) / _multiply1->Sx, cos( - _multiply1->R) / _multiply1->Sy);
+		_multiply1->SetInput(0, NetworkNodes[tct_level1]);
+		_multiply1->SetInput(1, NetworkNodes[bevel1]);
+		_multiply1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_level2
+		UTctLevel* _tct_level2 = Cast<UTctLevel>(NetworkNodes[tct_level2]);
+		_tct_level2->InputLevel = FVector2f(0.450000f, 1.000000f);
+		_tct_level2->SetInput(0, NetworkNodes[multiply1]);
+		_tct_level2->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_height_blend1
+		UTctHeightBlend* _tct_height_blend1 = Cast<UTctHeightBlend>(NetworkNodes[tct_height_blend1]);
+		_tct_height_blend1->HeightOffset = 0.510000f;
+		_tct_height_blend1->SetInput(0, NetworkNodes[tct_auto_level1]);
+		_tct_height_blend1->SetInput(1, NetworkNodes[tct_level2]);
+		_tct_height_blend1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_directional_noise_4
+		UTctDirectionalNoise4* _tct_directional_noise_4 = Cast<UTctDirectionalNoise4>(NetworkNodes[tct_directional_noise_4]);
+		_tct_directional_noise_4->Rotate = 1;
+		_tct_directional_noise_4->Divide = int32(pow(2, _tct_directional_noise_4->Level));
+		_tct_directional_noise_4->SigmaRs = float(1.0f / (2.0f * _tct_directional_noise_4->Sigma * _tct_directional_noise_4->Sigma));
+		_tct_directional_noise_4->Size = FIntVector2(Res.X, Res.Y);
+		_tct_directional_noise_4->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_slope_blur1
+		UTctSlopeBlur* _tct_slope_blur1 = Cast<UTctSlopeBlur>(NetworkNodes[tct_slope_blur1]);
+		_tct_slope_blur1->Samples = 32;
+		_tct_slope_blur1->Intensity = 8.000000f;
+		_tct_slope_blur1->WIntensity = float(_tct_slope_blur1->Intensity / _tct_slope_blur1->Samples * Res.X / 256);
+		_tct_slope_blur1->Step = FVector2f(_tct_slope_blur1->WIntensity / Res.X, _tct_slope_blur1->WIntensity / Res.Y);
+		_tct_slope_blur1->SetInput(0, NetworkNodes[tct_height_blend1]);
+		_tct_slope_blur1->SetInput(1, NetworkNodes[tct_directional_noise_4]);
+		_tct_slope_blur1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_blend1
+		UTctBlend* _tct_blend1 = Cast<UTctBlend>(NetworkNodes[tct_blend1]);
+		_tct_blend1->Opacity = 0.696000f;
+		_tct_blend1->M = FVector4f(cos( - _tct_blend1->R) / _tct_blend1->Sx, sin( - _tct_blend1->R) / _tct_blend1->Sy, -sin( - _tct_blend1->R) / _tct_blend1->Sx, cos( - _tct_blend1->R) / _tct_blend1->Sy);
+		_tct_blend1->SetInput(0, NetworkNodes[tct_slope_blur1]);
+		_tct_blend1->SetInput(1, NetworkNodes[tct_directional_noise_4]);
+		_tct_blend1->UpdateHelperNodeParameters();
+	}
+	{
+		// Node: tct_normal_map1
 		UTctNormalMap* _tct_normal_map1 = Cast<UTctNormalMap>(NetworkNodes[tct_normal_map1]);
 		_tct_normal_map1->Intensity = float(Intensity);
+		_tct_normal_map1->SetInput(0, NetworkNodes[tct_blend1]);
+		_tct_normal_map1->UpdateHelperNodeParameters();
 	}
 	{
+		// Node: tct_ambient_occlusion1
 		UTctAmbientOcclusion* _tct_ambient_occlusion1 = Cast<UTctAmbientOcclusion>(NetworkNodes[tct_ambient_occlusion1]);
 		_tct_ambient_occlusion1->Intensity = 0.045600f;
 		_tct_ambient_occlusion1->AngleStep = float(3.14159f * 2.0f / _tct_ambient_occlusion1->Dirs);
 		_tct_ambient_occlusion1->SearchStep = FVector2f(_tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.X, _tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.Y);
+		_tct_ambient_occlusion1->SetInput(0, NetworkNodes[tct_blend1]);
+		_tct_ambient_occlusion1->SetInput(1, NetworkNodes[tct_normal_map1]);
+		_tct_ambient_occlusion1->UpdateHelperNodeParameters();
 	}
 	{
+		// Node: tct_gradient_map1
 		UTctGradientMap* _tct_gradient_map1 = Cast<UTctGradientMap>(NetworkNodes[tct_gradient_map1]);
 		_tct_gradient_map1->Color = ETccRampInterp::Linear;
 		_tct_gradient_map1->Color.ResizeRampPoints(10);
@@ -51,34 +259,114 @@ void UTctrBigmidTree::UpdateParameters()
 		_tct_gradient_map1->Color.AddRampPoint(0.8863f, FVector3f(0.2944f, 0.2289f, 0.1322f));
 		_tct_gradient_map1->Color.AddRampPoint(0.9475f, FVector3f(0.2810f, 0.1962f, 0.1250f));
 		_tct_gradient_map1->Color.AddRampPoint(1.0000f, FVector3f(0.2350f, 0.1562f, 0.1192f));
+		_tct_gradient_map1->SetInput(0, NetworkNodes[tct_ambient_occlusion1]);
+		_tct_gradient_map1->UpdateHelperNodeParameters();
 	}
 	{
+		// Node: tct_hsv1
 		UTctHsv* _tct_hsv1 = Cast<UTctHsv>(NetworkNodes[tct_hsv1]);
-		_tct_hsv1->Hue = 0.152000f;
-		_tct_hsv1->Sat = -0.307000f;
-		_tct_hsv1->Value = 0.123000f;
+		_tct_hsv1->Sat = -0.155000f;
+		_tct_hsv1->Value = 0.084000f;
+		_tct_hsv1->SetInput(0, NetworkNodes[tct_gradient_map1]);
+		_tct_hsv1->UpdateHelperNodeParameters();
 	}
 }
 void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 InOutputIndex,TObjectPtr<UTexture2D> OutTexture) 
 {
 	{
-		NetworkNodes[tct_cells_3]->FillComputeGraph(InComputeGraph, OUT_Height_Trunk, Textures[OUT_Height_Trunk]); 
+		// Node: tct_anistropic_noise1
+		NetworkNodes[tct_anistropic_noise1]->FillComputeGraph(InComputeGraph);
 	}
 	{
-		NetworkNodes[tct_normal_map1]->SetInput(0, NetworkNodes[tct_cells_3]);
+		// Node: tct_cells_1
+		NetworkNodes[tct_cells_1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_level3
+		NetworkNodes[tct_level3]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_directional_warp1
+		NetworkNodes[tct_directional_warp1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_edge_detect1
+		NetworkNodes[tct_edge_detect1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_quantize_greyscale1
+		NetworkNodes[tct_quantize_greyscale1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_edge_detect2
+		NetworkNodes[tct_edge_detect2]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: multiply
+		NetworkNodes[multiply]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_edge_detect3
+		NetworkNodes[tct_edge_detect3]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_bevel1
+		NetworkNodes[tct_bevel1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_auto_level1
+		NetworkNodes[tct_auto_level1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_cells_2
+		NetworkNodes[tct_cells_2]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_level1
+		NetworkNodes[tct_level1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: bevel1
+		NetworkNodes[bevel1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: multiply1
+		NetworkNodes[multiply1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_level2
+		NetworkNodes[tct_level2]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_height_blend1
+		NetworkNodes[tct_height_blend1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_directional_noise_4
+		NetworkNodes[tct_directional_noise_4]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_slope_blur1
+		NetworkNodes[tct_slope_blur1]->FillComputeGraph(InComputeGraph);
+	}
+	{
+		// Node: tct_blend1
+		NetworkNodes[tct_blend1]->FillComputeGraph(InComputeGraph, OUT_Height_Trunk, Textures[OUT_Height_Trunk]); 
+	}
+	{
+		// Node: tct_normal_map1
 		NetworkNodes[tct_normal_map1]->FillComputeGraph(InComputeGraph, OUT_Normal_Trunk, Textures[OUT_Normal_Trunk]); 
 	}
 	{
-		NetworkNodes[tct_ambient_occlusion1]->SetInput(0, NetworkNodes[tct_cells_3]);
-		NetworkNodes[tct_ambient_occlusion1]->SetInput(1, NetworkNodes[tct_normal_map1]);
+		// Node: tct_ambient_occlusion1
 		NetworkNodes[tct_ambient_occlusion1]->FillComputeGraph(InComputeGraph, OUT_AO_Trunk, Textures[OUT_AO_Trunk]); 
 	}
 	{
-		NetworkNodes[tct_gradient_map1]->SetInput(0, NetworkNodes[tct_ambient_occlusion1]);
+		// Node: tct_gradient_map1
 		NetworkNodes[tct_gradient_map1]->FillComputeGraph(InComputeGraph);
 	}
 	{
-		NetworkNodes[tct_hsv1]->SetInput(0, NetworkNodes[tct_gradient_map1]);
+		// Node: tct_hsv1
 		NetworkNodes[tct_hsv1]->FillComputeGraph(InComputeGraph, OUT_Albedo_Trunk, Textures[OUT_Albedo_Trunk]); 
 	}
 }

@@ -18,12 +18,31 @@ public:
 		OUT_Albedo_Trunk,  // From tct_hsv1
 		OUT_Normal_Trunk,  // From tct_normal_map1
 		OUT_AO_Trunk,  // From tct_ambient_occlusion1
-		OUT_Height_Trunk,  // From tct_cells_3
+		OUT_Height_Trunk,  // From tct_blend1
 		OUT_Count,
 	};
 	enum ENetworkNodes
 	{
-		tct_cells_3,
+		tct_anistropic_noise1,
+		tct_cells_1,
+		tct_level3,
+		tct_directional_warp1,
+		tct_edge_detect1,
+		tct_quantize_greyscale1,
+		tct_edge_detect2,
+		multiply,
+		tct_edge_detect3,
+		tct_bevel1,
+		tct_auto_level1,
+		tct_cells_2,
+		tct_level1,
+		bevel1,
+		multiply1,
+		tct_level2,
+		tct_height_blend1,
+		tct_directional_noise_4,
+		tct_slope_blur1,
+		tct_blend1,
 		tct_normal_map1,
 		tct_ambient_occlusion1,
 		tct_gradient_map1,
