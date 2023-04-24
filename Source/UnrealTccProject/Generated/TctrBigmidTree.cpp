@@ -67,6 +67,7 @@ void UTctrBigmidTree::UpdateParameters()
 	{
 		// Node: tct_anistropic_noise1
 		UTctAnistropicNoise* _tct_anistropic_noise1 = Cast<UTctAnistropicNoise>(NetworkNodes[tct_anistropic_noise1]);
+		_tct_anistropic_noise1->Seed = int32(Seed);
 		_tct_anistropic_noise1->Xamount = 3;
 		_tct_anistropic_noise1->Yamount = 24;
 		_tct_anistropic_noise1->Rotate = 1;
@@ -79,6 +80,7 @@ void UTctrBigmidTree::UpdateParameters()
 	{
 		// Node: tct_cells_1
 		UTctCells1* _tct_cells_1 = Cast<UTctCells1>(NetworkNodes[tct_cells_1]);
+		_tct_cells_1->Seed = int32(Seed);
 		_tct_cells_1->Scale = 12;
 		_tct_cells_1->Size = FIntVector2(Res.X, Res.Y);
 		_tct_cells_1->UpdateHelperNodeParameters();
@@ -237,7 +239,8 @@ void UTctrBigmidTree::UpdateParameters()
 	{
 		// Node: tct_ambient_occlusion1
 		UTctAmbientOcclusion* _tct_ambient_occlusion1 = Cast<UTctAmbientOcclusion>(NetworkNodes[tct_ambient_occlusion1]);
-		_tct_ambient_occlusion1->Intensity = 0.045600f;
+		_tct_ambient_occlusion1->Intensity = 0.200000f;
+		_tct_ambient_occlusion1->Radius = 120.000000f;
 		_tct_ambient_occlusion1->AngleStep = float(3.14159f * 2.0f / _tct_ambient_occlusion1->Dirs);
 		_tct_ambient_occlusion1->SearchStep = FVector2f(_tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.X, _tct_ambient_occlusion1->Radius / _tct_ambient_occlusion1->SearchNum / Res.Y);
 		_tct_ambient_occlusion1->SetInput(0, NetworkNodes[tct_blend1]);
@@ -265,8 +268,9 @@ void UTctrBigmidTree::UpdateParameters()
 	{
 		// Node: tct_hsv1
 		UTctHsv* _tct_hsv1 = Cast<UTctHsv>(NetworkNodes[tct_hsv1]);
-		_tct_hsv1->Sat = -0.155000f;
-		_tct_hsv1->Value = 0.084000f;
+		_tct_hsv1->Hue = -0.013000f;
+		_tct_hsv1->Sat = -0.080000f;
+		_tct_hsv1->Value = 0.126000f;
 		_tct_hsv1->SetInput(0, NetworkNodes[tct_gradient_map1]);
 		_tct_hsv1->UpdateHelperNodeParameters();
 	}

@@ -67,15 +67,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	FIntVector2 Res = FIntVector2(2048, 2048);
 
-	// TestSeed
+	// Seed
 	UPROPERTY(EditAnywhere)
 	int32 Seed = 0;
 
-	// TestScale
-	UPROPERTY(EditAnywhere)
-	int32 Scale = 32;
-
-	// TestIntensity
+	// Normal Intensity
 	UPROPERTY(EditAnywhere)
 	float Intensity = 12.000000f;
 
