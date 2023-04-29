@@ -45,6 +45,7 @@ public:
 		tct_blend1,
 		tct_normal_map1,
 		tct_ambient_occlusion1,
+		blue_channel,
 		tct_gradient_map1,
 		tct_hsv1,
 		NumNodes,

@@ -52,10 +52,12 @@
 	NetworkNodes[tct_slope_blur1]->CreateHelperNodes();
 	NetworkNodes[tct_blend1] = CreateDefaultSubobject<UTctBlend>("tct_blend1", true); // RefCount = 3
 	NetworkNodes[tct_blend1]->CreateHelperNodes();
-	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 2
+	NetworkNodes[tct_normal_map1] = CreateDefaultSubobject<UTctNormalMap>("tct_normal_map1", true); // RefCount = 3
 	NetworkNodes[tct_normal_map1]->CreateHelperNodes();
-	NetworkNodes[tct_ambient_occlusion1] = CreateDefaultSubobject<UTctAmbientOcclusion>("tct_ambient_occlusion1", true); // RefCount = 2
+	NetworkNodes[tct_ambient_occlusion1] = CreateDefaultSubobject<UTctAmbientOcclusion>("tct_ambient_occlusion1", true); // RefCount = 1
 	NetworkNodes[tct_ambient_occlusion1]->CreateHelperNodes();
+	NetworkNodes[blue_channel] = CreateDefaultSubobject<UTctTexVex>("blue_channel", true); // RefCount = 1
+	NetworkNodes[blue_channel]->CreateHelperNodes();
 	NetworkNodes[tct_gradient_map1] = CreateDefaultSubobject<UTctGradientMap>("tct_gradient_map1", true); // RefCount = 1
 	NetworkNodes[tct_gradient_map1]->CreateHelperNodes();
 	NetworkNodes[tct_hsv1] = CreateDefaultSubobject<UTctHsv>("tct_hsv1", true); // RefCount = 1
@@ -248,6 +250,11 @@ void UTctrBigmidTree::UpdateParameters()
 		_tct_ambient_occlusion1->UpdateHelperNodeParameters();
 	}
 	{
+		// Node: blue_channel
+		UTctTexVex* _blue_channel = Cast<UTctTexVex>(NetworkNodes[blue_channel]);
+		_blue_channel->SetInput(0, NetworkNodes[tct_normal_map1]);
+	}
+	{
 		// Node: tct_gradient_map1
 		UTctGradientMap* _tct_gradient_map1 = Cast<UTctGradientMap>(NetworkNodes[tct_gradient_map1]);
 		_tct_gradient_map1->Color = ETccRampInterp::Linear;
@@ -262,7 +269,7 @@ void UTctrBigmidTree::UpdateParameters()
 		_tct_gradient_map1->Color.AddRampPoint(0.8863f, FVector3f(0.2944f, 0.2289f, 0.1322f));
 		_tct_gradient_map1->Color.AddRampPoint(0.9475f, FVector3f(0.2810f, 0.1962f, 0.1250f));
 		_tct_gradient_map1->Color.AddRampPoint(1.0000f, FVector3f(0.2350f, 0.1562f, 0.1192f));
-		_tct_gradient_map1->SetInput(0, NetworkNodes[tct_ambient_occlusion1]);
+		_tct_gradient_map1->SetInput(0, NetworkNodes[blue_channel]);
 		_tct_gradient_map1->UpdateHelperNodeParameters();
 	}
 	{
@@ -364,6 +371,44 @@ void UTctrBigmidTree::FillComputeGraph(UTccComputeGraph* InComputeGraph,int32 In
 	{
 		// Node: tct_ambient_occlusion1
 		NetworkNodes[tct_ambient_occlusion1]->FillComputeGraph(InComputeGraph, OUT_AO_Trunk, Textures[OUT_AO_Trunk]); 
+	}
+	{
+		// Node: blue_channel
+		FTccTexVexDefine TexVex;
+		TexVex.EntryName = "BlueChannel";
+		TexVex.DispatchSize = FIntVector(8, 8, 1);
+		TexVex.ShaderCode = 
+		"// No inner vex functions.\n"
+		"[numthreads(8, 8, 1)]\n"
+		"void BlueChannel(uint3 dispatchThreadId : SV_DispatchThreadID)\n"
+		"{\n"
+		"	int2 __Size = ReadNumThreads().xy;\n"
+		"	int IX = dispatchThreadId.x;\n"
+		"	int IY = dispatchThreadId.y;\n"
+		"	int XRES = __Size.x;\n"
+		"	int YRES = __Size.y;\n"
+		"	float XResInv = 1.0 / XRES;\n"
+		"	float YResInv = 1.0 / YRES;\n"
+		"	float X = (IX + 0.5) * XResInv;\n"
+		"	float Y = (IY + 0.5) * YResInv;\n"
+		"	float4 output = 0;\n"
+		"	\n"
+		"	// vex shader code here.\n"
+		"	float bottom = ReadBottom();\n"
+		"float b = ReadInput0( uint2( IX, IY )) .z;\n"
+		"b = vex_fit(b, bottom, 1, 0, 1);\n"
+		"output = b;\n"
+		"	// vex shader code end.\n"
+		"	WriteOutput(dispatchThreadId.xy, output.x);\n"
+		"	// Output code\n"
+		"}\n"
+		;
+		TexVex.NumInputs = 1;
+		TexVex.InputTypes[0] = PF_B8G8R8A8;
+		TexVex.OutputType = PF_R16F;
+		TexVex.Params.Reserve(1);
+		TexVex.AddParam("Bottom", "float", 0.900000f);
+		NetworkNodes[blue_channel]->FillComputeGraph(InComputeGraph, TexVex);
 	}
 	{
 		// Node: tct_gradient_map1
