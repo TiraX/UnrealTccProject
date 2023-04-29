@@ -4,6 +4,7 @@
 #include "Generated/TccTemplates.h"
 #include "TccForBlock.h"
 #include "TccSwitch.h"
+#include "TctTexVex.h"
 #include "TccAttribute.h"
 #include "TccGeometry.h"
 #include "Vex.h"
