@@ -5,3 +5,11 @@ Intermediate/
 Saved/
 *.sln
 .vsconfig
+Content/DreamscapeSeries/
+Content/EuropeanBeech/
+Content/EuropeanHornbeam/
+Content/MSPresets/
+Content/TreeLODTest/
+Houdini/backup/
+Houdini/hda/backup/
+Houdini/mess/
