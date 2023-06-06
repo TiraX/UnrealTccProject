@@ -6,10 +6,10 @@
 #include "TccNode.h"
 #include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
-#include "TcrSimpleLeaf.generated.h"
+#include "TcrTreeSimpleLeaf.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrSimpleLeaf : public UTccRecipeGeoDefine
+class UNREALTCCPROJECT_API UTcrTreeSimpleLeaf : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:
@@ -24,7 +24,7 @@ public:
 		TEXT("output0"),
 	};
 
-	UTcrSimpleLeaf() ;
+	UTcrTreeSimpleLeaf() ;
 
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
@@ -69,11 +69,11 @@ class FTccSwitch;
 class FTccBend;
 class FTccAttribPromote;
 class FTccAttribRename;
-class UNREALTCCPROJECT_API FTcrSimpleLeaf : public FTccNode
+class UNREALTCCPROJECT_API FTcrTreeSimpleLeaf : public FTccNode
 {
 public:
-	FTcrSimpleLeaf() ;
-	virtual ~FTcrSimpleLeaf() ;
+	FTcrTreeSimpleLeaf() ;
+	virtual ~FTcrTreeSimpleLeaf() ;
 
 	virtual void Cook() override;
 

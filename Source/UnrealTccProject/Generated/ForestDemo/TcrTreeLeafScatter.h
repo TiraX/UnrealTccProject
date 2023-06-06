@@ -6,10 +6,10 @@
 #include "TccNode.h"
 #include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
-#include "TcrLeafGenerator.generated.h"
+#include "TcrTreeLeafScatter.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrLeafGenerator : public UTccRecipeGeoDefine
+class UNREALTCCPROJECT_API UTcrTreeLeafScatter : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:
@@ -24,7 +24,7 @@ public:
 		TEXT("output0"),
 	};
 
-	UTcrLeafGenerator() ;
+	UTcrTreeLeafScatter() ;
 
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
@@ -102,11 +102,11 @@ class FTccResample;
 class FTccAttribPromote;
 class FTccMerge;
 class FTccInstancer;
-class UNREALTCCPROJECT_API FTcrLeafGenerator : public FTccNode
+class UNREALTCCPROJECT_API FTcrTreeLeafScatter : public FTccNode
 {
 public:
-	FTcrLeafGenerator() ;
-	virtual ~FTcrLeafGenerator() ;
+	FTcrTreeLeafScatter() ;
+	virtual ~FTcrTreeLeafScatter() ;
 
 	virtual void Cook() override;
 

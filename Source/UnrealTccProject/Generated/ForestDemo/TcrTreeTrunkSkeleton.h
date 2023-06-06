@@ -6,10 +6,10 @@
 #include "TccNode.h"
 #include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
-#include "TcrTrunkGenerator.generated.h"
+#include "TcrTreeTrunkSkeleton.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrTrunkGenerator : public UTccRecipeGeoDefine
+class UNREALTCCPROJECT_API UTcrTreeTrunkSkeleton : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:
@@ -24,7 +24,7 @@ public:
 		TEXT("output0"),
 	};
 
-	UTcrTrunkGenerator() ;
+	UTcrTreeTrunkSkeleton() ;
 
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
@@ -72,11 +72,11 @@ class FTccSwitch;
 class FTccVex;
 class FTccBend;
 class FTccTransform;
-class UNREALTCCPROJECT_API FTcrTrunkGenerator : public FTccNode
+class UNREALTCCPROJECT_API FTcrTreeTrunkSkeleton : public FTccNode
 {
 public:
-	FTcrTrunkGenerator() ;
-	virtual ~FTcrTrunkGenerator() ;
+	FTcrTreeTrunkSkeleton() ;
+	virtual ~FTcrTreeTrunkSkeleton() ;
 
 	virtual void Cook() override;
 

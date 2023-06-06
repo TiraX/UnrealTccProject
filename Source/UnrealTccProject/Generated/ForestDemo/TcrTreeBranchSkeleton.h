@@ -6,10 +6,10 @@
 #include "TccNode.h"
 #include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
-#include "TcrBranchGenerator.generated.h"
+#include "TcrTreeBranchSkeleton.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrBranchGenerator : public UTccRecipeGeoDefine
+class UNREALTCCPROJECT_API UTcrTreeBranchSkeleton : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:
@@ -29,7 +29,7 @@ public:
 		TEXT("output0"),
 	};
 
-	UTcrBranchGenerator() ;
+	UTcrTreeBranchSkeleton() ;
 
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
@@ -58,9 +58,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 BranchSegs = 10;
 
+	// DebugColor
+	UPROPERTY(EditAnywhere)
+	int32 EnableDbgColor = 0;
+
+	// Debug Color
+	UPROPERTY(EditAnywhere)
+	FVector3f DbgColor = FVector3f(1.000000f, 1.000000f, 1.000000f);
+
 	// Pattern
 	UPROPERTY(EditAnywhere)
-	int32 Pattern = UTcrBranchGenerator::AngleStep;
+	int32 Pattern = UTcrTreeBranchSkeleton::AngleStep;
 
 	// Yaw
 	UPROPERTY(EditAnywhere)
@@ -85,6 +93,10 @@ public:
 	// Radius Scale
 	UPROPERTY(EditAnywhere)
 	float RadiusScale = 1.000000f;
+
+	// Prune by Volume
+	UPROPERTY(EditAnywhere)
+	int32 Prune = 0;
 
 	// Branch Length
 	UPROPERTY(EditAnywhere)
@@ -151,13 +163,14 @@ class FTccAttribDelete;
 class FTccSort;
 class FTccAttribPromote;
 class FTccCopyToPoint;
+class FTccCarveByVolume;
 class FTccResample;
 class FTccMerge;
-class UNREALTCCPROJECT_API FTcrBranchGenerator : public FTccNode
+class UNREALTCCPROJECT_API FTcrTreeBranchSkeleton : public FTccNode
 {
 public:
-	FTcrBranchGenerator() ;
-	virtual ~FTcrBranchGenerator() ;
+	FTcrTreeBranchSkeleton() ;
+	virtual ~FTcrTreeBranchSkeleton() ;
 
 	virtual void Cook() override;
 
@@ -179,8 +192,14 @@ public:
 	// Segments
 	int32 BranchSegs = 10;
 
+	// DebugColor
+	int32 EnableDbgColor = 0;
+
+	// Debug Color
+	FVector3f DbgColor = FVector3f(1.000000f, 1.000000f, 1.000000f);
+
 	// Pattern
-	int32 Pattern = UTcrBranchGenerator::AngleStep;
+	int32 Pattern = UTcrTreeBranchSkeleton::AngleStep;
 
 	// Yaw
 	float Yaw = 137.500000f;
@@ -199,6 +218,9 @@ public:
 
 	// Radius Scale
 	float RadiusScale = 1.000000f;
+
+	// Prune by Volume
+	int32 Prune = 0;
 
 	// Branch Length
 	float BranchLength = 1.000000f;
@@ -243,11 +265,11 @@ public:
 
 	FTccLine* tcc_line1 = nullptr;
 
-	FTccSwitch* need_bend1 = nullptr;
+	FTccSwitch* bend1 = nullptr;
 
 	FTccBend* tcc_bend1 = nullptr;
 
-	FTccSwitch* need_bend2 = nullptr;
+	FTccSwitch* bend2 = nullptr;
 
 	FTccBend* tcc_bend2 = nullptr;
 
@@ -271,6 +293,10 @@ public:
 
 	FTccVex* add_primattrib_level = nullptr;
 
+	FTccSwitch* prune = nullptr;
+
+	FTccCarveByVolume* tcc_carve_by_volume1 = nullptr;
+
 	FTccVex* calc_radius = nullptr;
 
 	FTccSwitch* enable_noise = nullptr;
@@ -278,6 +304,10 @@ public:
 	FTccResample* tcc_resample1 = nullptr;
 
 	FTccVex* curl_noise = nullptr;
+
+	FTccSwitch* dbg_color = nullptr;
+
+	FTccVex* tcc_vex1 = nullptr;
 
 	FTccMerge* tcc_merge1 = nullptr;
 

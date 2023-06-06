@@ -6,10 +6,10 @@
 #include "TccNode.h"
 #include "TccRecipeGeoDefine.h"
 #include "TccRamp.h"
-#include "TcrLeafGeneratorWithVariations.generated.h"
+#include "TcrTreeLeafScatterVariation.generated.h"
 
 UCLASS()
-class UNREALTCCPROJECT_API UTcrLeafGeneratorWithVariations : public UTccRecipeGeoDefine
+class UNREALTCCPROJECT_API UTcrTreeLeafScatterVariation : public UTccRecipeGeoDefine
 {
 	GENERATED_BODY()
 public:
@@ -18,13 +18,18 @@ public:
 		output0,  // From foreach_branch2
 		OUT_Count,
 	};
+	enum EMethod
+	{
+		ByCount,
+		ByDistance,
+	};
 
 	const FString SOutputs[OUT_Count] = 
 	{
 		TEXT("output0"),
 	};
 
-	UTcrLeafGeneratorWithVariations() ;
+	UTcrTreeLeafScatterVariation() ;
 
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
@@ -37,13 +42,25 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 BranchSeed = 0;
 
-	// Force Total Count
+	// Method
+	UPROPERTY(EditAnywhere)
+	int32 Method = UTcrTreeLeafScatterVariation::ByCount;
+
+	// Count
 	UPROPERTY(EditAnywhere)
 	int32 Npts = 100;
 
-	// Grow Range
+	// Distance
 	UPROPERTY(EditAnywhere)
-	FVector2f Gpercent = FVector2f(0.200000f, 1.000000f);
+	float Distance = 1.000000f;
+
+	// Grow Range Min
+	UPROPERTY(EditAnywhere)
+	float GrowMin = 0.000000f;
+
+	// Grow Range Max
+	UPROPERTY(EditAnywhere)
+	float GrowMax = 1.000000f;
 
 	// Mirror
 	UPROPERTY(EditAnywhere)
@@ -69,6 +86,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	FVector2f Scale = FVector2f(1.000000f, 1.000000f);
 
+	// Prune
+	UPROPERTY(EditAnywhere)
+	int32 Prune = 0;
+
 	// Enable Scale Along Curve
 	UPROPERTY(EditAnywhere)
 	int32 EnableScaleCurve = 1;
@@ -76,20 +97,22 @@ public:
 };
 
 class FTccBlastByFeature;
+class FTccMeasure;
+class FTccPolyFrame;
 class FTccAttribPromote;
 class FTccForBlock;
 class FTccVex;
-class FTccScatter;
-class FTccAttribDelete;
+class FTccDitheredScatter;
 class FTccSort;
 class FTccSwitch;
 class FTccMerge;
+class FTccAttribDelete;
 class FTccInstancer;
-class UNREALTCCPROJECT_API FTcrLeafGeneratorWithVariations : public FTccNode
+class UNREALTCCPROJECT_API FTcrTreeLeafScatterVariation : public FTccNode
 {
 public:
-	FTcrLeafGeneratorWithVariations() ;
-	virtual ~FTcrLeafGeneratorWithVariations() ;
+	FTcrTreeLeafScatterVariation() ;
+	virtual ~FTcrTreeLeafScatterVariation() ;
 
 	virtual void Cook() override;
 
@@ -99,11 +122,20 @@ public:
 	// Seed
 	int32 BranchSeed = 0;
 
-	// Force Total Count
+	// Method
+	int32 Method = UTcrTreeLeafScatterVariation::ByCount;
+
+	// Count
 	int32 Npts = 100;
 
-	// Grow Range
-	FVector2f Gpercent = FVector2f(0.200000f, 1.000000f);
+	// Distance
+	float Distance = 1.000000f;
+
+	// Grow Range Min
+	float GrowMin = 0.000000f;
+
+	// Grow Range Max
+	float GrowMax = 1.000000f;
 
 	// Mirror
 	int32 Mirror = 1;
@@ -123,22 +155,31 @@ public:
 	// Scale
 	FVector2f Scale = FVector2f(1.000000f, 1.000000f);
 
+	// Prune
+	int32 Prune = 0;
+
 	// Enable Scale Along Curve
 	int32 EnableScaleCurve = 1;
 
-	FTccBlastByFeature* tcc_blast_by_feature3 = nullptr;
+	FTccBlastByFeature* remove_other_levels = nullptr;
+
+	FTccBlastByFeature* remove_under_min = nullptr;
+
+	FTccBlastByFeature* remove_above_max = nullptr;
+
+	FTccMeasure* tcc_measure1 = nullptr;
+
+	FTccBlastByFeature* remove_0_len = nullptr;
+
+	FTccPolyFrame* branch_dir = nullptr;
 
 	FTccAttribPromote* tcc_attrib_promote1 = nullptr;
 
 	FTccForBlock* foreach_branch2 = nullptr;
 
-	FTccVex* add_density1 = nullptr;
+	FTccVex* calc_count_and_seed = nullptr;
 
-	FTccVex* calc_seed = nullptr;
-
-	FTccScatter* tcc_scatter5 = nullptr;
-
-	FTccAttribDelete* delete_density2 = nullptr;
+	FTccDitheredScatter* tcc_dithered_scatter1 = nullptr;
 
 	FTccSort* tcc_sort3 = nullptr;
 
@@ -160,7 +201,7 @@ public:
 
 	FTccVex* apply_scale = nullptr;
 
-	FTccVex* add_instance_id1 = nullptr;
+	FTccVex* add_instance_id = nullptr;
 
 	FTccInstancer* tcc_instancer2 = nullptr;
 

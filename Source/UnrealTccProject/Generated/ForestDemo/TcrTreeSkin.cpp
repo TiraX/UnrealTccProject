@@ -4,6 +4,7 @@
 #include "Generated/TccTemplates.h"
 #include "TccForBlock.h"
 #include "TccSwitch.h"
+#include "TctTexVex.h"
 #include "TccAttribute.h"
 #include "TccGeometry.h"
 #include "Vex.h"
@@ -38,6 +39,7 @@ void UTcrTreeSkin::SyncParams(FTccNodePtr InNode)
 void FTcrTreeSkin::Cook() 
 {
 	{
+		// Node: tcc_poly_wire1
 		tcc_poly_wire1->SetInput(0, GetInput(0));
 		tcc_poly_wire1->EnableRadiusAttrib = 1;
 		tcc_poly_wire1->RAttrib = TEXT("radius");
