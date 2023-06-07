@@ -4,7 +4,6 @@
 #include "TcrTreeTrunkSkeleton.h"
 #include "TcrTreeBranchSkeleton.h"
 #include "TcrScatterOnBranches.h"
-#include "TcrTreeSkin.h"
 #include "TcrTreeBigSubbranches.h"
 #include "TcrTreeLeafScatterVariation.h"
 #include "Generated/TccTemplates.h"
@@ -51,8 +50,8 @@ void UTcrTreeBigUe::SyncParams(FTccNodePtr InNode)
 	branch2->InitMultiRefs(false); // RefCount = 1
 	branch3 = new FTcrTreeBranchSkeleton();
 	branch3->InitMultiRefs(true); // RefCount = 2
-	skin = new FTcrTreeSkin();
-	skin->InitMultiRefs(false); // RefCount = 1
+	tree_skin1 = new FTccPolyWire();
+	tree_skin1->InitMultiRefs(false); // RefCount = 1
 	mat_trunk = new FTccUnrealMaterial();
 	mat_trunk->InitMultiRefs(false); // RefCount = 1
 	tcc_pack1 = new FTccPack();
@@ -66,6 +65,8 @@ void UTcrTreeBigUe::SyncParams(FTccNodePtr InNode)
 		subbranches->InitMultiRefs(false); // RefCount = 1
 		mat_leaf = new FTccUnrealMaterial();
 		mat_leaf->InitMultiRefs(false); // RefCount = 1
+		packed_name = new FTccVex();
+		packed_name->InitMultiRefs(false); // RefCount = 1
 		pack_branch_instance = new FTccPack();
 		pack_branch_instance->InitMultiRefs(false); // RefCount = 1
 		add_instance_attrib = new FTccVex();
@@ -86,13 +87,14 @@ void UTcrTreeBigUe::SyncParams(FTccNodePtr InNode)
 	delete tcc_sdf_from_polygon2; 
 	delete branch2; 
 	delete branch3; 
-	delete skin; 
+	delete tree_skin1; 
 	delete mat_trunk; 
 	delete tcc_pack1; 
 	delete for_variation_number; 
 		delete calc_seed; 
 		delete subbranches; 
 		delete mat_leaf; 
+		delete packed_name; 
 		delete pack_branch_instance; 
 		delete add_instance_attrib; 
 	delete tcr_tree_leaf_scatter_variation1; 
@@ -248,19 +250,23 @@ void FTcrTreeBigUe::Cook()
 		branch3->Cook();
 	}
 	{
-		// Node: skin
-		skin->SetInput(0, branch3);
-		skin->Cook();
+		// Node: tree_skin1
+		tree_skin1->SetInput(0, branch3);
+		tree_skin1->EnableRadiusAttrib = 1;
+		tree_skin1->RAttrib = TEXT("radius");
+		tree_skin1->Divs = 7;
+		tree_skin1->Cook();
 	}
 	{
 		// Node: mat_trunk
-		mat_trunk->SetInput(0, skin);
+		mat_trunk->SetInput(0, tree_skin1);
 		mat_trunk->MatPath = TEXT("/Game/ForestDemo/Materials/MI_TreeBig_Trunk.MI_TreeBig_Trunk");
 		mat_trunk->Cook();
 	}
 	{
 		// Node: tcc_pack1
 		tcc_pack1->SetInput(0, mat_trunk);
+		tcc_pack1->GeoName = TEXT("trunk");
 		tcc_pack1->Cook();
 	}
 	{
@@ -320,8 +326,24 @@ void FTcrTreeBigUe::Cook()
 				}
 				
 				{
+					// Node: packed_name
+					packed_name->SetInput(0, mat_leaf);
+					packed_name->SetInput(1, nullptr);
+					packed_name->Cook();
+					{
+						FTccGeometryPtr Geo0 = packed_name->GetGeoResult(0);
+						FTccAttribPtr attr_name = Geo0->AddDetailAttrib("name", ETccAttribType::S);
+						FString& _name = attr_name->GetData<FString>()[0];
+						int32 iter = _iteration;
+						_name = "subbranch" + vex_itoa(iter);
+					}
+				}
+				
+				{
 					// Node: pack_branch_instance
-					pack_branch_instance->SetInput(0, mat_leaf);
+					pack_branch_instance->SetInput(0, packed_name);
+					FTccGeometryConstPtr Geo0 = pack_branch_instance->GetInput(0)->GetConstGeoResult(0);
+					pack_branch_instance->GeoName = hs_details(Geo0, "name");
 					pack_branch_instance->Cook();
 				}
 				
@@ -366,8 +388,7 @@ void FTcrTreeBigUe::Cook()
 		tcr_tree_leaf_scatter_variation1->ScaleRamp.AddRampPoint(1.0000f, 0.0000f);
 		tcr_tree_leaf_scatter_variation1->BranchSeed = 5;
 		tcr_tree_leaf_scatter_variation1->Method = UTcrTreeLeafScatterVariation::ByDistance;
-		tcr_tree_leaf_scatter_variation1->Npts = 1;
-		tcr_tree_leaf_scatter_variation1->Distance = 0.350000f;
+		tcr_tree_leaf_scatter_variation1->Distance = 0.340000f;
 		tcr_tree_leaf_scatter_variation1->Mirror = 0;
 		tcr_tree_leaf_scatter_variation1->YawRange = FVector2f(15.000000f, 60.000000f);
 		tcr_tree_leaf_scatter_variation1->PitchRand = 180.899994f;

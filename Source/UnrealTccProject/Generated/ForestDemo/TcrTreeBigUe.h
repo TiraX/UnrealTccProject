@@ -38,7 +38,7 @@ class FTccVex;
 class FTcrScatterOnBranches;
 class FTccCopyToPoint;
 class FTccSdfFromPolygon;
-class FTcrTreeSkin;
+class FTccPolyWire;
 class FTccUnrealMaterial;
 class FTccPack;
 class FTccForBlock;
@@ -71,7 +71,7 @@ public:
 
 	FTcrTreeBranchSkeleton* branch3 = nullptr;
 
-	FTcrTreeSkin* skin = nullptr;
+	FTccPolyWire* tree_skin1 = nullptr;
 
 	FTccUnrealMaterial* mat_trunk = nullptr;
 
@@ -84,6 +84,8 @@ public:
 	FTcrTreeBigSubbranches* subbranches = nullptr;
 
 	FTccUnrealMaterial* mat_leaf = nullptr;
+
+	FTccVex* packed_name = nullptr;
 
 	FTccPack* pack_branch_instance = nullptr;
 
