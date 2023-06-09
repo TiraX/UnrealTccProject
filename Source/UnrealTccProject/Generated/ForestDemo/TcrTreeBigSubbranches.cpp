@@ -3,7 +3,6 @@
 #include "TcrTreeBigSubbranches.h"
 #include "TcrTreeTrunkSkeleton.h"
 #include "TcrTreeBranchSkeleton.h"
-#include "TcrTreeSkin.h"
 #include "TcrTreeSimpleLeaf.h"
 #include "TcrTreeLeafScatter.h"
 #include "Generated/TccTemplates.h"
@@ -54,8 +53,10 @@ void UTcrTreeBigSubbranches::SyncParams(FTccNodePtr InNode)
 	hierarchy2->InitMultiRefs(true); // RefCount = 2
 		branch4 = new FTcrTreeBranchSkeleton();
 		branch4->InitMultiRefs(false); // RefCount = 1
-	tcr_tree_skin1 = new FTcrTreeSkin();
-	tcr_tree_skin1->InitMultiRefs(false); // RefCount = 1
+	tree_skin = new FTccPolyWire();
+	tree_skin->InitMultiRefs(false); // RefCount = 1
+	tcc_attrib_delete1 = new FTccAttribDelete();
+	tcc_attrib_delete1->InitMultiRefs(false); // RefCount = 1
 	tcr_tree_simple_leaf1 = new FTcrTreeSimpleLeaf();
 	tcr_tree_simple_leaf1->InitMultiRefs(false); // RefCount = 1
 	tcc_uv_transform1 = new FTccUvTransform();
@@ -78,7 +79,8 @@ void UTcrTreeBigSubbranches::SyncParams(FTccNodePtr InNode)
 		delete branch3; 
 	delete hierarchy2; 
 		delete branch4; 
-	delete tcr_tree_skin1; 
+	delete tree_skin; 
+	delete tcc_attrib_delete1; 
 	delete tcr_tree_simple_leaf1; 
 	delete tcc_uv_transform1; 
 	delete leaf_scatter; 
@@ -96,9 +98,9 @@ void FTcrTreeBigSubbranches::Cook()
 		main_branch->RscaleAlongCurve.AddRampPoint(0.5392f, 0.5833f);
 		main_branch->RscaleAlongCurve.AddRampPoint(1.0000f, 0.5208f);
 		main_branch->Length = float(hs_fit01(hs_rand(Gseed + 1.5f), SizeMin, SizeMax));
+		main_branch->Segs = 13;
 		main_branch->Radius = float((Hierachy + 1) * 0.05f);
 		main_branch->Nseed = int32(Gseed);
-		main_branch->Segs = 13;
 		main_branch->Freq = 0.650000f;
 		main_branch->Amp = float(main_branch->Length * 0.2f);
 		main_branch->Bend = 4.900000f;
@@ -158,7 +160,7 @@ void FTcrTreeBigSubbranches::Cook()
 		branch1->LscaleAlongCurve = ETccRampInterp::Linear;
 		branch1->LscaleAlongCurve.ResizeRampPoints(2);
 		branch1->LscaleAlongCurve.AddRampPoint(0.0000f, 1.0000f);
-		branch1->LscaleAlongCurve.AddRampPoint(1.0000f, 0.8974f);
+		branch1->LscaleAlongCurve.AddRampPoint(1.0000f, 1.0000f);
 		branch1->BranchSeed = int32(Gseed);
 		branch1->Npts = 5;
 		branch1->Gpercent = FVector2f(0.100000f, 1.000000f);
@@ -291,9 +293,20 @@ void FTcrTreeBigSubbranches::Cook()
 		hierarchy2->SetValidGeoResult(0, SwitchResult);
 	}
 	{
-		// Node: tcr_tree_skin1
-		tcr_tree_skin1->SetInput(0, hierarchy2);
-		tcr_tree_skin1->Cook();
+		// Node: tree_skin
+		tree_skin->SetInput(0, hierarchy2);
+		tree_skin->EnableRadiusAttrib = 1;
+		tree_skin->RAttrib = TEXT("radius");
+		tree_skin->Divs = 7;
+		tree_skin->Cook();
+	}
+	{
+		// Node: tcc_attrib_delete1
+		tcc_attrib_delete1->SetInput(0, tree_skin);
+		tcc_attrib_delete1->Ptdel = TEXT("*");
+		tcc_attrib_delete1->Primdel = TEXT("*");
+		tcc_attrib_delete1->Dtldel = TEXT("*");
+		tcc_attrib_delete1->Cook();
 	}
 	{
 		// Node: tcr_tree_simple_leaf1
@@ -343,7 +356,7 @@ void FTcrTreeBigSubbranches::Cook()
 	}
 	{
 		// Node: tcc_merge1
-		tcc_merge1->SetInput(0, tcr_tree_skin1);
+		tcc_merge1->SetInput(0, tcc_attrib_delete1);
 		tcc_merge1->SetInput(1, leaf_scatter);
 		tcc_merge1->Cook();
 	}

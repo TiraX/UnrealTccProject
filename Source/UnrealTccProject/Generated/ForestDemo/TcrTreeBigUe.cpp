@@ -27,6 +27,13 @@ FTccNodePtr UTcrTreeBigUe::CreateNode()
 void UTcrTreeBigUe::SyncParams(FTccNodePtr InNode) 
 {
 	TSharedPtr<FTcrTreeBigUe> Node = StaticCastSharedPtr<FTcrTreeBigUe>(InNode);
+	Node->DebugShape = DebugShape;
+	Node->VolumeShape = VolumeShape;
+	Node->VoxelSize = VoxelSize;
+	Node->B2Dis = B2Dis;
+	Node->B3Dis = B3Dis;
+	Node->Npts = Npts;
+	Node->Gpercent = Gpercent;
 }
 
  FTcrTreeBigUe::FTcrTreeBigUe() 
@@ -52,6 +59,8 @@ void UTcrTreeBigUe::SyncParams(FTccNodePtr InNode)
 	branch3->InitMultiRefs(true); // RefCount = 2
 	tree_skin1 = new FTccPolyWire();
 	tree_skin1->InitMultiRefs(false); // RefCount = 1
+	tcc_attrib_delete1 = new FTccAttribDelete();
+	tcc_attrib_delete1->InitMultiRefs(false); // RefCount = 1
 	mat_trunk = new FTccUnrealMaterial();
 	mat_trunk->InitMultiRefs(false); // RefCount = 1
 	tcc_pack1 = new FTccPack();
@@ -88,6 +97,7 @@ void UTcrTreeBigUe::SyncParams(FTccNodePtr InNode)
 	delete branch2; 
 	delete branch3; 
 	delete tree_skin1; 
+	delete tcc_attrib_delete1; 
 	delete mat_trunk; 
 	delete tcc_pack1; 
 	delete for_variation_number; 
@@ -111,11 +121,13 @@ void FTcrTreeBigUe::Cook()
 		trunk->RscaleAlongCurve.AddRampPoint(0.5366f, 0.4167f);
 		trunk->RscaleAlongCurve.AddRampPoint(1.0000f, 0.3542f);
 		trunk->Length = 20.000000f;
+		trunk->Segs = 30;
 		trunk->Radius = 1.600000f;
-		trunk->Segs = 10;
 		trunk->Freq = 0.750000f;
 		trunk->EnableBend = 1;
-		trunk->Bend = 4.900000f;
+		trunk->Bend = -11.800000f;
+		trunk->BendCapLen = 10.000000f;
+		trunk->BendCapOff = 1.800000f;
 		trunk->Cook();
 	}
 	{
@@ -130,20 +142,17 @@ void FTcrTreeBigUe::Cook()
 		branch1->LscaleAlongCurve.ResizeRampPoints(2);
 		branch1->LscaleAlongCurve.AddRampPoint(0.0000f, 1.0000f);
 		branch1->LscaleAlongCurve.AddRampPoint(1.0000f, 0.4615f);
-		branch1->Npts = 7;
-		branch1->Gpercent = FVector2f(0.700000f, 1.000000f);
+		branch1->Npts = int32(Npts);
+		branch1->Gpercent = FVector2f(Gpercent.X, Gpercent.Y);
 		branch1->DbgColor = FVector3f(0.500000f, 0.000000f, 0.500000f);
-		branch1->PitchR = FVector2f(18.000000f, 25.000000f);
+		branch1->PitchR = FVector2f(10.000000f, 25.000000f);
 		branch1->RadiusScale = 0.788000f;
-		branch1->BranchLength = 14.000000f;
+		branch1->BranchLength = 9.610000f;
 		branch1->EnableNoise = 1;
-		branch1->Segs = 5;
-		branch1->Freq = 0.280000f;
+		branch1->Freq = 0.288000f;
 		branch1->Amp = 2.000000f;
-		branch1->Bend1 = 1;
-		branch1->Bend1Angle = -22.700001f;
+		branch1->Bend1Angle = 0.600000f;
 		branch1->Bend1Length = 0.285000f;
-		branch1->Bend2 = 1;
 		branch1->Bend2Angle = 59.200001f;
 		branch1->Bend2Length = 0.982000f;
 		branch1->Bend2Offset = 5.740000f;
@@ -152,7 +161,7 @@ void FTcrTreeBigUe::Cook()
 	{
 		// Node: tcc_sphere2
 		tcc_sphere2->Type = UTccSphere::Polygon;
-		tcc_sphere2->Rad = FVector3f(5.500000f, 5.500000f, 5.500000f);
+		tcc_sphere2->Rad = FVector3f(4.100000f, 4.100000f, 3.000000f);
 		tcc_sphere2->Cook();
 	}
 	{
@@ -170,9 +179,9 @@ void FTcrTreeBigUe::Cook()
 			{
 				const int32 _ptnum = i;
 				FVector3f& _P = Geo0->GetPositions()[i];
-				if(_P.Z - bbox_min.Y < s.Y * percent)
+				if(_P.Z - bbox_min.Z < s.Z * percent)// tcc_mark:replace = bbox_min.Z / bbox_min.Z;replace = s.Z / s.Z
 				{
-				_P.Z = s.Y * percent + bbox_min.Y;
+				_P.Z = s.Z * percent + bbox_min.Z;// tcc_mark:replace = bbox_min.Z / bbox_min.Z;replace = s.Z / s.Z
 				}
 			}
 		}
@@ -180,8 +189,9 @@ void FTcrTreeBigUe::Cook()
 	{
 		// Node: tcr_scatter_on_branches1
 		tcr_scatter_on_branches1->SetInput(0, branch1);
-		tcr_scatter_on_branches1->Gseed = 34;
-		tcr_scatter_on_branches1->ScaleMin = FVector3f(0.750000f, 0.800000f, 0.400000f);
+		tcr_scatter_on_branches1->Gseed = 43;
+		tcr_scatter_on_branches1->Range = FVector2f(0.500000f, 1.000000f);
+		tcr_scatter_on_branches1->ScaleMin = FVector3f(0.610000f, 0.800000f, 0.550000f);
 		tcr_scatter_on_branches1->Cook();
 	}
 	{
@@ -193,7 +203,7 @@ void FTcrTreeBigUe::Cook()
 	{
 		// Node: tcc_sdf_from_polygon2
 		tcc_sdf_from_polygon2->SetInput(0, tcc_copy_to_point1);
-		tcc_sdf_from_polygon2->Voxelsize = 1.200000f;
+		tcc_sdf_from_polygon2->Voxelsize = float(VoxelSize);
 		tcc_sdf_from_polygon2->Cook();
 	}
 	{
@@ -209,8 +219,10 @@ void FTcrTreeBigUe::Cook()
 		branch2->LscaleAlongCurve.ResizeRampPoints(2);
 		branch2->LscaleAlongCurve.AddRampPoint(0.0000f, 1.0000f);
 		branch2->LscaleAlongCurve.AddRampPoint(1.0000f, 0.5385f);
-		branch2->Npts = 6;
+		branch2->Method = UTcrTreeBranchSkeleton::ByDistance;
+		branch2->Distance = float(B2Dis);
 		branch2->Gpercent = FVector2f(0.400000f, 1.000000f);
+		branch2->EnableDbgColor = 1;
 		branch2->DbgColor = FVector3f(0.000000f, 0.500000f, 0.500000f);
 		branch2->Pattern = UTcrTreeBranchSkeleton::AngleRange;
 		branch2->Yaw = 0.000000f;
@@ -218,11 +230,11 @@ void FTcrTreeBigUe::Cook()
 		branch2->AngleOffset = 110.000000f;
 		branch2->PitchR = FVector2f(35.000000f, 55.000000f);
 		branch2->RadiusScale = 0.630000f;
-		branch2->Prune = 1;
-		branch2->BranchLength = 6.410000f;
+		branch2->ByVolume = int32(VolumeShape);
+		branch2->BranchLength = 4.670000f;
 		branch2->EnableNoise = 1;
-		branch2->Freq = 4.370000f;
-		branch2->Amp = 1.320000f;
+		branch2->Freq = 3.879000f;
+		branch2->Amp = 0.785000f;
 		branch2->Cook();
 	}
 	{
@@ -237,16 +249,18 @@ void FTcrTreeBigUe::Cook()
 		branch3->LscaleAlongCurve.ResizeRampPoints(2);
 		branch3->LscaleAlongCurve.AddRampPoint(0.0000f, 1.0000f);
 		branch3->LscaleAlongCurve.AddRampPoint(1.0000f, 0.4872f);
-		branch3->Npts = 5;
+		branch3->Method = UTcrTreeBranchSkeleton::ByDistance;
+		branch3->Distance = float(B3Dis);
 		branch3->Gpercent = FVector2f(0.100000f, 1.000000f);
 		branch3->BranchSegs = 6;
+		branch3->EnableDbgColor = 1;
 		branch3->DbgColor = FVector3f(0.500000f, 1.000000f, 0.000000f);
-		branch3->PitchR = FVector2f(25.000000f, 45.000000f);
-		branch3->Prune = 1;
-		branch3->BranchLength = 2.520000f;
+		branch3->PitchR = FVector2f(35.000000f, 65.000000f);
+		branch3->ByVolume = int32(VolumeShape);
+		branch3->BranchLength = 2.130000f;
 		branch3->EnableNoise = 1;
 		branch3->Freq = 1.240000f;
-		branch3->Amp = 0.231000f;
+		branch3->Amp = 0.667000f;
 		branch3->Cook();
 	}
 	{
@@ -258,8 +272,16 @@ void FTcrTreeBigUe::Cook()
 		tree_skin1->Cook();
 	}
 	{
+		// Node: tcc_attrib_delete1
+		tcc_attrib_delete1->SetInput(0, tree_skin1);
+		tcc_attrib_delete1->Ptdel = TEXT("*");
+		tcc_attrib_delete1->Primdel = TEXT("*");
+		tcc_attrib_delete1->Dtldel = TEXT("*");
+		tcc_attrib_delete1->Cook();
+	}
+	{
 		// Node: mat_trunk
-		mat_trunk->SetInput(0, tree_skin1);
+		mat_trunk->SetInput(0, tcc_attrib_delete1);
 		mat_trunk->MatPath = TEXT("/Game/ForestDemo/Materials/MI_TreeBig_Trunk.MI_TreeBig_Trunk");
 		mat_trunk->Cook();
 	}
@@ -302,8 +324,8 @@ void FTcrTreeBigUe::Cook()
 						_gseed = iter * 2 + 4;
 						int32 level = iter / 2;
 						_hie = level;
-						_smin = level * 2.f + 1.f;
-						_smax = level * 2.f + 2.f;
+						_smin = level * 1.5f + 1.f;
+						_smax = level * 1.5f + 2.f;
 					}
 				}
 				
@@ -388,11 +410,11 @@ void FTcrTreeBigUe::Cook()
 		tcr_tree_leaf_scatter_variation1->ScaleRamp.AddRampPoint(1.0000f, 0.0000f);
 		tcr_tree_leaf_scatter_variation1->BranchSeed = 5;
 		tcr_tree_leaf_scatter_variation1->Method = UTcrTreeLeafScatterVariation::ByDistance;
-		tcr_tree_leaf_scatter_variation1->Distance = 0.340000f;
+		tcr_tree_leaf_scatter_variation1->Distance = 0.240000f;
 		tcr_tree_leaf_scatter_variation1->Mirror = 0;
 		tcr_tree_leaf_scatter_variation1->YawRange = FVector2f(15.000000f, 60.000000f);
 		tcr_tree_leaf_scatter_variation1->PitchRand = 180.899994f;
-		tcr_tree_leaf_scatter_variation1->Scale = FVector2f(0.230000f, 0.400000f);
+		tcr_tree_leaf_scatter_variation1->Scale = FVector2f(0.300000f, 0.400000f);
 		tcr_tree_leaf_scatter_variation1->Prune = 1;
 		tcr_tree_leaf_scatter_variation1->EnableScaleCurve = 0;
 		tcr_tree_leaf_scatter_variation1->Cook();

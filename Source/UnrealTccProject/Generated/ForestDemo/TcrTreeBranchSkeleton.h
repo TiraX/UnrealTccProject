@@ -18,6 +18,11 @@ public:
 		output0,  // From inc_curr_level
 		OUT_Count,
 	};
+	enum EMethod
+	{
+		ByCount,
+		ByDistance,
+	};
 	enum EPattern
 	{
 		AngleStep,
@@ -46,9 +51,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 BranchSeed = 0;
 
+	// Method
+	UPROPERTY(EditAnywhere)
+	int32 Method = UTcrTreeBranchSkeleton::ByCount;
+
 	// Force Total Count
 	UPROPERTY(EditAnywhere)
 	int32 Npts = 100;
+
+	// Distance
+	UPROPERTY(EditAnywhere)
+	float Distance = 1.000000f;
 
 	// Grow Range
 	UPROPERTY(EditAnywhere)
@@ -94,9 +107,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float RadiusScale = 1.000000f;
 
-	// Prune by Volume
+	// Length by Volume
 	UPROPERTY(EditAnywhere)
-	int32 Prune = 0;
+	int32 ByVolume = 0;
 
 	// Branch Length
 	UPROPERTY(EditAnywhere)
@@ -105,10 +118,6 @@ public:
 	// Enable
 	UPROPERTY(EditAnywhere)
 	int32 EnableNoise = 0;
-
-	// Segments
-	UPROPERTY(EditAnywhere)
-	int32 Segs = 4;
 
 	// Frequency
 	UPROPERTY(EditAnywhere)
@@ -153,18 +162,18 @@ public:
 };
 
 class FTccBlastByFeature;
-class FTccLine;
+class FTccMeasure;
+class FTccPolyFrame;
 class FTccSwitch;
+class FTccLine;
 class FTccBend;
 class FTccForBlock;
 class FTccVex;
-class FTccScatter;
-class FTccAttribDelete;
+class FTccDitheredScatter;
 class FTccSort;
 class FTccAttribPromote;
 class FTccCopyToPoint;
 class FTccCarveByVolume;
-class FTccResample;
 class FTccMerge;
 class UNREALTCCPROJECT_API FTcrTreeBranchSkeleton : public FTccNode
 {
@@ -183,8 +192,14 @@ public:
 	// Seed
 	int32 BranchSeed = 0;
 
+	// Method
+	int32 Method = UTcrTreeBranchSkeleton::ByCount;
+
 	// Force Total Count
 	int32 Npts = 100;
+
+	// Distance
+	float Distance = 1.000000f;
 
 	// Grow Range
 	FVector2f Gpercent = FVector2f(0.000000f, 1.000000f);
@@ -219,17 +234,14 @@ public:
 	// Radius Scale
 	float RadiusScale = 1.000000f;
 
-	// Prune by Volume
-	int32 Prune = 0;
+	// Length by Volume
+	int32 ByVolume = 0;
 
 	// Branch Length
 	float BranchLength = 1.000000f;
 
 	// Enable
 	int32 EnableNoise = 0;
-
-	// Segments
-	int32 Segs = 4;
 
 	// Frequency
 	float Freq = 1.000000f;
@@ -263,7 +275,21 @@ public:
 
 	FTccBlastByFeature* tcc_blast_by_feature1 = nullptr;
 
+	FTccBlastByFeature* remove_under_min = nullptr;
+
+	FTccBlastByFeature* remove_above_max = nullptr;
+
+	FTccMeasure* tcc_measure1 = nullptr;
+
+	FTccBlastByFeature* remove_0_len = nullptr;
+
+	FTccPolyFrame* tangent = nullptr;
+
+	FTccSwitch* by_volume_more_length = nullptr;
+
 	FTccLine* tcc_line1 = nullptr;
+
+	FTccLine* tcc_line_double = nullptr;
 
 	FTccSwitch* bend1 = nullptr;
 
@@ -275,11 +301,9 @@ public:
 
 	FTccForBlock* foreach_branch = nullptr;
 
-	FTccVex* add_density_calc_dir = nullptr;
+	FTccVex* calc_count_and_seed = nullptr;
 
-	FTccScatter* tcc_scatter3 = nullptr;
-
-	FTccAttribDelete* delete_density = nullptr;
+	FTccDitheredScatter* tcc_dithered_scatter1 = nullptr;
 
 	FTccSort* tcc_sort1 = nullptr;
 
@@ -293,15 +317,13 @@ public:
 
 	FTccVex* add_primattrib_level = nullptr;
 
-	FTccSwitch* prune = nullptr;
+	FTccSwitch* prune_by_volume = nullptr;
 
 	FTccCarveByVolume* tcc_carve_by_volume1 = nullptr;
 
 	FTccVex* calc_radius = nullptr;
 
 	FTccSwitch* enable_noise = nullptr;
-
-	FTccResample* tcc_resample1 = nullptr;
 
 	FTccVex* curl_noise = nullptr;
 

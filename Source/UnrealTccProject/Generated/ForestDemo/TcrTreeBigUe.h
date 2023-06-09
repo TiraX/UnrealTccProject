@@ -29,6 +29,34 @@ public:
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
 
+	// DebugShape
+	UPROPERTY(EditAnywhere)
+	int32 DebugShape = 0;
+
+	// Volume Shape
+	UPROPERTY(EditAnywhere)
+	int32 VolumeShape = 1;
+
+	// VoxelSize
+	UPROPERTY(EditAnywhere)
+	float VoxelSize = 0.700000f;
+
+	// Branch2 Dis
+	UPROPERTY(EditAnywhere)
+	float B2Dis = 0.800000f;
+
+	// Branch3 Dis
+	UPROPERTY(EditAnywhere)
+	float B3Dis = 0.800000f;
+
+	// Branch1 Count
+	UPROPERTY(EditAnywhere)
+	int32 Npts = 9;
+
+	// Branch1 Range
+	UPROPERTY(EditAnywhere)
+	FVector2f Gpercent = FVector2f(0.600000f, 0.900000f);
+
 };
 
 class FTcrTreeTrunkSkeleton;
@@ -39,6 +67,7 @@ class FTcrScatterOnBranches;
 class FTccCopyToPoint;
 class FTccSdfFromPolygon;
 class FTccPolyWire;
+class FTccAttribDelete;
 class FTccUnrealMaterial;
 class FTccPack;
 class FTccForBlock;
@@ -52,6 +81,27 @@ public:
 	virtual ~FTcrTreeBigUe() ;
 
 	virtual void Cook() override;
+
+	// DebugShape
+	int32 DebugShape = 0;
+
+	// Volume Shape
+	int32 VolumeShape = 1;
+
+	// VoxelSize
+	float VoxelSize = 0.700000f;
+
+	// Branch2 Dis
+	float B2Dis = 0.800000f;
+
+	// Branch3 Dis
+	float B3Dis = 0.800000f;
+
+	// Branch1 Count
+	int32 Npts = 9;
+
+	// Branch1 Range
+	FVector2f Gpercent = FVector2f(0.600000f, 0.900000f);
 
 	FTcrTreeTrunkSkeleton* trunk = nullptr;
 
@@ -72,6 +122,8 @@ public:
 	FTcrTreeBranchSkeleton* branch3 = nullptr;
 
 	FTccPolyWire* tree_skin1 = nullptr;
+
+	FTccAttribDelete* tcc_attrib_delete1 = nullptr;
 
 	FTccUnrealMaterial* mat_trunk = nullptr;
 

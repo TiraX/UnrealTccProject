@@ -23,6 +23,7 @@ void UTcrScatterOnBranches::SyncParams(FTccNodePtr InNode)
 {
 	TSharedPtr<FTcrScatterOnBranches> Node = StaticCastSharedPtr<FTcrScatterOnBranches>(InNode);
 	Node->Gseed = Gseed;
+	Node->Range = Range;
 	Node->ScaleMin = ScaleMin;
 	Node->ScaleMax = ScaleMax;
 }
@@ -36,6 +37,8 @@ void UTcrScatterOnBranches::SyncParams(FTccNodePtr InNode)
 	keep_level_1_lines_only->InitMultiRefs(false); // RefCount = 1
 	tangentu = new FTccPolyFrame();
 	tangentu->InitMultiRefs(false); // RefCount = 1
+	remap_scatter_range = new FTccVex();
+	remap_scatter_range->InitMultiRefs(false); // RefCount = 1
 	foreach_begin1 = new FTccForBlock();
 	foreach_begin1->InitMultiRefs(false); // RefCount = 1
 	foreach_begin1->InitInputsCount(1);
@@ -51,6 +54,7 @@ void UTcrScatterOnBranches::SyncParams(FTccNodePtr InNode)
 	delete remove_attr_radius; 
 	delete keep_level_1_lines_only; 
 	delete tangentu; 
+	delete remap_scatter_range; 
 	delete foreach_begin1; 
 		delete tcc_vex1; 
 		delete tcc_scatter1; 
@@ -79,8 +83,25 @@ void FTcrScatterOnBranches::Cook()
 		tangentu->Cook();
 	}
 	{
+		// Node: remap_scatter_range
+		remap_scatter_range->SetInput(0, tangentu);
+		remap_scatter_range->Cook();
+		{
+			FTccGeometryPtr Geo0 = remap_scatter_range->GetGeoResult(0);
+			FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
+			const FVector2f range = Range;
+			const int32 _numpt = Geo0->GetNumPoints();
+			for(int32 i = 0; i < _numpt; i++)
+			{
+				const int32 _ptnum = i;
+				float& _curveu = attr_curveu->GetData<float>()[i];
+				_curveu = vex_fit(_curveu, range.X, range.Y, 0, 1);
+			}
+		}
+	}
+	{
 		// Node: foreach_begin1
-		foreach_begin1->SetInput(0, tangentu);
+		foreach_begin1->SetInput(0, remap_scatter_range);
 		foreach_begin1->Itermethod = UTccForBlock::ByPiecesOrPoints;
 		foreach_begin1->Method = UTccForBlock::MergeEachIteration;
 		foreach_begin1->Class = UTccForBlock::Primitives;
@@ -150,7 +171,7 @@ void FTcrScatterOnBranches::Cook()
 				_scale = s;
 				FVector3f dir = _tangentu;
 				// crush vertical direction
-				dir.Y = 0;
+				dir.Z = 0;// tcc_mark:replace = dir.Z / dir.Z
 				dir = vex_normalize(dir);
 				FMatrix44f m = vex_maketransform(dir, up);
 				FVector4f q = vex_quaternion(m);

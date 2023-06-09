@@ -37,6 +37,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Length = 5.000000f;
 
+	// Segments
+	UPROPERTY(EditAnywhere)
+	int32 Segs = 4;
+
 	// Radius
 	UPROPERTY(EditAnywhere)
 	float Radius = 0.500000f;
@@ -44,10 +48,6 @@ public:
 	// Noise Seed
 	UPROPERTY(EditAnywhere)
 	int32 Nseed = 0;
-
-	// Segments
-	UPROPERTY(EditAnywhere)
-	int32 Segs = 4;
 
 	// Frequency
 	UPROPERTY(EditAnywhere)
@@ -64,6 +64,14 @@ public:
 	// Bend
 	UPROPERTY(EditAnywhere)
 	float Bend = 0.000000f;
+
+	// Capture Length
+	UPROPERTY(EditAnywhere)
+	float BendCapLen = 2.000000f;
+
+	// Capture Offset
+	UPROPERTY(EditAnywhere)
+	float BendCapOff = 0.000000f;
 
 };
 
@@ -86,14 +94,14 @@ public:
 	// Max Length
 	float Length = 5.000000f;
 
+	// Segments
+	int32 Segs = 4;
+
 	// Radius
 	float Radius = 0.500000f;
 
 	// Noise Seed
 	int32 Nseed = 0;
-
-	// Segments
-	int32 Segs = 4;
 
 	// Frequency
 	float Freq = 1.000000f;
@@ -106,6 +114,12 @@ public:
 
 	// Bend
 	float Bend = 0.000000f;
+
+	// Capture Length
+	float BendCapLen = 2.000000f;
+
+	// Capture Offset
+	float BendCapOff = 0.000000f;
 
 	FTccLine* tcc_line1 = nullptr;
 

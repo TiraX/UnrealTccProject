@@ -31,7 +31,9 @@ void UTcrTreeBranchSkeleton::SyncParams(FTccNodePtr InNode)
 	Node->RscaleAlongCurve = RscaleAlongCurve;
 	Node->LscaleAlongCurve = LscaleAlongCurve;
 	Node->BranchSeed = BranchSeed;
+	Node->Method = Method;
 	Node->Npts = Npts;
+	Node->Distance = Distance;
 	Node->Gpercent = Gpercent;
 	Node->BranchSegs = BranchSegs;
 	Node->EnableDbgColor = EnableDbgColor;
@@ -43,10 +45,9 @@ void UTcrTreeBranchSkeleton::SyncParams(FTccNodePtr InNode)
 	Node->AngleOffset = AngleOffset;
 	Node->PitchR = PitchR;
 	Node->RadiusScale = RadiusScale;
-	Node->Prune = Prune;
+	Node->ByVolume = ByVolume;
 	Node->BranchLength = BranchLength;
 	Node->EnableNoise = EnableNoise;
-	Node->Segs = Segs;
 	Node->Freq = Freq;
 	Node->Amp = Amp;
 	Node->Bend1 = Bend1;
@@ -64,8 +65,22 @@ void UTcrTreeBranchSkeleton::SyncParams(FTccNodePtr InNode)
 	InitInputsCount(2);
 	tcc_blast_by_feature1 = new FTccBlastByFeature();
 	tcc_blast_by_feature1->InitMultiRefs(false); // RefCount = 1
-	tcc_line1 = new FTccLine();
-	tcc_line1->InitMultiRefs(false); // RefCount = 1
+	remove_under_min = new FTccBlastByFeature();
+	remove_under_min->InitMultiRefs(false); // RefCount = 1
+	remove_above_max = new FTccBlastByFeature();
+	remove_above_max->InitMultiRefs(false); // RefCount = 1
+	tcc_measure1 = new FTccMeasure();
+	tcc_measure1->InitMultiRefs(false); // RefCount = 1
+	remove_0_len = new FTccBlastByFeature();
+	remove_0_len->InitMultiRefs(false); // RefCount = 1
+	tangent = new FTccPolyFrame();
+	tangent->InitMultiRefs(false); // RefCount = 1
+	by_volume_more_length = new FTccSwitch();
+	by_volume_more_length->InitMultiRefs(false); // RefCount = 1
+		tcc_line1 = new FTccLine();
+		tcc_line1->InitMultiRefs(false); // RefCount = 1
+		tcc_line_double = new FTccLine();
+		tcc_line_double->InitMultiRefs(false); // RefCount = 1
 	bend1 = new FTccSwitch();
 	bend1->InitMultiRefs(false); // RefCount = 1
 		tcc_bend1 = new FTccBend();
@@ -77,12 +92,10 @@ void UTcrTreeBranchSkeleton::SyncParams(FTccNodePtr InNode)
 	foreach_branch = new FTccForBlock();
 	foreach_branch->InitMultiRefs(false); // RefCount = 1
 	foreach_branch->InitInputsCount(2);
-		add_density_calc_dir = new FTccVex();
-		add_density_calc_dir->InitMultiRefs(false); // RefCount = 1
-		tcc_scatter3 = new FTccScatter();
-		tcc_scatter3->InitMultiRefs(false); // RefCount = 1
-		delete_density = new FTccAttribDelete();
-		delete_density->InitMultiRefs(false); // RefCount = 1
+		calc_count_and_seed = new FTccVex();
+		calc_count_and_seed->InitMultiRefs(false); // RefCount = 1
+		tcc_dithered_scatter1 = new FTccDitheredScatter();
+		tcc_dithered_scatter1->InitMultiRefs(false); // RefCount = 1
 		tcc_sort1 = new FTccSort();
 		tcc_sort1->InitMultiRefs(false); // RefCount = 1
 		min_max_u = new FTccAttribPromote();
@@ -95,16 +108,14 @@ void UTcrTreeBranchSkeleton::SyncParams(FTccNodePtr InNode)
 		tcc_copy_to_point1->InitMultiRefs(false); // RefCount = 1
 	add_primattrib_level = new FTccVex();
 	add_primattrib_level->InitMultiRefs(false); // RefCount = 1
-	prune = new FTccSwitch();
-	prune->InitMultiRefs(false); // RefCount = 1
+	prune_by_volume = new FTccSwitch();
+	prune_by_volume->InitMultiRefs(false); // RefCount = 1
 		tcc_carve_by_volume1 = new FTccCarveByVolume();
 		tcc_carve_by_volume1->InitMultiRefs(false); // RefCount = 1
 	calc_radius = new FTccVex();
 	calc_radius->InitMultiRefs(false); // RefCount = 1
 	enable_noise = new FTccSwitch();
 	enable_noise->InitMultiRefs(false); // RefCount = 1
-		tcc_resample1 = new FTccResample();
-		tcc_resample1->InitMultiRefs(false); // RefCount = 1
 		curl_noise = new FTccVex();
 		curl_noise->InitMultiRefs(false); // RefCount = 1
 	dbg_color = new FTccSwitch();
@@ -125,26 +136,31 @@ void UTcrTreeBranchSkeleton::SyncParams(FTccNodePtr InNode)
  FTcrTreeBranchSkeleton::~FTcrTreeBranchSkeleton() 
 {
 	delete tcc_blast_by_feature1; 
-	delete tcc_line1; 
+	delete remove_under_min; 
+	delete remove_above_max; 
+	delete tcc_measure1; 
+	delete remove_0_len; 
+	delete tangent; 
+	delete by_volume_more_length; 
+		delete tcc_line1; 
+		delete tcc_line_double; 
 	delete bend1; 
 		delete tcc_bend1; 
 	delete bend2; 
 		delete tcc_bend2; 
 	delete foreach_branch; 
-		delete add_density_calc_dir; 
-		delete tcc_scatter3; 
-		delete delete_density; 
+		delete calc_count_and_seed; 
+		delete tcc_dithered_scatter1; 
 		delete tcc_sort1; 
 		delete min_max_u; 
 		delete calc_rotation1; 
 		delete calc_scale; 
 		delete tcc_copy_to_point1; 
 	delete add_primattrib_level; 
-	delete prune; 
+	delete prune_by_volume; 
 		delete tcc_carve_by_volume1; 
 	delete calc_radius; 
 	delete enable_noise; 
-		delete tcc_resample1; 
 		delete curl_noise; 
 	delete dbg_color; 
 		delete tcc_vex1; 
@@ -164,16 +180,95 @@ void FTcrTreeBranchSkeleton::Cook()
 		tcc_blast_by_feature1->Cook();
 	}
 	{
-		// Node: tcc_line1
-		tcc_line1->Dir = FVector3f(0.000000f, 1.000000f, 0.000000f);
-		tcc_line1->Dist = float(BranchLength);
-		tcc_line1->Points = int32(BranchSegs);
-		tcc_line1->Docurveuattr = 1;
-		tcc_line1->Cook();
+		// Node: remove_under_min
+		remove_under_min->SetInput(0, tcc_blast_by_feature1);
+		remove_under_min->Grouptype = UTccBlastByFeature::Points;
+		remove_under_min->ByAttrib = 1;
+		remove_under_min->Attrib = TEXT("curveu");
+		remove_under_min->Op = UTccBlastByFeature::Less;
+		remove_under_min->Value = float(Gpercent.X);
+		remove_under_min->Cook();
+	}
+	{
+		// Node: remove_above_max
+		remove_above_max->SetInput(0, remove_under_min);
+		remove_above_max->Grouptype = UTccBlastByFeature::Points;
+		remove_above_max->ByAttrib = 1;
+		remove_above_max->Attrib = TEXT("curveu");
+		remove_above_max->Op = UTccBlastByFeature::Greater;
+		remove_above_max->Value = float(Gpercent.Y);
+		remove_above_max->Cook();
+	}
+	{
+		// Node: tcc_measure1
+		tcc_measure1->SetInput(0, remove_above_max);
+		tcc_measure1->Measure = UTccMeasure::Perimeter;
+		tcc_measure1->Attribname = TEXT("length");
+		tcc_measure1->Cook();
+	}
+	{
+		// Node: remove_0_len
+		remove_0_len->SetInput(0, tcc_measure1);
+		remove_0_len->ByAttrib = 1;
+		remove_0_len->Attrib = TEXT("length");
+		remove_0_len->Cook();
+	}
+	{
+		// Node: tangent
+		tangent->SetInput(0, remove_0_len);
+		tangent->Tangentu = TEXT("tangent");
+		tangent->Cook();
+	}
+	{
+		// Node: by_volume_more_length
+		by_volume_more_length->Input = int32(ByVolume);
+		by_volume_more_length->NumCases = 2;
+		by_volume_more_length->Cook();
+		FTccGeometryPtr SwitchResult = nullptr;
+		const int32 Selection = by_volume_more_length->Input;
+		switch (Selection)
+		{
+			case 0:
+			{
+				{
+					// Node: tcc_line1
+					tcc_line1->Dir = FVector3f(0.000000f, 1.000000f, 0.000000f);
+					tcc_line1->Dist = float(BranchLength);
+					tcc_line1->Points = int32(BranchSegs);
+					tcc_line1->Docurveuattr = 1;
+					tcc_line1->Cook();
+				}
+				
+				
+				SwitchResult = tcc_line1->GetGeoResult(0);
+			}
+			break;
+			case 1:
+			{
+				
+				{
+					// Node: tcc_line_double
+					tcc_line_double->Dir = FVector3f(0.000000f, 1.000000f, 0.000000f);
+					tcc_line_double->Dist = float(BranchLength * 2);
+					tcc_line_double->Points = int32(BranchSegs * 2);
+					tcc_line_double->Docurveuattr = 1;
+					tcc_line_double->Cook();
+				}
+				
+				SwitchResult = tcc_line_double->GetGeoResult(0);
+			}
+			break;
+			default:
+			{
+				checkNoEntry();
+			}
+			break;
+		}
+		by_volume_more_length->SetValidGeoResult(0, SwitchResult);
 	}
 	{
 		// Node: bend1
-		bend1->SetInput(0, tcc_line1);
+		bend1->SetInput(0, by_volume_more_length);
 		bend1->Input = int32(Bend1);
 		bend1->NumCases = 2;
 		bend1->Cook();
@@ -191,7 +286,7 @@ void FTcrTreeBranchSkeleton::Cook()
 			{
 				{
 					// Node: tcc_bend1
-					tcc_bend1->SetInput(0, tcc_line1);
+					tcc_bend1->SetInput(0, by_volume_more_length);
 					tcc_bend1->Bend = float(Bend1Angle);
 					tcc_bend1->Origin = FVector3f(0.000000f, Bend1Offset, 0.000000f);
 					tcc_bend1->Length = float(BranchLength * Bend1Length);
@@ -249,7 +344,7 @@ void FTcrTreeBranchSkeleton::Cook()
 	}
 	{
 		// Node: foreach_branch
-		foreach_branch->SetInput(0, tcc_blast_by_feature1);
+		foreach_branch->SetInput(0, tangent);
 		foreach_branch->SetInput(1, bend2);
 		foreach_branch->Itermethod = UTccForBlock::ByPiecesOrPoints;
 		foreach_branch->Method = UTccForBlock::MergeEachIteration;
@@ -265,70 +360,51 @@ void FTcrTreeBranchSkeleton::Cook()
 				block_input0->SetGeoResult(0, foreach_branch->GetGeometryPiece(piece));
 				FTccNode* block_input1 = bend2;
 				{
-					// Node: add_density_calc_dir
-					add_density_calc_dir->SetInput(0, block_input0);
-					add_density_calc_dir->Cook();
+					// Node: calc_count_and_seed
+					calc_count_and_seed->SetInput(0, block_input0);
+					calc_count_and_seed->SetInput(1, nullptr);
+					calc_count_and_seed->Cook();
 					{
-						FTccGeometryPtr Geo0 = add_density_calc_dir->GetGeoResult(0);
-						FTccAttribPtr attr_curveu = Geo0->AddPointAttrib("curveu", ETccAttribType::F);
-						FTccAttribPtr attr_density = Geo0->AddPointAttrib("density", ETccAttribType::F);
-						FTccAttribPtr attr_tangent = Geo0->AddPointAttrib("tangent", ETccAttribType::F3);
-						const FVector2f percent = Gpercent;
-						const int32 _numpt = Geo0->GetNumPoints();
-						for(int32 i = 0; i < _numpt; i++)
+						FTccGeometryPtr Geo0 = calc_count_and_seed->GetGeoResult(0);
+						FTccAttribPtr attr_total_count = Geo0->AddDetailAttrib("total_count", ETccAttribType::I);
+						FTccAttribPtr attr_seed = Geo0->AddDetailAttrib("seed", ETccAttribType::I);
+						const int32 method = Method;
+						const int32 npts = Npts;
+						const float distance = Distance;
+						const int32 bseed = BranchSeed;
+						int32& _total_count = attr_total_count->GetData<int32>()[0];
+						int32& _seed = attr_seed->GetData<int32>()[0];
+						int32 count = 0;
+						if(method == 1)
 						{
-							const int32 _ptnum = i;
-							float& _curveu = attr_curveu->GetData<float>()[i];
-							float& _density = attr_density->GetData<float>()[i];
-							FVector3f& _tangent = attr_tangent->GetData<FVector3f>()[i];
-							// calc density
-							float f = _curveu;
-							_density = (f >= percent.X && f <= percent.Y)? 1.f : 0.f;
-							// calc tangent dir
-							FVector3f p0, p1;
-							if(_ptnum == _numpt - 1)
-							{
-							    // last point
-							p0 = vex_pointp(Geo0, _ptnum - 1);
-							p1 = vex_pointp(Geo0, _ptnum);
-							}
-							else if(_ptnum == 0)
-							{
-							    // first point
-							p0 = vex_pointp(Geo0, _ptnum);
-							p1 = vex_pointp(Geo0, _ptnum + 1);
-							}
-							else
-							{
-							    // other points
-							p0 = vex_pointp(Geo0, _ptnum - 1);
-							p1 = vex_pointp(Geo0, _ptnum + 1);
-							}
-							FVector3f yaw_axis = vex_normalize(p1 - p0);
-							_tangent = yaw_axis;
+						    // by distance
+						float l = vex_primf(Geo0, "length", 0);
+						count = (int)(l / distance + 0.5f);
 						}
+						else
+						{
+						    // by count
+						count = npts;
+						}
+						_total_count = count;
+						int32 iter = _iteration;
+						_seed = bseed + iter * 4;
 					}
 				}
 				
 				{
-					// Node: tcc_scatter3
-					tcc_scatter3->SetInput(0, add_density_calc_dir);
-					tcc_scatter3->Usedensityattrib = 1;
-					tcc_scatter3->Npts = int32(Npts);
-					tcc_scatter3->ScatterSeed = int32(BranchSeed);
-					tcc_scatter3->Cook();
-				}
-				
-				{
-					// Node: delete_density
-					delete_density->SetInput(0, tcc_scatter3);
-					delete_density->Ptdel = TEXT("density");
-					delete_density->Cook();
+					// Node: tcc_dithered_scatter1
+					tcc_dithered_scatter1->SetInput(0, calc_count_and_seed);
+					FTccGeometryConstPtr Geo0 = tcc_dithered_scatter1->GetInput(0)->GetConstGeoResult(0);
+					tcc_dithered_scatter1->Npts = int32(hs_detail(Geo0, "total_count", 0));
+					tcc_dithered_scatter1->ScatterSeed = int32(hs_detail(Geo0, "seed", 0));
+					tcc_dithered_scatter1->Jitter = 0.063000f;
+					tcc_dithered_scatter1->Cook();
 				}
 				
 				{
 					// Node: tcc_sort1
-					tcc_sort1->SetInput(0, delete_density);
+					tcc_sort1->SetInput(0, tcc_dithered_scatter1);
 					tcc_sort1->Ptsort = UTccSort::ByAttribute;
 					tcc_sort1->Pointattrib = TEXT("curveu");
 					tcc_sort1->Cook();
@@ -391,7 +467,7 @@ void FTcrTreeBranchSkeleton::Cook()
 							yaw += angle_step - yaw_range;
 							    //yaw -= yaw_range;
 							}
-							FVector3f yaw_axis = _tangent;
+							FVector3f yaw_axis =  - _tangent;
 							// calc rotated normal
 							FVector3f n = vex_set(0, 1, 0);
 							// if n and axis locate in same direction, change n to axis-z
@@ -403,7 +479,10 @@ void FTcrTreeBranchSkeleton::Cook()
 							//@N = n;
 							//f@L = length(@N);
 							FVector3f pitch_axis = vex_normalize(vex_cross(n, yaw_axis));
-							float pitch = vex_fit(_curveu, min_u, max_u, pitch_r.X, pitch_r.Y);
+							float pitch_percent = vex_fit(_curveu, min_u, max_u, 0, 1);
+							pitch_percent = pitch_percent * pitch_percent;
+							float pitch = vex_fit01(pitch_percent, pitch_r.X, pitch_r.Y);
+							//float pitch = fit(f@curveu, min_u, max_u, pitch_r.x, pitch_r.y);
 							FVector4f q1 = vex_quaternion(pitch, pitch_axis);
 							n = vex_normalize(vex_qrotate(q1, n));
 							FMatrix44f m3 = vex_maketransform(n, yaw_axis);
@@ -469,13 +548,13 @@ void FTcrTreeBranchSkeleton::Cook()
 		}
 	}
 	{
-		// Node: prune
-		prune->SetInput(0, add_primattrib_level);
-		prune->Input = int32(Prune);
-		prune->NumCases = 2;
-		prune->Cook();
+		// Node: prune_by_volume
+		prune_by_volume->SetInput(0, add_primattrib_level);
+		prune_by_volume->Input = int32(ByVolume);
+		prune_by_volume->NumCases = 2;
+		prune_by_volume->Cook();
 		FTccGeometryPtr SwitchResult = nullptr;
-		const int32 Selection = prune->Input;
+		const int32 Selection = prune_by_volume->Input;
 		switch (Selection)
 		{
 			case 0:
@@ -504,11 +583,11 @@ void FTcrTreeBranchSkeleton::Cook()
 			}
 			break;
 		}
-		prune->SetValidGeoResult(0, SwitchResult);
+		prune_by_volume->SetValidGeoResult(0, SwitchResult);
 	}
 	{
 		// Node: calc_radius
-		calc_radius->SetInput(0, prune);
+		calc_radius->SetInput(0, prune_by_volume);
 		calc_radius->Cook();
 		{
 			FTccGeometryPtr Geo0 = calc_radius->GetGeoResult(0);
@@ -540,24 +619,14 @@ void FTcrTreeBranchSkeleton::Cook()
 			case 0:
 			{
 				
-				
 				SwitchResult = nullptr;
 			}
 			break;
 			case 1:
 			{
 				{
-					// Node: tcc_resample1
-					tcc_resample1->SetInput(0, calc_radius);
-					tcc_resample1->Dolength = 0;
-					tcc_resample1->Dosegs = 1;
-					tcc_resample1->Segs = int32(Segs);
-					tcc_resample1->Cook();
-				}
-				
-				{
 					// Node: curl_noise
-					curl_noise->SetInput(0, tcc_resample1);
+					curl_noise->SetInput(0, calc_radius);
 					curl_noise->Cook();
 					{
 						FTccGeometryPtr Geo0 = curl_noise->GetGeoResult(0);

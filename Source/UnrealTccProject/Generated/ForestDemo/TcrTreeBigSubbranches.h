@@ -52,7 +52,8 @@ class FTccTransform;
 class FTccVex;
 class FTcrTreeBranchSkeleton;
 class FTccSwitch;
-class FTcrTreeSkin;
+class FTccPolyWire;
+class FTccAttribDelete;
 class FTcrTreeSimpleLeaf;
 class FTccUvTransform;
 class FTcrTreeLeafScatter;
@@ -96,7 +97,9 @@ public:
 
 	FTcrTreeBranchSkeleton* branch4 = nullptr;
 
-	FTcrTreeSkin* tcr_tree_skin1 = nullptr;
+	FTccPolyWire* tree_skin = nullptr;
+
+	FTccAttribDelete* tcc_attrib_delete1 = nullptr;
 
 	FTcrTreeSimpleLeaf* tcr_tree_simple_leaf1 = nullptr;
 

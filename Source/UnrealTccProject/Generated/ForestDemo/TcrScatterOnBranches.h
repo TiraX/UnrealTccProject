@@ -33,6 +33,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Gseed = 0;
 
+	// Scatter Range
+	UPROPERTY(EditAnywhere)
+	FVector2f Range = FVector2f(0.000000f, 1.000000f);
+
 	// Scale Min
 	UPROPERTY(EditAnywhere)
 	FVector3f ScaleMin = FVector3f(1.000000f, 1.000000f, 1.000000f);
@@ -46,8 +50,8 @@ public:
 class FTccAttribDelete;
 class FTccBlastByFeature;
 class FTccPolyFrame;
-class FTccForBlock;
 class FTccVex;
+class FTccForBlock;
 class FTccScatter;
 class UNREALTCCPROJECT_API FTcrScatterOnBranches : public FTccNode
 {
@@ -60,6 +64,9 @@ public:
 	// Seed
 	int32 Gseed = 0;
 
+	// Scatter Range
+	FVector2f Range = FVector2f(0.000000f, 1.000000f);
+
 	// Scale Min
 	FVector3f ScaleMin = FVector3f(1.000000f, 1.000000f, 1.000000f);
 
@@ -71,6 +78,8 @@ public:
 	FTccBlastByFeature* keep_level_1_lines_only = nullptr;
 
 	FTccPolyFrame* tangentu = nullptr;
+
+	FTccVex* remap_scatter_range = nullptr;
 
 	FTccForBlock* foreach_begin1 = nullptr;
 

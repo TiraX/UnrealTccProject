@@ -29,13 +29,15 @@ void UTcrTreeTrunkSkeleton::SyncParams(FTccNodePtr InNode)
 	TSharedPtr<FTcrTreeTrunkSkeleton> Node = StaticCastSharedPtr<FTcrTreeTrunkSkeleton>(InNode);
 	Node->RscaleAlongCurve = RscaleAlongCurve;
 	Node->Length = Length;
+	Node->Segs = Segs;
 	Node->Radius = Radius;
 	Node->Nseed = Nseed;
-	Node->Segs = Segs;
 	Node->Freq = Freq;
 	Node->Amp = Amp;
 	Node->EnableBend = EnableBend;
 	Node->Bend = Bend;
+	Node->BendCapLen = BendCapLen;
+	Node->BendCapOff = BendCapOff;
 }
 
  FTcrTreeTrunkSkeleton::FTcrTreeTrunkSkeleton() 
@@ -189,8 +191,9 @@ void FTcrTreeTrunkSkeleton::Cook()
 					// Node: tcc_bend1
 					tcc_bend1->SetInput(0, add_attrib_level);
 					tcc_bend1->Bend = float(Bend);
+					tcc_bend1->Origin = FVector3f(0.000000f, 0.000000f, BendCapOff);
 					tcc_bend1->Dir = FVector3f(0.000000f, 0.000000f, 1.000000f);
-					tcc_bend1->Length = float(Length);
+					tcc_bend1->Length = float(BendCapLen);
 					tcc_bend1->Cook();
 				}
 				
