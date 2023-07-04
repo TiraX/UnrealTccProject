@@ -29,6 +29,42 @@ public:
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
 
+	// Yaw
+	UPROPERTY(EditAnywhere)
+	FVector2f Yaw = FVector2f(0.000000f, 720.000000f);
+
+	// Rand
+	UPROPERTY(EditAnywhere)
+	float YawR = 0.441000f;
+
+	// Pitch
+	UPROPERTY(EditAnywhere)
+	FVector2f Pitch = FVector2f(-3.600000f, -25.400000f);
+
+	// Rand
+	UPROPERTY(EditAnywhere)
+	float PitchR = 0.752000f;
+
+	// Roll
+	UPROPERTY(EditAnywhere)
+	float Roll = 0.000000f;
+
+	// Yaw
+	UPROPERTY(EditAnywhere)
+	FVector2f Yaw2 = FVector2f(0.000000f, 0.000000f);
+
+	// Rand
+	UPROPERTY(EditAnywhere)
+	float YawR2 = 0.000000f;
+
+	// Pitch
+	UPROPERTY(EditAnywhere)
+	FVector2f Pitch2 = FVector2f(0.000000f, 0.000000f);
+
+	// Rand
+	UPROPERTY(EditAnywhere)
+	float PitchR2 = 0.000000f;
+
 };
 
 class FTcrTreeTrunkGrowth;
@@ -42,13 +78,36 @@ public:
 
 	virtual void Cook() override;
 
+	// Yaw
+	FVector2f Yaw = FVector2f(0.000000f, 720.000000f);
+
+	// Rand
+	float YawR = 0.441000f;
+
+	// Pitch
+	FVector2f Pitch = FVector2f(-3.600000f, -25.400000f);
+
+	// Rand
+	float PitchR = 0.752000f;
+
+	// Roll
+	float Roll = 0.000000f;
+
+	// Yaw
+	FVector2f Yaw2 = FVector2f(0.000000f, 0.000000f);
+
+	// Rand
+	float YawR2 = 0.000000f;
+
+	// Pitch
+	FVector2f Pitch2 = FVector2f(0.000000f, 0.000000f);
+
+	// Rand
+	float PitchR2 = 0.000000f;
+
 	FTcrTreeTrunkGrowth* tcr_tree_trunk_growth4 = nullptr;
 
 	FTcrTreeBranchGrowth* tcr_tree_branch_growth7 = nullptr;
-
-	FTcrTreeBranchGrowth* tcr_tree_branch_growth8 = nullptr;
-
-	FTcrTreeBranchGrowth* tcr_tree_branch_growth4 = nullptr;
 
 	FTccPolyWire* tcc_poly_wire2 = nullptr;
 

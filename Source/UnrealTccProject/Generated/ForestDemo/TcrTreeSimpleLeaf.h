@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeSimpleLeaf : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From rename_fmuv_to_uv
+		output0,  // From stem
 		OUT_Count,
 	};
 
@@ -45,6 +45,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Cols = 5;
 
+	// Stem
+	UPROPERTY(EditAnywhere)
+	float Stem = 0.000000f;
+
 	// Enable Bend
 	UPROPERTY(EditAnywhere)
 	int32 EnableBend = 1;
@@ -69,6 +73,8 @@ class FTccSwitch;
 class FTccBend;
 class FTccAttribPromote;
 class FTccAttribRename;
+class FTccTransform;
+class FTccMerge;
 class UNREALTCCPROJECT_API FTcrTreeSimpleLeaf : public FTccNode
 {
 public:
@@ -88,6 +94,9 @@ public:
 
 	// Columns
 	int32 Cols = 5;
+
+	// Stem
+	float Stem = 0.000000f;
 
 	// Enable Bend
 	int32 EnableBend = 1;
@@ -116,6 +125,14 @@ public:
 	FTccAttribPromote* uv_to_vertices = nullptr;
 
 	FTccAttribRename* rename_fmuv_to_uv = nullptr;
+
+	FTccSwitch* stem = nullptr;
+
+	FTccTransform* tcc_transform2 = nullptr;
+
+	FTccGrid* tcc_grid2 = nullptr;
+
+	FTccMerge* tcc_merge2 = nullptr;
 
 };
 

@@ -24,6 +24,15 @@ FTccNodePtr UTcrTreeBigUe2::CreateNode()
 void UTcrTreeBigUe2::SyncParams(FTccNodePtr InNode) 
 {
 	TSharedPtr<FTcrTreeBigUe2> Node = StaticCastSharedPtr<FTcrTreeBigUe2>(InNode);
+	Node->Yaw = Yaw;
+	Node->YawR = YawR;
+	Node->Pitch = Pitch;
+	Node->PitchR = PitchR;
+	Node->Roll = Roll;
+	Node->Yaw2 = Yaw2;
+	Node->YawR2 = YawR2;
+	Node->Pitch2 = Pitch2;
+	Node->PitchR2 = PitchR2;
 }
 
  FTcrTreeBigUe2::FTcrTreeBigUe2() 
@@ -33,10 +42,6 @@ void UTcrTreeBigUe2::SyncParams(FTccNodePtr InNode)
 	tcr_tree_trunk_growth4->InitMultiRefs(false); // RefCount = 1
 	tcr_tree_branch_growth7 = new FTcrTreeBranchGrowth();
 	tcr_tree_branch_growth7->InitMultiRefs(false); // RefCount = 1
-	tcr_tree_branch_growth8 = new FTcrTreeBranchGrowth();
-	tcr_tree_branch_growth8->InitMultiRefs(false); // RefCount = 1
-	tcr_tree_branch_growth4 = new FTcrTreeBranchGrowth();
-	tcr_tree_branch_growth4->InitMultiRefs(false); // RefCount = 1
 	tcc_poly_wire2 = new FTccPolyWire();
 	tcc_poly_wire2->InitMultiRefs(false); // RefCount = 1
 }
@@ -44,8 +49,6 @@ void UTcrTreeBigUe2::SyncParams(FTccNodePtr InNode)
 {
 	delete tcr_tree_trunk_growth4; 
 	delete tcr_tree_branch_growth7; 
-	delete tcr_tree_branch_growth8; 
-	delete tcr_tree_branch_growth4; 
 	delete tcc_poly_wire2; 
 }
 void FTcrTreeBigUe2::Cook() 
@@ -128,126 +131,8 @@ void FTcrTreeBigUe2::Cook()
 		tcr_tree_branch_growth7->Cook();
 	}
 	{
-		// Node: tcr_tree_branch_growth8
-		tcr_tree_branch_growth8->SetInput(0, tcr_tree_branch_growth7);
-		tcr_tree_branch_growth8->MaxCountRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->MaxCountRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->MaxCountRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->MaxCountRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth8->SegLenRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->SegLenRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->SegLenRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->SegLenRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth8->StartPercentRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->StartPercentRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->StartPercentRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->StartPercentRamp.AddRampPoint(1.0000f, 0.5667f);
-		tcr_tree_branch_growth8->AgeDisRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->AgeDisRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->AgeDisRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->AgeDisRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth8->MaxAgeRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->MaxAgeRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->MaxAgeRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->MaxAgeRamp.AddRampPoint(1.0000f, 0.5000f);
-		tcr_tree_branch_growth8->RadiusShape = ETccRampInterp::Bezier;
-		tcr_tree_branch_growth8->RadiusShape.ResizeRampPoints(3);
-		tcr_tree_branch_growth8->RadiusShape.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->RadiusShape.AddRampPoint(0.1538f, 0.6458f);
-		tcr_tree_branch_growth8->RadiusShape.AddRampPoint(1.0000f, 0.4167f);
-		tcr_tree_branch_growth8->Pitch0Ramp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->Pitch0Ramp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->Pitch0Ramp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->Pitch0Ramp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth8->Pitch1Ramp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->Pitch1Ramp.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->Pitch1Ramp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth8->Pitch1Ramp.AddRampPoint(1.0000f, 0.2667f);
-		tcr_tree_branch_growth8->Soft = ETccRampInterp::Linear;
-		tcr_tree_branch_growth8->Soft.ResizeRampPoints(2);
-		tcr_tree_branch_growth8->Soft.AddRampPoint(0.0000f, 0.0000f);
-		tcr_tree_branch_growth8->Soft.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth8->Gseed = 44;
-		tcr_tree_branch_growth8->StartPercentAdv = 1;
-		tcr_tree_branch_growth8->AgeDis = 1.660000f;
-		tcr_tree_branch_growth8->MaxAge = 3.000000f;
-		tcr_tree_branch_growth8->MaxAgeAdv = 1;
-		tcr_tree_branch_growth8->DbgColor = FVector3f(0.210000f, 0.130000f, 0.600000f);
-		tcr_tree_branch_growth8->YawOffset = 123.900002f;
-		tcr_tree_branch_growth8->Pitch0 = 82.300003f;
-		tcr_tree_branch_growth8->Pitch1 = 83.400002f;
-		tcr_tree_branch_growth8->Pitch1ShowAdv = 1;
-		tcr_tree_branch_growth8->Pitch1Adv = 1;
-		tcr_tree_branch_growth8->Curl = 1.022000f;
-		tcr_tree_branch_growth8->CurlFreq = 1.000000f;
-		tcr_tree_branch_growth8->Force = -0.078000f;
-		tcr_tree_branch_growth8->Cook();
-	}
-	{
-		// Node: tcr_tree_branch_growth4
-		tcr_tree_branch_growth4->SetInput(0, tcr_tree_branch_growth8);
-		tcr_tree_branch_growth4->MaxCountRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->MaxCountRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->MaxCountRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth4->MaxCountRamp.AddRampPoint(1.0000f, 0.5000f);
-		tcr_tree_branch_growth4->SegLenRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->SegLenRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->SegLenRamp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth4->SegLenRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth4->StartPercentRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->StartPercentRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->StartPercentRamp.AddRampPoint(0.0000f, 0.6000f);
-		tcr_tree_branch_growth4->StartPercentRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth4->AgeDisRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->AgeDisRamp.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->AgeDisRamp.AddRampPoint(0.0000f, 0.3667f);
-		tcr_tree_branch_growth4->AgeDisRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth4->MaxAgeRamp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->MaxAgeRamp.ResizeRampPoints(8);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.0000f, 0.5000f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.0773f, 1.0000f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.2050f, 0.2667f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.3092f, 1.0000f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.4050f, 0.5000f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.6151f, 1.0000f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(0.7059f, 0.1000f);
-		tcr_tree_branch_growth4->MaxAgeRamp.AddRampPoint(1.0000f, 0.5333f);
-		tcr_tree_branch_growth4->RadiusShape = ETccRampInterp::Bezier;
-		tcr_tree_branch_growth4->RadiusShape.ResizeRampPoints(3);
-		tcr_tree_branch_growth4->RadiusShape.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth4->RadiusShape.AddRampPoint(0.1473f, 0.3542f);
-		tcr_tree_branch_growth4->RadiusShape.AddRampPoint(1.0000f, 0.2500f);
-		tcr_tree_branch_growth4->Pitch0Ramp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->Pitch0Ramp.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->Pitch0Ramp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth4->Pitch0Ramp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth4->Pitch1Ramp = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->Pitch1Ramp.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->Pitch1Ramp.AddRampPoint(0.0000f, 1.0000f);
-		tcr_tree_branch_growth4->Pitch1Ramp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth4->Soft = ETccRampInterp::Linear;
-		tcr_tree_branch_growth4->Soft.ResizeRampPoints(2);
-		tcr_tree_branch_growth4->Soft.AddRampPoint(0.0000f, 0.0000f);
-		tcr_tree_branch_growth4->Soft.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_branch_growth4->MaxCount = 2;
-		tcr_tree_branch_growth4->StartPercent = 0.409000f;
-		tcr_tree_branch_growth4->StartPercentAdv = 1;
-		tcr_tree_branch_growth4->AgeDis = 1.830000f;
-		tcr_tree_branch_growth4->AgeDisAdv = 1;
-		tcr_tree_branch_growth4->MaxAge = 2.470000f;
-		tcr_tree_branch_growth4->MaxAgeAdv = 1;
-		tcr_tree_branch_growth4->DbgColor = FVector3f(0.160000f, 0.680000f, 0.250000f);
-		tcr_tree_branch_growth4->YawOffset = 90.000000f;
-		tcr_tree_branch_growth4->Yaw = 120.000000f;
-		tcr_tree_branch_growth4->Pitch0 = 65.000000f;
-		tcr_tree_branch_growth4->Curl = 0.714000f;
-		tcr_tree_branch_growth4->CurlFreq = 0.994000f;
-		tcr_tree_branch_growth4->Force = -0.160000f;
-		tcr_tree_branch_growth4->Cook();
-	}
-	{
 		// Node: tcc_poly_wire2
-		tcc_poly_wire2->SetInput(0, tcr_tree_branch_growth4);
+		tcc_poly_wire2->SetInput(0, tcr_tree_branch_growth7);
 		tcc_poly_wire2->EnableRadiusAttrib = 1;
 		tcc_poly_wire2->RAttrib = TEXT("radius");
 		tcc_poly_wire2->Divs = 8;

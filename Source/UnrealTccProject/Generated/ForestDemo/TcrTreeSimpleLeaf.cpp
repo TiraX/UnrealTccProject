@@ -34,6 +34,7 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 	Node->Size = Size;
 	Node->Rows = Rows;
 	Node->Cols = Cols;
+	Node->Stem = Stem;
 	Node->EnableBend = EnableBend;
 	Node->Bend = Bend;
 	Node->EnableCurl = EnableCurl;
@@ -59,6 +60,14 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 	uv_to_vertices->InitMultiRefs(false); // RefCount = 1
 	rename_fmuv_to_uv = new FTccAttribRename();
 	rename_fmuv_to_uv->InitMultiRefs(false); // RefCount = 1
+	stem = new FTccSwitch();
+	stem->InitMultiRefs(false); // RefCount = 1
+		tcc_transform2 = new FTccTransform();
+		tcc_transform2->InitMultiRefs(false); // RefCount = 1
+		tcc_grid2 = new FTccGrid();
+		tcc_grid2->InitMultiRefs(false); // RefCount = 1
+		tcc_merge2 = new FTccMerge();
+		tcc_merge2->InitMultiRefs(false); // RefCount = 1
 	Shape.ResizeRampPoints(7);
 	Shape.AddRampPoint(0.0000f, 0.0885f);
 	Shape.AddRampPoint(0.1035f, 0.7708f);
@@ -78,6 +87,10 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 		delete bend_l; 
 	delete uv_to_vertices; 
 	delete rename_fmuv_to_uv; 
+	delete stem; 
+		delete tcc_transform2; 
+		delete tcc_grid2; 
+		delete tcc_merge2; 
 }
 void FTcrTreeSimpleLeaf::Cook() 
 {
@@ -209,6 +222,61 @@ void FTcrTreeSimpleLeaf::Cook()
 		rename_fmuv_to_uv->Tovtx0 = TEXT("uv");
 		rename_fmuv_to_uv->Cook();
 	}
-	SetGeoResult(UTcrTreeSimpleLeaf::output0, rename_fmuv_to_uv->GetGeoResult(0));
+	{
+		// Node: stem
+		stem->SetInput(0, rename_fmuv_to_uv);
+		stem->Input = int32(Stem > 0);
+		stem->NumCases = 2;
+		stem->Cook();
+		FTccGeometryPtr SwitchResult = nullptr;
+		const int32 Selection = stem->Input;
+		switch (Selection)
+		{
+			case 0:
+			{
+				
+				
+				
+				SwitchResult = nullptr;
+			}
+			break;
+			case 1:
+			{
+				{
+					// Node: tcc_transform2
+					tcc_transform2->SetInput(0, rename_fmuv_to_uv);
+					tcc_transform2->T = FVector3f(0.000000f, Stem, 0.000000f);
+					tcc_transform2->Cook();
+				}
+				
+				{
+					// Node: tcc_grid2
+					tcc_grid2->Size = FVector2f(Size.X * Shape.Lookup(0.0f, 0), Stem);
+					tcc_grid2->T = FVector3f(0.000000f, tcc_grid2->Size.Y * 0.5f, 0.000000f);
+					tcc_grid2->Rows = 2;
+					tcc_grid2->Cols = 2;
+					tcc_grid2->Uv = 1;
+					tcc_grid2->Cook();
+				}
+				
+				{
+					// Node: tcc_merge2
+					tcc_merge2->SetInput(0, tcc_transform2);
+					tcc_merge2->SetInput(1, tcc_grid2);
+					tcc_merge2->Cook();
+				}
+				
+				SwitchResult = tcc_merge2->GetGeoResult(0);
+			}
+			break;
+			default:
+			{
+				checkNoEntry();
+			}
+			break;
+		}
+		stem->SetValidGeoResult(0, SwitchResult);
+	}
+	SetGeoResult(UTcrTreeSimpleLeaf::output0, stem->GetGeoResult(0));
 }
 

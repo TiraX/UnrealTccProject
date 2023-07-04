@@ -117,7 +117,7 @@ void FTcrTreeBigSubbranches::Cook()
 		info_by_hierarchy->SetInput(0, trunk_laydown);
 		info_by_hierarchy->Cook();
 		{
-			FTccGeometryPtr Geo0 = info_by_hierarchy->GetGeoResult(0);
+			FTccGeometryPtr Geo0 = info_by_hierarchy->GetGeoRef(0);
 			FTccAttribPtr attr_branch1_len = Geo0->AddDetailAttrib("branch1_len", ETccAttribType::F);
 			FTccAttribPtr attr_branch2_len = Geo0->AddDetailAttrib("branch2_len", ETccAttribType::F);
 			FTccAttribPtr attr_branch3_len = Geo0->AddDetailAttrib("branch3_len", ETccAttribType::F);
