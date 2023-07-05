@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeBigUe2 : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From foreach_begin2
+		output0,  // From tcc_instancer1
 		OUT_Count,
 	};
 
@@ -76,6 +76,9 @@ class FTccPack;
 class FTccBlastByFeature;
 class FTcrTreeBigSubbranchScatter;
 class FTccMerge;
+class FTcrTreeTrunkGrowth;
+class FTcrTreeBranchGrowth;
+class FTccInstancer;
 class UNREALTCCPROJECT_API FTcrTreeBigUe2 : public FTccNode
 {
 public:
@@ -128,6 +131,22 @@ public:
 	FTcrTreeBigSubbranchScatter* tcr_tree_big_subbranch_scatter1 = nullptr;
 
 	FTccMerge* tcc_merge1 = nullptr;
+
+	FTccVex* packed_name = nullptr;
+
+	FTccPack* tcc_pack2 = nullptr;
+
+	FTccVex* instance_id = nullptr;
+
+	FTcrTreeTrunkGrowth* tcr_tree_trunk_growth4 = nullptr;
+
+	FTcrTreeBranchGrowth* tcr_tree_branch_growth7 = nullptr;
+
+	FTcrTreeBranchGrowth* tcr_tree_branch_growth8 = nullptr;
+
+	FTccVex* tcc_vex1 = nullptr;
+
+	FTccInstancer* tcc_instancer1 = nullptr;
 
 };
 
