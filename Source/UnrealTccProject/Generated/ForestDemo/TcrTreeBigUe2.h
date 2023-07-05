@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeBigUe2 : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From tcc_poly_wire2
+		output0,  // From foreach_begin2
 		OUT_Count,
 	};
 
@@ -67,9 +67,15 @@ public:
 
 };
 
-class FTcrTreeTrunkGrowth;
-class FTcrTreeBranchGrowth;
-class FTccPolyWire;
+class FTcrTreeBigSubbranchesGrowth;
+class FTccForBlock;
+class FTccVex;
+class FTcrTreeBranchFrac;
+class FTcrTreeSkinGrowth;
+class FTccPack;
+class FTccBlastByFeature;
+class FTcrTreeBigSubbranchScatter;
+class FTccMerge;
 class UNREALTCCPROJECT_API FTcrTreeBigUe2 : public FTccNode
 {
 public:
@@ -105,11 +111,23 @@ public:
 	// Rand
 	float PitchR2 = 0.000000f;
 
-	FTcrTreeTrunkGrowth* tcr_tree_trunk_growth4 = nullptr;
+	FTcrTreeBigSubbranchesGrowth* subbranches_growth2 = nullptr;
 
-	FTcrTreeBranchGrowth* tcr_tree_branch_growth7 = nullptr;
+	FTccForBlock* foreach_begin2 = nullptr;
 
-	FTccPolyWire* tcc_poly_wire2 = nullptr;
+	FTccVex* info = nullptr;
+
+	FTcrTreeBranchFrac* branch_frac3 = nullptr;
+
+	FTcrTreeSkinGrowth* tcr_tree_skin_growth7 = nullptr;
+
+	FTccPack* tcc_pack1 = nullptr;
+
+	FTccBlastByFeature* last_3_levels = nullptr;
+
+	FTcrTreeBigSubbranchScatter* tcr_tree_big_subbranch_scatter1 = nullptr;
+
+	FTccMerge* tcc_merge1 = nullptr;
 
 };
 
