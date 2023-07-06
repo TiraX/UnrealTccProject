@@ -257,14 +257,16 @@ void FTcrTreeBigSubbranchScatter::Cook()
 							int32 seed = gseed + iter;
 							// rot hor
 							FVector3f dir = _dir;
-							FVector3f dir_hor = vex_normalize(vex_set(dir.X, 0, dir.Z));
+							FVector3f dir_h = dir;
+							dir_h.Z = 0;// tcc_mark:replace=dir_h.Z / dir_h.Z
+							dir_h = vex_normalize(dir_h);
 							float oppo = _ptnum % 2 == 0 ? 1.0f : - 1.0f;
 							// YAW, 90 degree with dir, with 45 degrees rand
 							float yaw = PI * 0.5f * oppo;
 							yaw += vex_fit01(vex_rand(seed + _ptnum + 63),  - 1.0f, 1.0f) * vex_radians(45);
 							FVector4f qyaw = vex_quaternion(yaw, up);
-							dir_hor = vex_qrotate(qyaw, dir_hor);
-							FVector4f q0 = vex_dihedral(fwd, dir_hor);
+							dir_h = vex_qrotate(qyaw, dir_h);
+							FVector4f q0 = vex_dihedral(fwd, dir_h);
 							// PITCH, random in 
 							float pitch = vex_rand(seed + _ptnum + 64) * vex_radians( - 45) * oppo;
 							FVector4f qpitch = vex_quaternion(pitch, dir);

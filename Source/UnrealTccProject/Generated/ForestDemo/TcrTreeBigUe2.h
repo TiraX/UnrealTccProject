@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeBigUe2 : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From tcc_instancer1
+		output0,  // From tcc_merge7
 		OUT_Count,
 	};
 
@@ -28,6 +28,10 @@ public:
 
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
+
+	// Seed
+	UPROPERTY(EditAnywhere)
+	int32 Gseed = 0;
 
 	// Yaw
 	UPROPERTY(EditAnywhere)
@@ -67,17 +71,18 @@ public:
 
 };
 
+class FTcrTreeTrunkGrowth;
+class FTcrTreeSkinGrowth;
+class FTcrTreeBranchGrowth;
+class FTccMerge;
+class FTccUnrealMaterial;
+class FTccPack;
 class FTcrTreeBigSubbranchesGrowth;
 class FTccForBlock;
 class FTccVex;
 class FTcrTreeBranchFrac;
-class FTcrTreeSkinGrowth;
-class FTccPack;
 class FTccBlastByFeature;
 class FTcrTreeBigSubbranchScatter;
-class FTccMerge;
-class FTcrTreeTrunkGrowth;
-class FTcrTreeBranchGrowth;
 class FTccInstancer;
 class UNREALTCCPROJECT_API FTcrTreeBigUe2 : public FTccNode
 {
@@ -86,6 +91,9 @@ public:
 	virtual ~FTcrTreeBigUe2() ;
 
 	virtual void Cook() override;
+
+	// Seed
+	int32 Gseed = 0;
 
 	// Yaw
 	FVector2f Yaw = FVector2f(0.000000f, 720.000000f);
@@ -114,39 +122,67 @@ public:
 	// Rand
 	float PitchR2 = 0.000000f;
 
-	FTcrTreeBigSubbranchesGrowth* subbranches_growth2 = nullptr;
+	FTcrTreeTrunkGrowth* main_trunk = nullptr;
 
-	FTccForBlock* foreach_begin2 = nullptr;
+	FTcrTreeSkinGrowth* main_trunk_skin = nullptr;
 
-	FTccVex* info = nullptr;
+	FTcrTreeBranchGrowth* branch1 = nullptr;
 
-	FTcrTreeBranchFrac* branch_frac3 = nullptr;
+	FTcrTreeBranchGrowth* root1 = nullptr;
 
-	FTcrTreeSkinGrowth* tcr_tree_skin_growth7 = nullptr;
+	FTccMerge* tcc_merge4 = nullptr;
 
-	FTccPack* tcc_pack1 = nullptr;
+	FTcrTreeSkinGrowth* main_branch_skin = nullptr;
 
-	FTccBlastByFeature* last_3_levels = nullptr;
+	FTcrTreeBranchGrowth* branch2 = nullptr;
 
-	FTcrTreeBigSubbranchScatter* tcr_tree_big_subbranch_scatter1 = nullptr;
+	FTcrTreeBranchGrowth* branch3 = nullptr;
 
-	FTccMerge* tcc_merge1 = nullptr;
+	FTcrTreeBranchGrowth* root2 = nullptr;
 
-	FTccVex* packed_name = nullptr;
+	FTccMerge* tcc_merge5 = nullptr;
 
-	FTccPack* tcc_pack2 = nullptr;
+	FTcrTreeSkinGrowth* second_branch_skin = nullptr;
 
-	FTccVex* instance_id = nullptr;
+	FTccMerge* tcc_merge6 = nullptr;
 
-	FTcrTreeTrunkGrowth* tcr_tree_trunk_growth4 = nullptr;
+	FTccUnrealMaterial* mi_trunk = nullptr;
 
-	FTcrTreeBranchGrowth* tcr_tree_branch_growth7 = nullptr;
+	FTccPack* tcc_pack4 = nullptr;
 
-	FTcrTreeBranchGrowth* tcr_tree_branch_growth8 = nullptr;
+	FTcrTreeBigSubbranchesGrowth* subbranch = nullptr;
 
-	FTccVex* tcc_vex1 = nullptr;
+	FTccUnrealMaterial* mi_subbranch = nullptr;
 
-	FTccInstancer* tcc_instancer1 = nullptr;
+	FTccForBlock* foreach_begin3 = nullptr;
+
+	FTccVex* info1 = nullptr;
+
+	FTcrTreeBranchFrac* branch_frac5 = nullptr;
+
+	FTcrTreeSkinGrowth* frac_skin = nullptr;
+
+	FTccUnrealMaterial* mi_frac_branch = nullptr;
+
+	FTccPack* pack_frac_skin = nullptr;
+
+	FTccBlastByFeature* last_3_levels1 = nullptr;
+
+	FTcrTreeBigSubbranchScatter* subbranch_scatter = nullptr;
+
+	FTccMerge* tcc_merge3 = nullptr;
+
+	FTccVex* packed_name1 = nullptr;
+
+	FTccPack* tcc_pack5 = nullptr;
+
+	FTccVex* instance_id1 = nullptr;
+
+	FTccVex* grab_last_points = nullptr;
+
+	FTccInstancer* tcc_instancer2 = nullptr;
+
+	FTccMerge* tcc_merge7 = nullptr;
 
 };
 
