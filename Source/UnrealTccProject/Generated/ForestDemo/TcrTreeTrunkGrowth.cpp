@@ -74,6 +74,7 @@ void FTcrTreeTrunkGrowth::Cook()
 			const float curl_freq = CurlFreq;
 			const float radius_shape0 = RadiusShape.Lookup(0.f);
 			const float radius_shape1 = RadiusShape.Lookup(1.f);
+			const FVector3f up = vex_set(0, 1, 0);
 			const float eps = 0.01f;
 			float& _global_tree_age = attr_global_tree_age->GetData<float>()[0];
 			float& _global_seg_len = attr_global_seg_len->GetData<float>()[0];
@@ -109,7 +110,8 @@ void FTcrTreeTrunkGrowth::Cook()
 			if(curl_force > 0.f)
 			{
 			FVector3f curl_seed = last_pos * curl_freq + float(gseed);
-			FVector3f c = vex_curlnoise(curl_seed) * curl_force;
+			FVector3f c = vex_curlnoise2d(curl_seed) * curl_force;
+			c = vex_set(c.X, 0.f, c.Y);
 			dir = vex_normalize(dir + c);
 			}
 			FVector3f pos = last_pos + dir * seg_len;

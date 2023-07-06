@@ -198,8 +198,8 @@ void FTcrTreeBigUe2::Cook()
 		branch1->Pitch1Ramp = ETccRampInterp::Linear;
 		branch1->Pitch1Ramp.ResizeRampPoints(3);
 		branch1->Pitch1Ramp.AddRampPoint(0.0000f, 1.0000f);
-		branch1->Pitch1Ramp.AddRampPoint(0.7412f, 0.9333f);
-		branch1->Pitch1Ramp.AddRampPoint(1.0000f, 0.5000f);
+		branch1->Pitch1Ramp.AddRampPoint(0.7092f, 0.9333f);
+		branch1->Pitch1Ramp.AddRampPoint(1.0000f, 0.2000f);
 		branch1->Soft = ETccRampInterp::Linear;
 		branch1->Soft.ResizeRampPoints(2);
 		branch1->Soft.AddRampPoint(0.0000f, 0.0000f);
@@ -215,6 +215,7 @@ void FTcrTreeBigUe2::Cook()
 		branch1->Pitch0 = 22.000000f;
 		branch1->Pitch0Adv = 1;
 		branch1->Pitch1 = 72.599998f;
+		branch1->Pitch1ShowAdv = 1;
 		branch1->Pitch1Adv = 1;
 		branch1->Curl = 0.394000f;
 		branch1->CurlFreq = 0.654000f;

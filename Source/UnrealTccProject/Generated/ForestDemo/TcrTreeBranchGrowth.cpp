@@ -195,6 +195,7 @@ void FTcrTreeBranchGrowth::Cook()
 						const int32 parent_level = vex_primi(Geo1, "level", 0);
 						const int32 curr_level = parent_level + 1;
 						const float parent_percent = vex_primf(Geo1, "percent", 0);
+						const FVector3f up_const = vex_set(0, 1, 0);
 						const float _age0 = vex_pointf(Geo1, "age", 0);
 						const float _age1 = vex_pointf(Geo1, "age", 1);
 						const float inv_seg_len = 1.f / (_age1 - _age0);
@@ -407,7 +408,11 @@ void FTcrTreeBranchGrowth::Cook()
 						if(curl > 0.f)
 						{
 						FVector3f curl_seed = last_pos * curl_freq + float(seed);
-						FVector3f c = vex_curlnoise(curl_seed) * curl;
+						FVector3f c = vex_curlnoise2d(curl_seed) * curl;
+						                // rotate curl2d to a plane perpendicular to dir
+						c = vex_set(c.X, 0.f, c.Y);
+						FVector4f qperp = vex_dihedral(up_const, branch_dir);
+						c = vex_qrotate(qperp, c);
 						branch_dir = vex_normalize(branch_dir + c);
 						}
 						            
