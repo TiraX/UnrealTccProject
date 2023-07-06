@@ -162,8 +162,9 @@ void FTcrTreeBigUe2::Cook()
 	{
 		// Node: main_trunk_skin
 		main_trunk_skin->SetInput(0, main_trunk);
-		main_trunk_skin->Amp = 0.248000f;
-		main_trunk_skin->PosScale = FVector3f(11.000000f, 50.000000f, 3.000000f);
+		main_trunk_skin->Amp = 0.185000f;
+		main_trunk_skin->PosScale = FVector3f(15.000000f, 27.000000f, 28.000000f);
+		main_trunk_skin->Incroll = 80.199997f;
 		main_trunk_skin->Cook();
 	}
 	{
@@ -266,8 +267,9 @@ void FTcrTreeBigUe2::Cook()
 		root1->Pitch1Ramp.AddRampPoint(0.0000f, 0.0000f);
 		root1->Pitch1Ramp.AddRampPoint(1.0000f, 1.0000f);
 		root1->Soft = ETccRampInterp::Linear;
-		root1->Soft.ResizeRampPoints(2);
+		root1->Soft.ResizeRampPoints(3);
 		root1->Soft.AddRampPoint(0.0000f, 0.0000f);
+		root1->Soft.AddRampPoint(0.7169f, 0.0000f);
 		root1->Soft.AddRampPoint(1.0000f, 1.0000f);
 		root1->Gseed = 77;
 		root1->MaxCount = 7;
@@ -281,7 +283,7 @@ void FTcrTreeBigUe2::Cook()
 		root1->PitchLerpRange = FVector2f(0.000000f, 2.350000f);
 		root1->Curl = 0.819000f;
 		root1->CurlFreq = 0.697000f;
-		root1->Force = 0.052000f;
+		root1->Force = 1.000000f;
 		root1->Cook();
 	}
 	{
@@ -454,8 +456,9 @@ void FTcrTreeBigUe2::Cook()
 		root2->Pitch1Ramp.AddRampPoint(0.0000f, 0.0000f);
 		root2->Pitch1Ramp.AddRampPoint(1.0000f, 1.0000f);
 		root2->Soft = ETccRampInterp::Linear;
-		root2->Soft.ResizeRampPoints(2);
+		root2->Soft.ResizeRampPoints(3);
 		root2->Soft.AddRampPoint(0.0000f, 0.0000f);
+		root2->Soft.AddRampPoint(0.8134f, 0.0000f);
 		root2->Soft.AddRampPoint(1.0000f, 1.0000f);
 		root2->Gseed = 77;
 		root2->MaxCount = 2;
@@ -470,9 +473,9 @@ void FTcrTreeBigUe2::Cook()
 		root2->Pitch0 = 91.500000f;
 		root2->Pitch1 = 46.500000f;
 		root2->PitchLerpRange = FVector2f(0.000000f, 2.150000f);
-		root2->Curl = 0.782000f;
+		root2->Curl = 0.541000f;
 		root2->CurlFreq = 0.792000f;
-		root2->Force = 0.126000f;
+		root2->Force = 1.000000f;
 		root2->Cook();
 	}
 	{

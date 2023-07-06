@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeSkinGrowth : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From tcc_attrib_delete1
+		output0,  // From tcc_normal2
 		OUT_Count,
 	};
 
@@ -48,6 +48,9 @@ public:
 };
 
 class FTccPolyWire;
+class FTccNormal;
+class FTccSwitch;
+class FTccVex;
 class FTccAttribDelete;
 class UNREALTCCPROJECT_API FTcrTreeSkinGrowth : public FTccNode
 {
@@ -71,7 +74,15 @@ public:
 
 	FTccPolyWire* tcc_poly_wire1 = nullptr;
 
+	FTccNormal* tcc_normal1 = nullptr;
+
+	FTccSwitch* noise = nullptr;
+
+	FTccVex* tcc_vex1 = nullptr;
+
 	FTccAttribDelete* tcc_attrib_delete1 = nullptr;
+
+	FTccNormal* tcc_normal2 = nullptr;
 
 };
 

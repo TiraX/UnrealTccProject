@@ -33,13 +33,25 @@ void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode)
 	InitInputsCount(1);
 	tcc_poly_wire1 = new FTccPolyWire();
 	tcc_poly_wire1->InitMultiRefs(false); // RefCount = 1
+	tcc_normal1 = new FTccNormal();
+	tcc_normal1->InitMultiRefs(false); // RefCount = 1
+	noise = new FTccSwitch();
+	noise->InitMultiRefs(false); // RefCount = 1
+		tcc_vex1 = new FTccVex();
+		tcc_vex1->InitMultiRefs(false); // RefCount = 1
 	tcc_attrib_delete1 = new FTccAttribDelete();
 	tcc_attrib_delete1->InitMultiRefs(false); // RefCount = 1
+	tcc_normal2 = new FTccNormal();
+	tcc_normal2->InitMultiRefs(false); // RefCount = 1
 }
  FTcrTreeSkinGrowth::~FTcrTreeSkinGrowth() 
 {
 	delete tcc_poly_wire1; 
+	delete tcc_normal1; 
+	delete noise; 
+		delete tcc_vex1; 
 	delete tcc_attrib_delete1; 
+	delete tcc_normal2; 
 }
 void FTcrTreeSkinGrowth::Cook() 
 {
@@ -49,16 +61,85 @@ void FTcrTreeSkinGrowth::Cook()
 		tcc_poly_wire1->EnableRadiusAttrib = 1;
 		tcc_poly_wire1->RAttrib = TEXT("radius");
 		tcc_poly_wire1->Divs = int32(Cols);
+		tcc_poly_wire1->Twist = float(Incroll);
 		tcc_poly_wire1->DoUv = 1;
+		tcc_poly_wire1->PosBeforeTwist = 1;
 		tcc_poly_wire1->Cook();
 	}
 	{
+		// Node: tcc_normal1
+		tcc_normal1->SetInput(0, tcc_poly_wire1);
+		tcc_normal1->Cook();
+	}
+	{
+		// Node: noise
+		noise->SetInput(0, tcc_normal1);
+		noise->Input = int32(Amp > 0);
+		noise->NumCases = 2;
+		noise->Cook();
+		FTccGeometryPtr SwitchResult = nullptr;
+		const int32 Selection = noise->Input;
+		switch (Selection)
+		{
+			case 0:
+			{
+				
+				SwitchResult = nullptr;
+			}
+			break;
+			case 1:
+			{
+				{
+					// Node: tcc_vex1
+					tcc_vex1->SetInput(0, tcc_normal1);
+					tcc_vex1->Cook();
+					{
+						FTccGeometryPtr Geo0 = tcc_vex1->GetGeoRef(0);
+						FTccAttribPtr attr_before_twist = Geo0->AddPointAttrib("before_twist", ETccAttribType::F3);
+						FTccAttribPtr attr_N = Geo0->AddPointAttrib("N", ETccAttribType::F3);
+						const int32 _numpt = Geo0->GetNumPoints();
+						for(int32 i = 0; i < _numpt; i++)
+						{
+							const int32 _ptnum = i;
+							FVector3f& _P = Geo0->GetPositions()[i];
+							FVector3f& _before_twist = attr_before_twist->GetData<FVector3f>()[i];
+							FVector3f& _N = attr_N->GetData<FVector3f>()[i];
+							int32 gseed = 0;
+							FVector3f pos_scale = PosScale;
+							FVector3f uvw = _before_twist;
+							FVector3f pos_seed = uvw * pos_scale + float(gseed);
+							float n = vex_noise3(pos_seed);
+							n = n * 2.f - 1.f;
+							float amp = Amp;
+							_P += _N * n * amp;
+						}
+					}
+				}
+				
+				SwitchResult = tcc_vex1->GetGeoResult(0);
+			}
+			break;
+			default:
+			{
+				checkNoEntry();
+			}
+			break;
+		}
+		noise->SetValidGeoResult(0, SwitchResult);
+	}
+	{
 		// Node: tcc_attrib_delete1
-		tcc_attrib_delete1->SetInput(0, tcc_poly_wire1);
+		tcc_attrib_delete1->SetInput(0, noise);
 		tcc_attrib_delete1->Ptdel = TEXT("*");
 		tcc_attrib_delete1->Primdel = TEXT("*");
+		tcc_attrib_delete1->Dtldel = TEXT("*");
 		tcc_attrib_delete1->Cook();
 	}
-	SetGeoResult(UTcrTreeSkinGrowth::output0, tcc_attrib_delete1->GetGeoResult(0));
+	{
+		// Node: tcc_normal2
+		tcc_normal2->SetInput(0, tcc_attrib_delete1);
+		tcc_normal2->Cook();
+	}
+	SetGeoResult(UTcrTreeSkinGrowth::output0, tcc_normal2->GetGeoResult(0));
 }
 
