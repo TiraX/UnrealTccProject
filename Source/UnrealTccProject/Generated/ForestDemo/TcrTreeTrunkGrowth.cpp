@@ -57,7 +57,7 @@ void FTcrTreeTrunkGrowth::Cook()
 		// Node: main_trunk
 		main_trunk->Cook();
 		{
-			FTccGeometryPtr Geo0 = main_trunk->GetGeoResult(0);
+			FTccGeometryPtr Geo0 = main_trunk->GetGeoRef(0);
 			FTccAttribPtr attr_global_tree_age = Geo0->AddDetailAttrib("global_tree_age", ETccAttribType::F);
 			FTccAttribPtr attr_global_seg_len = Geo0->AddDetailAttrib("global_seg_len", ETccAttribType::F);
 			FTccAttribPtr attr_global_radius_base = Geo0->AddDetailAttrib("global_radius_base", ETccAttribType::F);

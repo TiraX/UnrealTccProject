@@ -108,7 +108,7 @@ void FTcrTreeSimpleLeaf::Cook()
 		float _shrink = 0.900000f;
 		leaf_shape3->Cook();
 		{
-			FTccGeometryPtr Geo0 = leaf_shape3->GetGeoResult(0);
+			FTccGeometryPtr Geo0 = leaf_shape3->GetGeoRef(0);
 			FTccAttribPtr attr_uv = Geo0->AddPointAttrib("uv", ETccAttribType::F2);
 			const FVector2f s = Size;
 			const float shrink = _shrink;

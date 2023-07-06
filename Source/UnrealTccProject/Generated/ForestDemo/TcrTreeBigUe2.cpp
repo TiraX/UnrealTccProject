@@ -29,15 +29,6 @@ void UTcrTreeBigUe2::SyncParams(FTccNodePtr InNode)
 {
 	TSharedPtr<FTcrTreeBigUe2> Node = StaticCastSharedPtr<FTcrTreeBigUe2>(InNode);
 	Node->Gseed = Gseed;
-	Node->Yaw = Yaw;
-	Node->YawR = YawR;
-	Node->Pitch = Pitch;
-	Node->PitchR = PitchR;
-	Node->Roll = Roll;
-	Node->Yaw2 = Yaw2;
-	Node->YawR2 = YawR2;
-	Node->Pitch2 = Pitch2;
-	Node->PitchR2 = PitchR2;
 }
 
  FTcrTreeBigUe2::FTcrTreeBigUe2() 
@@ -514,15 +505,10 @@ void FTcrTreeBigUe2::Cook()
 	{
 		// Node: subbranch
 		subbranch->Gseed = 8;
-		subbranch->Yaw = FVector2f(Yaw.X, Yaw.Y);
-		subbranch->YawR = float(YawR);
-		subbranch->Pitch = FVector2f(Pitch.X, Pitch.Y);
-		subbranch->PitchR = float(PitchR);
-		subbranch->Roll = float(Roll);
-		subbranch->Yaw2 = FVector2f(Yaw2.X, Yaw2.Y);
-		subbranch->YawR2 = float(YawR2);
-		subbranch->Pitch2 = FVector2f(Pitch2.X, Pitch2.Y);
-		subbranch->PitchR2 = float(PitchR2);
+		subbranch->Roll = 62.799999f;
+		subbranch->Yaw2 = FVector2f(0.000000f, 720.000000f);
+		subbranch->YawR2 = 0.012000f;
+		subbranch->PitchR2 = 0.410000f;
 		subbranch->Cook();
 	}
 	{
