@@ -212,7 +212,6 @@ void FTcrTreeBig01::Cook()
 		branch1->AgeDisAdv = 1;
 		branch1->MaxAge = 6.140000f;
 		branch1->MaxAgeAdv = 1;
-		branch1->DbgColor = FVector3f(0.660000f, 0.180000f, 0.750000f);
 		branch1->Pitch0 = 22.000000f;
 		branch1->Pitch0Adv = 1;
 		branch1->Pitch1 = 72.599998f;
@@ -270,7 +269,6 @@ void FTcrTreeBig01::Cook()
 		root1->AgeDis = 0.070000f;
 		root1->AgeDisShowAdv = 1;
 		root1->MaxAge = 5.110000f;
-		root1->DbgColor = FVector3f(0.200000f, 0.240000f, 0.330000f);
 		root1->Pitch0 = 128.899994f;
 		root1->Pitch1 = 97.199997f;
 		root1->PitchLerpRange = FVector2f(0.000000f, 2.350000f);
@@ -338,7 +336,6 @@ void FTcrTreeBig01::Cook()
 		branch2->AgeDis = 1.660000f;
 		branch2->MaxAge = 3.000000f;
 		branch2->MaxAgeAdv = 1;
-		branch2->DbgColor = FVector3f(0.210000f, 0.130000f, 0.600000f);
 		branch2->YawOffset = 123.900002f;
 		branch2->Pitch0 = 82.300003f;
 		branch2->Pitch1 = 83.400002f;
@@ -403,7 +400,6 @@ void FTcrTreeBig01::Cook()
 		branch3->AgeDisAdv = 1;
 		branch3->MaxAge = 2.470000f;
 		branch3->MaxAgeAdv = 1;
-		branch3->DbgColor = FVector3f(0.160000f, 0.680000f, 0.250000f);
 		branch3->YawOffset = 90.000000f;
 		branch3->Yaw = 120.000000f;
 		branch3->Pitch0 = 65.000000f;
@@ -461,7 +457,6 @@ void FTcrTreeBig01::Cook()
 		root2->StartPercentAdv = 1;
 		root2->AgeDis = 1.940000f;
 		root2->MaxAge = 2.300000f;
-		root2->DbgColor = FVector3f(0.500000f, 0.000000f, 0.000000f);
 		root2->YawOffset = 90.000000f;
 		root2->Yaw = 180.000000f;
 		root2->Pitch0 = 91.500000f;

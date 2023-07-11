@@ -178,7 +178,6 @@ void FTcrFernSubbranches::Cook()
 		branch1->Gseed = int32(Gseed);
 		branch1->MaxCount = 1;
 		branch1->MaxAge = float(TreeAge);
-		branch1->DbgColor = FVector3f(0.500000f, 0.940000f, 0.430000f);
 		branch1->Pitch0 = float(Pitch0);
 		branch1->Pitch1 = float(Pitch1);
 		branch1->PitchLerpRange = FVector2f(PitchLerpRange.X, PitchLerpRange.Y);

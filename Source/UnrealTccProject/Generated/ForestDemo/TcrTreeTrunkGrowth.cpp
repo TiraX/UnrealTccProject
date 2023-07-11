@@ -62,9 +62,9 @@ void FTcrTreeTrunkGrowth::Cook()
 			FTccAttribPtr attr_global_radius_base = Geo0->AddDetailAttrib("global_radius_base", ETccAttribType::F);
 			const int32 gseed = Gseed;
 			const float tree_age = TreeAge;
-			const float tree_age_inv = 1.f / tree_age;
 			const float max_age = MaxAge;
 			const float trunk_age = vex_min(max_age, tree_age);
+			const float trunk_age_inv = 1.f / trunk_age;
 			const float max_seg_len = SegLen;
 			const float radius = Radius;
 			const float curl_force = CurlForce;
@@ -112,7 +112,7 @@ void FTcrTreeTrunkGrowth::Cook()
 			poses [ i] = pos;
 			ages [ i] = local_age;
 			dirs [ i] = dir;
-			float local_radius = radius * RadiusShape.Lookup(local_age * tree_age_inv);
+			float local_radius = radius * RadiusShape.Lookup(local_age * trunk_age_inv);
 			rads [ i] = local_radius;
 			last_pos = pos;
 			}

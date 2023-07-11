@@ -129,17 +129,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 MaxAgeAdv = 0;
 
-	// Enable Debug
-	UPROPERTY(EditAnywhere)
-	int32 EnableDebug = 0;
-
-	// Dbg Color
-	UPROPERTY(EditAnywhere)
-	FVector3f DbgColor = FVector3f(1.000000f, 1.000000f, 1.000000f);
-
 	// Yaw Offset
 	UPROPERTY(EditAnywhere)
 	float YawOffset = 0.000000f;
+
+	// Random
+	UPROPERTY(EditAnywhere)
+	float YawOffsetR = 0.000000f;
 
 	// Yaw Pattern
 	UPROPERTY(EditAnywhere)
@@ -288,14 +284,11 @@ public:
 	// Advanced
 	int32 MaxAgeAdv = 0;
 
-	// Enable Debug
-	int32 EnableDebug = 0;
-
-	// Dbg Color
-	FVector3f DbgColor = FVector3f(1.000000f, 1.000000f, 1.000000f);
-
 	// Yaw Offset
 	float YawOffset = 0.000000f;
+
+	// Random
+	float YawOffsetR = 0.000000f;
 
 	// Yaw Pattern
 	float Yaw = 137.500000f;

@@ -75,9 +75,8 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
 	Node->MaxAge = MaxAge;
 	Node->MaxAgeShowAdv = MaxAgeShowAdv;
 	Node->MaxAgeAdv = MaxAgeAdv;
-	Node->EnableDebug = EnableDebug;
-	Node->DbgColor = DbgColor;
 	Node->YawOffset = YawOffset;
+	Node->YawOffsetR = YawOffsetR;
 	Node->Yaw = Yaw;
 	Node->Pitch0 = Pitch0;
 	Node->Pitch0ShowAdv = Pitch0ShowAdv;
@@ -180,6 +179,7 @@ void FTcrTreeBranchGrowth::Cook()
 						const int32 sep_range_adv = AgeDisAdv;
 						const float yaw_step = vex_radians(Yaw);
 						const float yaw_offset = vex_radians(YawOffset);
+						const float yaw_offset_r = vex_radians(YawOffsetR);
 						const float pitch_start_base = vex_radians(Pitch0);
 						const int32 pitch_start_adv = Pitch0Adv;
 						const float pitch_target_base = vex_radians(Pitch1);
@@ -230,7 +230,12 @@ void FTcrTreeBranchGrowth::Cook()
 						int32 max_pts_on_parent = vex_npoints(Geo1);
 						float age_start_on_parent = vex_pointf(Geo1, "age", 0);
 						float age_end_on_parent = vex_pointf(Geo1, "age", max_pts_on_parent - 1);
-						float yaw = yaw_offset;
+						float y_offset = yaw_offset;
+						if(yaw_offset_r > 0.f)
+						{
+						y_offset += vex_fit01(vex_rand(seed + 72),  - yaw_offset_r, yaw_offset_r);
+						}
+						float yaw = y_offset;
 						int32 num_generated = 0;
 						float branch_start = start;
 						float max_ages_generated = 0.f;
@@ -273,7 +278,7 @@ void FTcrTreeBranchGrowth::Cook()
 						}
 						// reset params
 						seed = gseed + iter + 19;
-						yaw = yaw_offset;
+						yaw = y_offset;
 						num_generated = 0;
 						for(float age = branch_start;age < tree_age;)
 						{

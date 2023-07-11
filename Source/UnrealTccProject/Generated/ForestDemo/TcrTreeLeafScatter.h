@@ -130,6 +130,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float YawOffset = 0.000000f;
 
+	// Random, Make roll random in [-roll_r, roll_r].
+	UPROPERTY(EditAnywhere)
+	float YawOffsetR = 0.000000f;
+
 	// Yaw Sep, Make roll random in [-roll_r, roll_r].
 	UPROPERTY(EditAnywhere)
 	float YawSep = 137.500000f;
@@ -245,6 +249,9 @@ public:
 
 	// Yaw Offset, Make roll random in [-roll_r, roll_r].
 	float YawOffset = 0.000000f;
+
+	// Random, Make roll random in [-roll_r, roll_r].
+	float YawOffsetR = 0.000000f;
 
 	// Yaw Sep, Make roll random in [-roll_r, roll_r].
 	float YawSep = 137.500000f;

@@ -64,6 +64,7 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	Node->PitchR = PitchR;
 	Node->RollR = RollR;
 	Node->YawOffset = YawOffset;
+	Node->YawOffsetR = YawOffsetR;
 	Node->YawSep = YawSep;
 	Node->PitchRange = PitchRange;
 	Node->PitchShowAdv = PitchShowAdv;
@@ -414,6 +415,7 @@ void FTcrTreeLeafScatter::Cook()
 						const float pitch_r = vex_radians(PitchR);
 						const float roll_r = vex_radians(RollR);
 						const float yaw_offset = vex_radians(YawOffset);
+						const float yaw_offset_r = vex_radians(YawOffsetR);
 						const float yaw_sep = vex_radians(YawSep);
 						const FVector2f pitch_range = vex_radians(PitchRange);
 						const int32 pitch_adv = PitchAdv;
@@ -494,7 +496,12 @@ void FTcrTreeLeafScatter::Cook()
 							int32 pt_index = _ptnum;
 							if(s < 0.f)
 							pt_index = _ptnum - num_pts / 2;
-							float pt_yaw = pt_index * yaw_sep + yaw_offset;
+							float y_offset = yaw_offset;
+							if(yaw_offset_r > 0.f)
+							{
+							y_offset += vex_fit01(vex_rand(seed + 71),  - yaw_offset_r, yaw_offset_r);
+							}
+							float pt_yaw = pt_index * yaw_sep + y_offset;
 							FVector4f qyaw = vex_quaternion(pt_yaw, dir);
 							FVector4f q = vex_qmultiply(qyaw, qpitch);
 							FVector3f dir_fwd = vex_qrotate(q, forward);
