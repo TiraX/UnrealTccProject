@@ -96,6 +96,7 @@ void FTcrTreeMidPalm::Cook()
 		main_trunk->RadiusShape.AddRampPoint(1.0000f, 0.2500f);
 		main_trunk->TreeAge = 8.700000f;
 		main_trunk->MaxAge = 4.410000f;
+		main_trunk->SegLen = 0.010000f;
 		main_trunk->Radius = 0.150000f;
 		main_trunk->CurlForce = 0.181000f;
 		main_trunk->CurlFreq = 0.355000f;
@@ -104,7 +105,10 @@ void FTcrTreeMidPalm::Cook()
 	{
 		// Node: tcr_tree_skin_growth1
 		tcr_tree_skin_growth1->SetInput(0, main_trunk);
-		tcr_tree_skin_growth1->Amp = 0.000000f;
+		tcr_tree_skin_growth1->Cols = 12;
+		tcr_tree_skin_growth1->Noise = UTcrTreeSkinGrowth::Worley;
+		tcr_tree_skin_growth1->Amp = 0.053000f;
+		tcr_tree_skin_growth1->Freq = FVector3f(0.000000f, 0.000000f, 6.400000f);
 		tcr_tree_skin_growth1->Cook();
 	}
 	{

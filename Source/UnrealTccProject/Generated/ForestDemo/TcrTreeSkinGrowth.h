@@ -18,6 +18,12 @@ public:
 		output0,  // From tcc_normal2
 		OUT_Count,
 	};
+	enum ENoise
+	{
+		None,
+		Perlin,
+		Worley,
+	};
 
 	const FString SOutputs[OUT_Count] = 
 	{
@@ -29,21 +35,29 @@ public:
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
 
+	// Seed
+	UPROPERTY(EditAnywhere)
+	int32 Gseed = 0;
+
 	// Tube Columns
 	UPROPERTY(EditAnywhere)
 	int32 Cols = 36;
+
+	// Partial Twist
+	UPROPERTY(EditAnywhere)
+	float Incroll = 133.000000f;
+
+	// Noise
+	UPROPERTY(EditAnywhere)
+	int32 Noise = UTcrTreeSkinGrowth::None;
 
 	// Amp
 	UPROPERTY(EditAnywhere)
 	float Amp = 0.100000f;
 
-	// Pos Scale
+	// Noise Freq
 	UPROPERTY(EditAnywhere)
-	FVector3f PosScale = FVector3f(1.000000f, 1.000000f, 1.000000f);
-
-	// Partial Twist
-	UPROPERTY(EditAnywhere)
-	float Incroll = 133.000000f;
+	FVector3f Freq = FVector3f(1.000000f, 1.000000f, 1.000000f);
 
 };
 
@@ -60,17 +74,23 @@ public:
 
 	virtual void Cook() override;
 
+	// Seed
+	int32 Gseed = 0;
+
 	// Tube Columns
 	int32 Cols = 36;
+
+	// Partial Twist
+	float Incroll = 133.000000f;
+
+	// Noise
+	int32 Noise = UTcrTreeSkinGrowth::None;
 
 	// Amp
 	float Amp = 0.100000f;
 
-	// Pos Scale
-	FVector3f PosScale = FVector3f(1.000000f, 1.000000f, 1.000000f);
-
-	// Partial Twist
-	float Incroll = 133.000000f;
+	// Noise Freq
+	FVector3f Freq = FVector3f(1.000000f, 1.000000f, 1.000000f);
 
 	FTccPolyWire* tcc_poly_wire1 = nullptr;
 
@@ -78,7 +98,9 @@ public:
 
 	FTccSwitch* noise = nullptr;
 
-	FTccVex* tcc_vex1 = nullptr;
+	FTccVex* noise_perlin = nullptr;
+
+	FTccVex* noise_worley = nullptr;
 
 	FTccAttribDelete* tcc_attrib_delete1 = nullptr;
 

@@ -140,7 +140,7 @@ void FTcrTreeBig01::Cook()
 		main_trunk->RadiusShape.ResizeRampPoints(3);
 		main_trunk->RadiusShape.AddRampPoint(0.0000f, 1.0000f);
 		main_trunk->RadiusShape.AddRampPoint(0.1500f, 0.5000f);
-		main_trunk->RadiusShape.AddRampPoint(1.0000f, 0.3125f);
+		main_trunk->RadiusShape.AddRampPoint(1.0000f, 0.2500f);
 		main_trunk->Gseed = int32(Gseed);
 		main_trunk->TreeAge = 16.170000f;
 		main_trunk->MaxAge = 10.970000f;
@@ -153,9 +153,10 @@ void FTcrTreeBig01::Cook()
 	{
 		// Node: main_trunk_skin
 		main_trunk_skin->SetInput(0, main_trunk);
-		main_trunk_skin->Amp = 0.185000f;
-		main_trunk_skin->PosScale = FVector3f(15.000000f, 27.000000f, 28.000000f);
 		main_trunk_skin->Incroll = 80.199997f;
+		main_trunk_skin->Noise = UTcrTreeSkinGrowth::Perlin;
+		main_trunk_skin->Amp = 0.221000f;
+		main_trunk_skin->Freq = FVector3f(7.000000f, 7.000000f, 0.200000f);
 		main_trunk_skin->Cook();
 	}
 	{
@@ -189,7 +190,7 @@ void FTcrTreeBig01::Cook()
 		branch1->RadiusShape = ETccRampInterp::Bezier;
 		branch1->RadiusShape.ResizeRampPoints(3);
 		branch1->RadiusShape.AddRampPoint(0.0000f, 1.0000f);
-		branch1->RadiusShape.AddRampPoint(0.1506f, 0.2500f);
+		branch1->RadiusShape.AddRampPoint(0.1391f, 0.5417f);
 		branch1->RadiusShape.AddRampPoint(1.0000f, 0.2500f);
 		branch1->Pitch0Ramp = ETccRampInterp::Linear;
 		branch1->Pitch0Ramp.ResizeRampPoints(2);
@@ -287,8 +288,9 @@ void FTcrTreeBig01::Cook()
 	{
 		// Node: main_branch_skin
 		main_branch_skin->SetInput(0, tcc_merge4);
+		main_branch_skin->Noise = UTcrTreeSkinGrowth::Perlin;
 		main_branch_skin->Amp = 0.116000f;
-		main_branch_skin->PosScale = FVector3f(16.000000f, 24.000000f, 11.000000f);
+		main_branch_skin->Freq = FVector3f(12.000000f, 12.000000f, 1.000000f);
 		main_branch_skin->Cook();
 	}
 	{
@@ -572,8 +574,8 @@ void FTcrTreeBig01::Cook()
 					// Node: frac_skin
 					frac_skin->SetInput(0, branch_frac5);
 					frac_skin->Cols = 4;
-					frac_skin->Amp = 0.000000f;
 					frac_skin->Incroll = 0.000000f;
+					frac_skin->Amp = 0.000000f;
 					frac_skin->Cook();
 				}
 				

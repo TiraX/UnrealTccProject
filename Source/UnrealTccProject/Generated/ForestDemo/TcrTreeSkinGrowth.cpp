@@ -22,10 +22,12 @@ FTccNodePtr UTcrTreeSkinGrowth::CreateNode()
 void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode) 
 {
 	TSharedPtr<FTcrTreeSkinGrowth> Node = StaticCastSharedPtr<FTcrTreeSkinGrowth>(InNode);
+	Node->Gseed = Gseed;
 	Node->Cols = Cols;
-	Node->Amp = Amp;
-	Node->PosScale = PosScale;
 	Node->Incroll = Incroll;
+	Node->Noise = Noise;
+	Node->Amp = Amp;
+	Node->Freq = Freq;
 }
 
  FTcrTreeSkinGrowth::FTcrTreeSkinGrowth() 
@@ -37,8 +39,10 @@ void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode)
 	tcc_normal1->InitMultiRefs(false); // RefCount = 1
 	noise = new FTccSwitch();
 	noise->InitMultiRefs(false); // RefCount = 1
-		tcc_vex1 = new FTccVex();
-		tcc_vex1->InitMultiRefs(false); // RefCount = 1
+		noise_perlin = new FTccVex();
+		noise_perlin->InitMultiRefs(false); // RefCount = 1
+		noise_worley = new FTccVex();
+		noise_worley->InitMultiRefs(false); // RefCount = 1
 	tcc_attrib_delete1 = new FTccAttribDelete();
 	tcc_attrib_delete1->InitMultiRefs(false); // RefCount = 1
 	tcc_normal2 = new FTccNormal();
@@ -49,7 +53,8 @@ void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode)
 	delete tcc_poly_wire1; 
 	delete tcc_normal1; 
 	delete noise; 
-		delete tcc_vex1; 
+		delete noise_perlin; 
+		delete noise_worley; 
 	delete tcc_attrib_delete1; 
 	delete tcc_normal2; 
 }
@@ -74,8 +79,8 @@ void FTcrTreeSkinGrowth::Cook()
 	{
 		// Node: noise
 		noise->SetInput(0, tcc_normal1);
-		noise->Input = int32(Amp > 0);
-		noise->NumCases = 2;
+		noise->Input = int32(Noise);
+		noise->NumCases = 3;
 		noise->Cook();
 		FTccGeometryPtr SwitchResult = nullptr;
 		const int32 Selection = noise->Input;
@@ -84,19 +89,22 @@ void FTcrTreeSkinGrowth::Cook()
 			case 0:
 			{
 				
+				
 				SwitchResult = nullptr;
 			}
 			break;
 			case 1:
 			{
 				{
-					// Node: tcc_vex1
-					tcc_vex1->SetInput(0, tcc_normal1);
-					tcc_vex1->Cook();
+					// Node: noise_perlin
+					noise_perlin->SetInput(0, tcc_normal1);
+					noise_perlin->Cook();
 					{
-						FTccGeometryPtr Geo0 = tcc_vex1->GetGeoRef(0);
+						FTccGeometryPtr Geo0 = noise_perlin->GetGeoRef(0);
 						FTccAttribPtr attr_before_twist = Geo0->AddPointAttrib("before_twist", ETccAttribType::F3);
 						FTccAttribPtr attr_N = Geo0->AddPointAttrib("N", ETccAttribType::F3);
+						const int32 gseed = Gseed;
+						const FVector3f freq = Freq;
 						const int32 _numpt = Geo0->GetNumPoints();
 						for(int32 i = 0; i < _numpt; i++)
 						{
@@ -104,10 +112,8 @@ void FTcrTreeSkinGrowth::Cook()
 							FVector3f& _P = Geo0->GetPositions()[i];
 							FVector3f& _before_twist = attr_before_twist->GetData<FVector3f>()[i];
 							FVector3f& _N = attr_N->GetData<FVector3f>()[i];
-							int32 gseed = 0;
-							FVector3f pos_scale = PosScale;
 							FVector3f uvw = _before_twist;
-							FVector3f pos_seed = uvw * pos_scale + float(gseed);
+							FVector3f pos_seed = uvw * freq + float(gseed);
 							float n = vex_noise3(pos_seed);
 							n = n * 2.f - 1.f;
 							float amp = Amp;
@@ -116,7 +122,42 @@ void FTcrTreeSkinGrowth::Cook()
 					}
 				}
 				
-				SwitchResult = tcc_vex1->GetGeoResult(0);
+				
+				SwitchResult = noise_perlin->GetGeoResult(0);
+			}
+			break;
+			case 2:
+			{
+				
+				{
+					// Node: noise_worley
+					noise_worley->SetInput(0, tcc_normal1);
+					noise_worley->Cook();
+					{
+						FTccGeometryPtr Geo0 = noise_worley->GetGeoRef(0);
+						FTccAttribPtr attr_before_twist = Geo0->AddPointAttrib("before_twist", ETccAttribType::F3);
+						FTccAttribPtr attr_N = Geo0->AddPointAttrib("N", ETccAttribType::F3);
+						const int32 gseed = Gseed;
+						const FVector3f freq = Freq;
+						const float amp = Amp;
+						const int32 _numpt = Geo0->GetNumPoints();
+						for(int32 i = 0; i < _numpt; i++)
+						{
+							const int32 _ptnum = i;
+							FVector3f& _P = Geo0->GetPositions()[i];
+							FVector3f& _before_twist = attr_before_twist->GetData<FVector3f>()[i];
+							FVector3f& _N = attr_N->GetData<FVector3f>()[i];
+							FVector3f uvw = _before_twist;
+							FVector3f pos_seed = uvw * freq + float(gseed);
+							float f1, f2;
+							vex_wnoise(pos_seed, gseed, f1, f2);
+							float n = f2 - f1;
+							_P += _N * n * amp;
+						}
+					}
+				}
+				
+				SwitchResult = noise_worley->GetGeoResult(0);
 			}
 			break;
 			default:
