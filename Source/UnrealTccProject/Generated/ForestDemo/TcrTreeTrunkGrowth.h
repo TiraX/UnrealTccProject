@@ -53,10 +53,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Radius = 2.000000f;
 
-	// Min Radius
-	UPROPERTY(EditAnywhere)
-	float RadiusMin = 0.100000f;
-
 	// Curl Force
 	UPROPERTY(EditAnywhere)
 	float CurlForce = 0.000000f;
@@ -93,9 +89,6 @@ public:
 
 	// Base Radius
 	float Radius = 2.000000f;
-
-	// Min Radius
-	float RadiusMin = 0.100000f;
 
 	// Curl Force
 	float CurlForce = 0.000000f;

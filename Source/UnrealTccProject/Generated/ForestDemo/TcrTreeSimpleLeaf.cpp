@@ -190,7 +190,7 @@ void FTcrTreeSimpleLeaf::Cook()
 					bend_l->SetInput(0, enable_bend);
 					bend_l->Bend = float(Curl);
 					bend_l->Dir = FVector3f(1.000000f, 0.000000f, 0.000000f);
-					bend_l->Length = float(Size.X);
+					bend_l->Length = float(Size.X * 0.5f);
 					bend_l->Symmetricdeformation = 1;
 					bend_l->Cook();
 				}

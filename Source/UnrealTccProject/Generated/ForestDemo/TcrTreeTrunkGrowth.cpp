@@ -32,7 +32,6 @@ void UTcrTreeTrunkGrowth::SyncParams(FTccNodePtr InNode)
 	Node->MaxAge = MaxAge;
 	Node->SegLen = SegLen;
 	Node->Radius = Radius;
-	Node->RadiusMin = RadiusMin;
 	Node->CurlForce = CurlForce;
 	Node->CurlFreq = CurlFreq;
 }
@@ -61,7 +60,6 @@ void FTcrTreeTrunkGrowth::Cook()
 			FTccAttribPtr attr_global_tree_age = Geo0->AddDetailAttrib("global_tree_age", ETccAttribType::F);
 			FTccAttribPtr attr_global_seg_len = Geo0->AddDetailAttrib("global_seg_len", ETccAttribType::F);
 			FTccAttribPtr attr_global_radius_base = Geo0->AddDetailAttrib("global_radius_base", ETccAttribType::F);
-			FTccAttribPtr attr_global_radius_min = Geo0->AddDetailAttrib("global_radius_min", ETccAttribType::F);
 			const int32 gseed = Gseed;
 			const float tree_age = TreeAge;
 			const float tree_age_inv = 1.f / tree_age;
@@ -69,17 +67,13 @@ void FTcrTreeTrunkGrowth::Cook()
 			const float trunk_age = vex_min(max_age, tree_age);
 			const float max_seg_len = SegLen;
 			const float radius = Radius;
-			const float radius_min = RadiusMin;
 			const float curl_force = CurlForce;
 			const float curl_freq = CurlFreq;
-			const float radius_shape0 = RadiusShape.Lookup(0.f);
-			const float radius_shape1 = RadiusShape.Lookup(1.f);
 			const FVector3f up = vex_set(0, 1, 0);
 			const float eps = 0.01f;
 			float& _global_tree_age = attr_global_tree_age->GetData<float>()[0];
 			float& _global_seg_len = attr_global_seg_len->GetData<float>()[0];
 			float& _global_radius_base = attr_global_radius_base->GetData<float>()[0];
-			float& _global_radius_min = attr_global_radius_min->GetData<float>()[0];
 			// parameters
 			int32 num_segs = (int)ceil(trunk_age / max_seg_len);
 			float len_left = trunk_age - max_seg_len * (num_segs - 1);
@@ -118,7 +112,7 @@ void FTcrTreeTrunkGrowth::Cook()
 			poses [ i] = pos;
 			ages [ i] = local_age;
 			dirs [ i] = dir;
-			float local_radius = vex_fit(RadiusShape.Lookup(local_age * tree_age_inv), radius_shape0, radius_shape1, radius, radius_min);
+			float local_radius = radius * RadiusShape.Lookup(local_age * tree_age_inv);
 			rads [ i] = local_radius;
 			last_pos = pos;
 			}
@@ -135,7 +129,6 @@ void FTcrTreeTrunkGrowth::Cook()
 			_global_tree_age = tree_age;
 			_global_seg_len = max_seg_len;
 			_global_radius_base = radius;
-			_global_radius_min = radius_min;
 			//i@curr_level = 0;
 		}
 	}

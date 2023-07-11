@@ -254,7 +254,12 @@ void FTcrTreeBranchGrowth::Cook()
 						if(use_parent_percent)
 						percent = parent_percent;
 						else
+						{
+						if(max_ages_generated == branch_start)
+						percent = 0.f;
+						else
 						percent = (age - branch_start) / (max_ages_generated - branch_start);
+						}
 						        
 						seed += 91;
 						float age_step = sep_range_base;
@@ -295,16 +300,21 @@ void FTcrTreeBranchGrowth::Cook()
 						dir = vex_normalize(dir);
 						float radius = vex_lerp(radius0, radius1, ratio) * 0.95f;
 						    // find grow direction
-						FVector3f up = vex_set(0, 1, 0);
-						float DoU = vex_dot(dir, up);
-						if(DoU > 0.9f)
-						up = vex_set(1, 0, 0);
-						FVector3f axis = vex_cross(dir, up);
+						    // vector up = set(0, 1, 0);
+						    // float DoU = dot(dir, up);
+						    // if (DoU > 0.99f)
+						    //     up = set(0, 0, 1);
+						    // vector axis = cross(dir, up);
 						float percent = 0.f;
 						if(use_parent_percent)
 						percent = parent_percent;
 						else
+						{
+						if(max_ages_generated == branch_start)
+						percent = 0.f;
+						else
 						percent = (age - branch_start) / (max_ages_generated - branch_start);
+						}
 						    
 						float branch_max_age = max_age_base;
 						if(max_age_adv > 0)
@@ -330,8 +340,9 @@ void FTcrTreeBranchGrowth::Cook()
 						pitch_target = vex_lerp(pitch_target, pitch_tail, p);
 						branch_max_age -= branch_max_age * p * (1 - max_age_tail);
 						}
-						FVector4f qpitch_start = vex_quaternion(pitch_start, axis);
-						FVector4f qpitch_target = vex_quaternion(pitch_target, axis);
+						FVector3f axis_x = vex_set(1, 0, 0);
+						FVector4f qpitch_start = vex_quaternion(pitch_start, axis_x);
+						FVector4f qpitch_target = vex_quaternion(pitch_target, axis_x);
 						FVector4f qyaw = vex_quaternion(yaw, dir);
 						FVector4f q = vex_qmultiply(qyaw, qpitch_start);
 						FVector4f q1 = vex_qmultiply(qyaw, qpitch_target);

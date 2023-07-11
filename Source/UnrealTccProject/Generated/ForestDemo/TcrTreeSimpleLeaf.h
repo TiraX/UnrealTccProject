@@ -63,7 +63,7 @@ public:
 
 	// Curl
 	UPROPERTY(EditAnywhere)
-	float Curl = -60.000000f;
+	float Curl = -30.000000f;
 
 };
 
@@ -108,7 +108,7 @@ public:
 	int32 EnableCurl = 1;
 
 	// Curl
-	float Curl = -60.000000f;
+	float Curl = -30.000000f;
 
 	FTccGrid* tcc_grid1 = nullptr;
 
