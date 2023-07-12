@@ -45,7 +45,7 @@ public:
 
 	// Partial Twist
 	UPROPERTY(EditAnywhere)
-	float Incroll = 133.000000f;
+	float Incroll = 0.000000f;
 
 	// Noise
 	UPROPERTY(EditAnywhere)
@@ -81,7 +81,7 @@ public:
 	int32 Cols = 36;
 
 	// Partial Twist
-	float Incroll = 133.000000f;
+	float Incroll = 0.000000f;
 
 	// Noise
 	int32 Noise = UTcrTreeSkinGrowth::None;

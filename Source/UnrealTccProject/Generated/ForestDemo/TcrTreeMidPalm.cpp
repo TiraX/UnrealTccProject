@@ -97,7 +97,7 @@ void FTcrTreeMidPalm::Cook()
 		main_trunk->TreeAge = 8.700000f;
 		main_trunk->MaxAge = 4.410000f;
 		main_trunk->SegLen = 0.010000f;
-		main_trunk->Radius = 0.150000f;
+		main_trunk->Radius = 0.180000f;
 		main_trunk->CurlForce = 0.181000f;
 		main_trunk->CurlFreq = 0.355000f;
 		main_trunk->Cook();

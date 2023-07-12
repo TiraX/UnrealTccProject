@@ -529,6 +529,9 @@ void FTcrTreeLeafScatter::Cook()
 							float pt_yaw = pt_index * yaw_sep + y_offset;
 							FVector4f qyaw = vex_quaternion(pt_yaw, dir);
 							FVector3f dir_fwd = vex_qrotate(qyaw, dir_perp);
+							    // OFFSET from radius
+							_P += dir_fwd * _radius * radius_shrink;
+							    
 							    // PITCH
 							FVector3f axis = vex_cross(dir_fwd, dir);
 							float pitch_percent = branch_percent;
@@ -543,8 +546,6 @@ void FTcrTreeLeafScatter::Cook()
 							}
 							FVector4f qpitch = vex_quaternion(pt_pitch, axis);
 							dir_fwd = vex_qrotate(qpitch, dir_fwd);
-							    // OFFSET from radius
-							_P += dir_fwd * _radius * radius_shrink;
 							    //v@dir_fwd = dir_fwd;
 							    // ROLL
 							FMatrix44f m = vex_maketransform(dir_fwd, dir);

@@ -57,6 +57,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Bend = -30.000000f;
 
+	// Bend Offset
+	UPROPERTY(EditAnywhere)
+	float BendOffset = 0.000000f;
+
 	// Enable Curl
 	UPROPERTY(EditAnywhere)
 	int32 EnableCurl = 1;
@@ -103,6 +107,9 @@ public:
 
 	// Bend
 	float Bend = -30.000000f;
+
+	// Bend Offset
+	float BendOffset = 0.000000f;
 
 	// Enable Curl
 	int32 EnableCurl = 1;

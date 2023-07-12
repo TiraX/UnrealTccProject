@@ -105,7 +105,6 @@ void FTcrTreeMid02::Cook()
 		// Node: trunk_skin
 		trunk_skin->SetInput(0, main_trunk);
 		trunk_skin->Cols = 12;
-		trunk_skin->Incroll = 0.000000f;
 		trunk_skin->Noise = UTcrTreeSkinGrowth::Worley;
 		trunk_skin->Amp = 0.038000f;
 		trunk_skin->Freq = FVector3f(1.000000f, 1.000000f, 5.800000f);
@@ -286,7 +285,6 @@ void FTcrTreeMid02::Cook()
 		// Node: branch_skin
 		branch_skin->SetInput(0, tcc_merge1);
 		branch_skin->Cols = 8;
-		branch_skin->Incroll = 0.000000f;
 		branch_skin->Amp = 0.038000f;
 		branch_skin->Freq = FVector3f(0.000000f, 0.000000f, 5.800000f);
 		branch_skin->Cook();

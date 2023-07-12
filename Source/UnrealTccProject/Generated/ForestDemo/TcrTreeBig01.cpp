@@ -286,6 +286,7 @@ void FTcrTreeBig01::Cook()
 	{
 		// Node: main_branch_skin
 		main_branch_skin->SetInput(0, tcc_merge4);
+		main_branch_skin->Incroll = 76.400002f;
 		main_branch_skin->Noise = UTcrTreeSkinGrowth::Perlin;
 		main_branch_skin->Amp = 0.116000f;
 		main_branch_skin->Freq = FVector3f(12.000000f, 12.000000f, 1.000000f);
@@ -569,7 +570,6 @@ void FTcrTreeBig01::Cook()
 					// Node: frac_skin
 					frac_skin->SetInput(0, branch_frac5);
 					frac_skin->Cols = 4;
-					frac_skin->Incroll = 0.000000f;
 					frac_skin->Amp = 0.000000f;
 					frac_skin->Cook();
 				}
