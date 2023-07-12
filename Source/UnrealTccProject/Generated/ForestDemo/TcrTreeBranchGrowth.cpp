@@ -78,6 +78,7 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
 	Node->YawOffset = YawOffset;
 	Node->YawOffsetR = YawOffsetR;
 	Node->Yaw = Yaw;
+	Node->YawR = YawR;
 	Node->Pitch0 = Pitch0;
 	Node->Pitch0ShowAdv = Pitch0ShowAdv;
 	Node->Pitch0Adv = Pitch0Adv;
@@ -178,6 +179,7 @@ void FTcrTreeBranchGrowth::Cook()
 						const float sep_range_base = AgeDis;
 						const int32 sep_range_adv = AgeDisAdv;
 						const float yaw_step = vex_radians(Yaw);
+						const float yaw_step_r = vex_radians(YawR);
 						const float yaw_offset = vex_radians(YawOffset);
 						const float yaw_offset_r = vex_radians(YawOffsetR);
 						const float pitch_start_base = vex_radians(Pitch0);
@@ -454,6 +456,10 @@ void FTcrTreeBranchGrowth::Cook()
 						vex_setprimattrib(Geo0, "percent", branch_line, percent);
 						seed += 91;
 						yaw += yaw_step;
+						if(yaw_step_r > 0.f)
+						{
+						yaw += vex_fit01(vex_rand(seed + 3),  - yaw_step_r, yaw_step_r);
+						}
 						float age_step = sep_range_base;
 						if(sep_range_adv > 0)
 						{

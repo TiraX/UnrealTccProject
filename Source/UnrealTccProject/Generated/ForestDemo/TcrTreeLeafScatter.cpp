@@ -24,12 +24,12 @@
 	PitchRamp.ResizeRampPoints(2);
 	PitchRamp.AddRampPoint(0.0000f, 0.0000f);
 	PitchRamp.AddRampPoint(1.0000f, 1.0000f);
-	ScaleRamp.ResizeRampPoints(5);
-	ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
-	ScaleRamp.AddRampPoint(0.0638f, 0.7667f);
-	ScaleRamp.AddRampPoint(0.1637f, 1.0000f);
-	ScaleRamp.AddRampPoint(0.8134f, 1.0000f);
-	ScaleRamp.AddRampPoint(0.9935f, 0.6333f);
+	ScaleAlongBranch.ResizeRampPoints(2);
+	ScaleAlongBranch.AddRampPoint(0.0000f, 1.0000f);
+	ScaleAlongBranch.AddRampPoint(1.0000f, 1.0000f);
+	ScaleAlongTrunk.ResizeRampPoints(2);
+	ScaleAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+	ScaleAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 }
 FTccNodePtr UTcrTreeLeafScatter::CreateNode() 
 {
@@ -44,7 +44,8 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	Node->AgeDisRamp = AgeDisRamp;
 	Node->YawRamp = YawRamp;
 	Node->PitchRamp = PitchRamp;
-	Node->ScaleRamp = ScaleRamp;
+	Node->ScaleAlongBranch = ScaleAlongBranch;
+	Node->ScaleAlongTrunk = ScaleAlongTrunk;
 	Node->Gseed = Gseed;
 	Node->MaxCount = MaxCount;
 	Node->StartPercent = StartPercent;
@@ -83,12 +84,12 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 		info->InitMultiRefs(false); // RefCount = 1
 		blast_start = new FTccBlastByFeature();
 		blast_start->InitMultiRefs(false); // RefCount = 1
-		blast_end = new FTccBlastByFeature();
-		blast_end->InitMultiRefs(false); // RefCount = 1
-		measure_len = new FTccMeasure();
-		measure_len->InitMultiRefs(false); // RefCount = 1
-		scatter_points = new FTccDitheredScatter();
-		scatter_points->InitMultiRefs(true); // RefCount = 2
+		scatter_on_end = new FTccSwitch();
+		scatter_on_end->InitMultiRefs(true); // RefCount = 2
+			blast_end = new FTccBlastByFeature();
+			blast_end->InitMultiRefs(false); // RefCount = 1
+			scatter_points = new FTccDitheredScatter();
+			scatter_points->InitMultiRefs(false); // RefCount = 1
 		mirror = new FTccSwitch();
 		mirror->InitMultiRefs(false); // RefCount = 1
 			sign = new FTccVex();
@@ -129,21 +130,21 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	PitchRamp.ResizeRampPoints(2);
 	PitchRamp.AddRampPoint(0.0000f, 0.0000f);
 	PitchRamp.AddRampPoint(1.0000f, 1.0000f);
-	ScaleRamp.ResizeRampPoints(5);
-	ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
-	ScaleRamp.AddRampPoint(0.0638f, 0.7667f);
-	ScaleRamp.AddRampPoint(0.1637f, 1.0000f);
-	ScaleRamp.AddRampPoint(0.8134f, 1.0000f);
-	ScaleRamp.AddRampPoint(0.9935f, 0.6333f);
+	ScaleAlongBranch.ResizeRampPoints(2);
+	ScaleAlongBranch.AddRampPoint(0.0000f, 1.0000f);
+	ScaleAlongBranch.AddRampPoint(1.0000f, 1.0000f);
+	ScaleAlongTrunk.ResizeRampPoints(2);
+	ScaleAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+	ScaleAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 }
  FTcrTreeLeafScatter::~FTcrTreeLeafScatter() 
 {
 	delete foreach_branch; 
 		delete info; 
 		delete blast_start; 
-		delete blast_end; 
-		delete measure_len; 
-		delete scatter_points; 
+		delete scatter_on_end; 
+			delete blast_end; 
+			delete scatter_points; 
 		delete mirror; 
 			delete sign; 
 			delete sign1; 
@@ -240,39 +241,62 @@ void FTcrTreeLeafScatter::Cook()
 				}
 				
 				{
-					// Node: blast_end
-					blast_end->SetInput(0, blast_start);
-					FTccGeometryConstPtr Geo0 = blast_end->GetInput(0)->GetConstGeoResult(0);
-					blast_end->Grouptype = UTccBlastByFeature::Points;
-					blast_end->ByAttrib = 1;
-					blast_end->Attrib = TEXT("age");
-					blast_end->Op = UTccBlastByFeature::Greater;
-					blast_end->Value = float(hs_detail(Geo0, "grow_age_end", 0));
-					blast_end->Cook();
-				}
-				
-				{
-					// Node: measure_len
-					measure_len->SetInput(0, blast_end);
-					measure_len->Measure = UTccMeasure::Perimeter;
-					measure_len->Attribname = TEXT("len");
-					measure_len->Cook();
-				}
-				
-				{
-					// Node: scatter_points
-					scatter_points->SetInput(0, measure_len);
-					FTccGeometryConstPtr Geo0 = scatter_points->GetInput(0)->GetConstGeoResult(0);
-					scatter_points->Npts = int32(hs_detail(Geo0, "max_count", 0));
-					scatter_points->ScatterSeed = int32(hs_detail(Geo0, "seed", 0));
-					scatter_points->Jitter = 0.265000f;
-					scatter_points->DoU = 1;
-					scatter_points->Cook();
+					// Node: scatter_on_end
+					scatter_on_end->SetInput(0, blast_start);
+					scatter_on_end->Input = int32(StartPercent >= 0.99f);
+					scatter_on_end->NumCases = 2;
+					scatter_on_end->Cook();
+					FTccGeometryPtr SwitchResult = nullptr;
+					const int32 Selection = scatter_on_end->Input;
+					switch (Selection)
+					{
+						case 0:
+						{
+							{
+								// Node: blast_end
+								blast_end->SetInput(0, blast_start);
+								FTccGeometryConstPtr Geo0 = blast_end->GetInput(0)->GetConstGeoResult(0);
+								blast_end->Grouptype = UTccBlastByFeature::Points;
+								blast_end->ByAttrib = 1;
+								blast_end->Attrib = TEXT("age");
+								blast_end->Op = UTccBlastByFeature::Greater;
+								blast_end->Value = float(hs_detail(Geo0, "grow_age_end", 0));
+								blast_end->Cook();
+							}
+							
+							{
+								// Node: scatter_points
+								scatter_points->SetInput(0, blast_end);
+								FTccGeometryConstPtr Geo0 = scatter_points->GetInput(0)->GetConstGeoResult(0);
+								scatter_points->Npts = int32(hs_detail(Geo0, "max_count", 0));
+								scatter_points->ScatterSeed = int32(hs_detail(Geo0, "seed", 0));
+								scatter_points->Jitter = 0.265000f;
+								scatter_points->DoU = 1;
+								scatter_points->Cook();
+							}
+							
+							SwitchResult = scatter_points->GetGeoResult(0);
+						}
+						break;
+						case 1:
+						{
+							
+							
+							SwitchResult = scatter_points->GetGeoResult(0);
+						}
+						break;
+						default:
+						{
+							checkNoEntry();
+						}
+						break;
+					}
+					scatter_on_end->SetValidGeoResult(0, SwitchResult);
 				}
 				
 				{
 					// Node: mirror
-					mirror->SetInput(0, scatter_points);
+					mirror->SetInput(0, scatter_on_end);
 					mirror->Input = int32(Mirror);
 					mirror->NumCases = 2;
 					mirror->Cook();
@@ -284,7 +308,7 @@ void FTcrTreeLeafScatter::Cook()
 						{
 							{
 								// Node: sign
-								sign->SetInput(0, scatter_points);
+								sign->SetInput(0, scatter_on_end);
 								sign->Cook();
 								{
 									FTccGeometryPtr Geo0 = sign->GetGeoRef(0);
@@ -310,7 +334,7 @@ void FTcrTreeLeafScatter::Cook()
 							
 							{
 								// Node: sign1
-								sign1->SetInput(0, scatter_points);
+								sign1->SetInput(0, scatter_on_end);
 								sign1->Cook();
 								{
 									FTccGeometryPtr Geo0 = sign1->GetGeoRef(0);
@@ -327,7 +351,7 @@ void FTcrTreeLeafScatter::Cook()
 							
 							{
 								// Node: sign2
-								sign2->SetInput(0, scatter_points);
+								sign2->SetInput(0, scatter_on_end);
 								sign2->Cook();
 								{
 									FTccGeometryPtr Geo0 = sign2->GetGeoRef(0);
@@ -398,9 +422,11 @@ void FTcrTreeLeafScatter::Cook()
 					// Node: transform
 					transform->SetInput(0, drop_points);
 					transform->SetInput(1, nullptr);
+					transform->SetInput(2, block_input0);
 					transform->Cook();
 					{
 						FTccGeometryPtr Geo0 = transform->GetGeoRef(0);
+						FTccGeometryConstPtr Geo2 = block_input0->GetConstGeoResult(0);
 						FTccAttribPtr attr___u = Geo0->AddPointAttrib("__u", ETccAttribType::F);
 						FTccAttribPtr attr_sign = Geo0->AddPointAttrib("sign", ETccAttribType::F);
 						FTccAttribPtr attr_dir = Geo0->AddPointAttrib("dir", ETccAttribType::F3);
@@ -437,7 +463,8 @@ void FTcrTreeLeafScatter::Cook()
 							// Around branch
 							// Scale
 							FVector3f up = vex_set(0, 1, 0);
-							float percent = ___u;
+							float branch_percent = ___u;
+							float trunk_percent = vex_primf(Geo2, "percent", 0);
 							float s = _sign;
 							int32 iter = _iteration;
 							int32 seed = gseed + iter * 100 + _ptnum + 28;
@@ -462,9 +489,9 @@ void FTcrTreeLeafScatter::Cook()
 							        //dir_perp = qrotate(q, dir_perp);
 							}
 							    // YAW
-							float yaw_percent = percent;
+							float yaw_percent = branch_percent;
 							if(yaw_adv > 0)
-							yaw_percent = YawRamp.Lookup(percent);
+							yaw_percent = YawRamp.Lookup(branch_percent);
 							float pt_yaw = vex_lerp(yaw_range.X, yaw_range.Y, yaw_percent) * s;
 							FVector4f qyaw = vex_quaternion(pt_yaw, axis);
 							q = vex_qmultiply(qyaw, q);
@@ -482,16 +509,7 @@ void FTcrTreeLeafScatter::Cook()
 							else
 							{
 							    // around branch
-							    // PITCH
-							FVector3f axis_x = vex_set(1, 0, 0);
-							float pitch_percent = percent;
-							if(pitch_adv > 0)
-							pitch_percent = PitchRamp.Lookup(percent);
-							float pt_pitch = vex_lerp(pitch_range.X, pitch_range.Y, pitch_percent);
-							FVector4f qpitch = vex_quaternion(pt_pitch, axis_x);
-							    //vector4 q = qmultiply(qyaw, qpitch);
-							    //vector dir_fwd = qrotate(qpitch, dir_yaw);
-							    
+							        
 							    // YAW
 							int32 pt_index = _ptnum;
 							if(s < 0.f)
@@ -503,16 +521,25 @@ void FTcrTreeLeafScatter::Cook()
 							}
 							float pt_yaw = pt_index * yaw_sep + y_offset;
 							FVector4f qyaw = vex_quaternion(pt_yaw, dir);
-							FVector4f q = vex_qmultiply(qyaw, qpitch);
-							FVector3f dir_fwd = vex_qrotate(q, forward);
+							FVector3f dir_fwd = vex_qrotate(qyaw, dir_perp);
+							    // PITCH
+							FVector3f axis = vex_cross(dir_fwd, dir);
+							float pitch_percent = branch_percent;
+							if(pitch_adv > 0)
+							pitch_percent = PitchRamp.Lookup(branch_percent);
+							float pt_pitch = vex_lerp(pitch_range.X, pitch_range.Y, pitch_percent);
+							FVector4f qpitch = vex_quaternion(pt_pitch, axis);
+							dir_fwd = vex_qrotate(qpitch, dir_fwd);
 							    // OFFSET from radius
 							_P += dir_fwd * _radius * radius_shrink;
+							    //v@dir_fwd = dir_fwd;
 							    // ROLL
 							FMatrix44f m = vex_maketransform(dir_fwd, dir);
 							_orient = vex_quaternion(m);
 							}
 							// SCALE
-							_pscale = scale_base * ScaleRamp.Lookup(percent);
+							_pscale = scale_base * ScaleAlongBranch.Lookup(branch_percent);
+							_pscale *= ScaleAlongTrunk.Lookup(trunk_percent);
 						}
 					}
 				}

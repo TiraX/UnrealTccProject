@@ -50,9 +50,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	FTccRampFloat PitchRamp = ETccRampInterp::Linear;
 
-	// Scale Ramp
+	// Scale Along Branch
 	UPROPERTY(EditAnywhere)
-	FTccRampFloat ScaleRamp = ETccRampInterp::Linear;
+	FTccRampFloat ScaleAlongBranch = ETccRampInterp::Linear;
+
+	// Scale Along Trunk
+	UPROPERTY(EditAnywhere)
+	FTccRampFloat ScaleAlongTrunk = ETccRampInterp::Linear;
 
 	// Seed
 	UPROPERTY(EditAnywhere)
@@ -163,9 +167,8 @@ public:
 class FTccForBlock;
 class FTccVex;
 class FTccBlastByFeature;
-class FTccMeasure;
-class FTccDitheredScatter;
 class FTccSwitch;
+class FTccDitheredScatter;
 class FTccMerge;
 class FTccAttribDelete;
 class FTccAttribPromote;
@@ -190,8 +193,11 @@ public:
 	// Pitch Range Ramp
 	FTccRampFloat PitchRamp = ETccRampInterp::Linear;
 
-	// Scale Ramp
-	FTccRampFloat ScaleRamp = ETccRampInterp::Linear;
+	// Scale Along Branch
+	FTccRampFloat ScaleAlongBranch = ETccRampInterp::Linear;
+
+	// Scale Along Trunk
+	FTccRampFloat ScaleAlongTrunk = ETccRampInterp::Linear;
 
 	// Seed
 	int32 Gseed = 0;
@@ -277,9 +283,9 @@ public:
 
 	FTccBlastByFeature* blast_start = nullptr;
 
-	FTccBlastByFeature* blast_end = nullptr;
+	FTccSwitch* scatter_on_end = nullptr;
 
-	FTccMeasure* measure_len = nullptr;
+	FTccBlastByFeature* blast_end = nullptr;
 
 	FTccDitheredScatter* scatter_points = nullptr;
 

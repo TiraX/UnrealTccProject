@@ -141,6 +141,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Yaw = 137.500000f;
 
+	// Random
+	UPROPERTY(EditAnywhere)
+	float YawR = 0.000000f;
+
 	// Pitch Start
 	UPROPERTY(EditAnywhere)
 	float Pitch0 = 15.000000f;
@@ -292,6 +296,9 @@ public:
 
 	// Yaw Pattern
 	float Yaw = 137.500000f;
+
+	// Random
+	float YawR = 0.000000f;
 
 	// Pitch Start
 	float Pitch0 = 15.000000f;

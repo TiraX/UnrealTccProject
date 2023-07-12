@@ -243,7 +243,11 @@ void FTcrFernSubbranches::Cook()
 		fern_leaf_scatter->PitchRamp.ResizeRampPoints(2);
 		fern_leaf_scatter->PitchRamp.AddRampPoint(0.0000f, 0.0000f);
 		fern_leaf_scatter->PitchRamp.AddRampPoint(1.0000f, 1.0000f);
-		fern_leaf_scatter->ScaleRamp = FTccRampFloat(ScaleRamp);
+		fern_leaf_scatter->ScaleAlongBranch = FTccRampFloat(ScaleRamp);
+		fern_leaf_scatter->ScaleAlongTrunk = ETccRampInterp::Linear;
+		fern_leaf_scatter->ScaleAlongTrunk.ResizeRampPoints(2);
+		fern_leaf_scatter->ScaleAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+		fern_leaf_scatter->ScaleAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 		fern_leaf_scatter->Gseed = int32(Gseed);
 		fern_leaf_scatter->StartPercent = float(StartPercent);
 		fern_leaf_scatter->AgeDis = float(AgeDis);
