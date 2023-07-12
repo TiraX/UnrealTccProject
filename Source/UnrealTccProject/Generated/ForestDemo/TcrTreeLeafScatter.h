@@ -46,9 +46,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	FTccRampFloat YawRamp = ETccRampInterp::Linear;
 
-	// Pitch Range Ramp
+	// Pitch Remap
 	UPROPERTY(EditAnywhere)
-	FTccRampFloat PitchRamp = ETccRampInterp::Linear;
+	FTccRampFloat PitchRemap = ETccRampInterp::Linear;
+
+	// Pitch Along Trunk
+	UPROPERTY(EditAnywhere)
+	FTccRampFloat PitchAlongTrunk = ETccRampInterp::Linear;
 
 	// Scale Along Branch
 	UPROPERTY(EditAnywhere)
@@ -190,8 +194,11 @@ public:
 	// Yaw Range Ramp
 	FTccRampFloat YawRamp = ETccRampInterp::Linear;
 
-	// Pitch Range Ramp
-	FTccRampFloat PitchRamp = ETccRampInterp::Linear;
+	// Pitch Remap
+	FTccRampFloat PitchRemap = ETccRampInterp::Linear;
+
+	// Pitch Along Trunk
+	FTccRampFloat PitchAlongTrunk = ETccRampInterp::Linear;
 
 	// Scale Along Branch
 	FTccRampFloat ScaleAlongBranch = ETccRampInterp::Linear;

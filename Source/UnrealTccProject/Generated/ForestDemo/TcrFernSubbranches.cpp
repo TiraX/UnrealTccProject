@@ -239,10 +239,14 @@ void FTcrFernSubbranches::Cook()
 		fern_leaf_scatter->YawRamp.ResizeRampPoints(2);
 		fern_leaf_scatter->YawRamp.AddRampPoint(0.0000f, 0.0000f);
 		fern_leaf_scatter->YawRamp.AddRampPoint(1.0000f, 1.0000f);
-		fern_leaf_scatter->PitchRamp = ETccRampInterp::Linear;
-		fern_leaf_scatter->PitchRamp.ResizeRampPoints(2);
-		fern_leaf_scatter->PitchRamp.AddRampPoint(0.0000f, 0.0000f);
-		fern_leaf_scatter->PitchRamp.AddRampPoint(1.0000f, 1.0000f);
+		fern_leaf_scatter->PitchRemap = ETccRampInterp::Linear;
+		fern_leaf_scatter->PitchRemap.ResizeRampPoints(2);
+		fern_leaf_scatter->PitchRemap.AddRampPoint(0.0000f, 0.0000f);
+		fern_leaf_scatter->PitchRemap.AddRampPoint(1.0000f, 1.0000f);
+		fern_leaf_scatter->PitchAlongTrunk = ETccRampInterp::Linear;
+		fern_leaf_scatter->PitchAlongTrunk.ResizeRampPoints(2);
+		fern_leaf_scatter->PitchAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+		fern_leaf_scatter->PitchAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 		fern_leaf_scatter->ScaleAlongBranch = FTccRampFloat(ScaleRamp);
 		fern_leaf_scatter->ScaleAlongTrunk = ETccRampInterp::Linear;
 		fern_leaf_scatter->ScaleAlongTrunk.ResizeRampPoints(2);

@@ -348,10 +348,14 @@ void FTcrTreeMid02::Cook()
 		tcr_tree_leaf_scatter1->YawRamp.ResizeRampPoints(2);
 		tcr_tree_leaf_scatter1->YawRamp.AddRampPoint(0.0000f, 0.0000f);
 		tcr_tree_leaf_scatter1->YawRamp.AddRampPoint(1.0000f, 1.0000f);
-		tcr_tree_leaf_scatter1->PitchRamp = ETccRampInterp::Linear;
-		tcr_tree_leaf_scatter1->PitchRamp.ResizeRampPoints(2);
-		tcr_tree_leaf_scatter1->PitchRamp.AddRampPoint(0.0000f, 0.0000f);
-		tcr_tree_leaf_scatter1->PitchRamp.AddRampPoint(1.0000f, 1.0000f);
+		tcr_tree_leaf_scatter1->PitchRemap = ETccRampInterp::Linear;
+		tcr_tree_leaf_scatter1->PitchRemap.ResizeRampPoints(2);
+		tcr_tree_leaf_scatter1->PitchRemap.AddRampPoint(0.0000f, 1.0000f);
+		tcr_tree_leaf_scatter1->PitchRemap.AddRampPoint(1.0000f, 1.0000f);
+		tcr_tree_leaf_scatter1->PitchAlongTrunk = ETccRampInterp::Linear;
+		tcr_tree_leaf_scatter1->PitchAlongTrunk.ResizeRampPoints(2);
+		tcr_tree_leaf_scatter1->PitchAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+		tcr_tree_leaf_scatter1->PitchAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 		tcr_tree_leaf_scatter1->ScaleAlongBranch = ETccRampInterp::Linear;
 		tcr_tree_leaf_scatter1->ScaleAlongBranch.ResizeRampPoints(2);
 		tcr_tree_leaf_scatter1->ScaleAlongBranch.AddRampPoint(0.0000f, 1.0000f);

@@ -21,9 +21,12 @@
 	YawRamp.ResizeRampPoints(2);
 	YawRamp.AddRampPoint(0.0000f, 0.0000f);
 	YawRamp.AddRampPoint(1.0000f, 1.0000f);
-	PitchRamp.ResizeRampPoints(2);
-	PitchRamp.AddRampPoint(0.0000f, 0.0000f);
-	PitchRamp.AddRampPoint(1.0000f, 1.0000f);
+	PitchRemap.ResizeRampPoints(2);
+	PitchRemap.AddRampPoint(0.0000f, 0.0000f);
+	PitchRemap.AddRampPoint(1.0000f, 1.0000f);
+	PitchAlongTrunk.ResizeRampPoints(2);
+	PitchAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+	PitchAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 	ScaleAlongBranch.ResizeRampPoints(2);
 	ScaleAlongBranch.AddRampPoint(0.0000f, 1.0000f);
 	ScaleAlongBranch.AddRampPoint(1.0000f, 1.0000f);
@@ -43,7 +46,8 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	Node->StartPercentRamp = StartPercentRamp;
 	Node->AgeDisRamp = AgeDisRamp;
 	Node->YawRamp = YawRamp;
-	Node->PitchRamp = PitchRamp;
+	Node->PitchRemap = PitchRemap;
+	Node->PitchAlongTrunk = PitchAlongTrunk;
 	Node->ScaleAlongBranch = ScaleAlongBranch;
 	Node->ScaleAlongTrunk = ScaleAlongTrunk;
 	Node->Gseed = Gseed;
@@ -127,9 +131,12 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	YawRamp.ResizeRampPoints(2);
 	YawRamp.AddRampPoint(0.0000f, 0.0000f);
 	YawRamp.AddRampPoint(1.0000f, 1.0000f);
-	PitchRamp.ResizeRampPoints(2);
-	PitchRamp.AddRampPoint(0.0000f, 0.0000f);
-	PitchRamp.AddRampPoint(1.0000f, 1.0000f);
+	PitchRemap.ResizeRampPoints(2);
+	PitchRemap.AddRampPoint(0.0000f, 0.0000f);
+	PitchRemap.AddRampPoint(1.0000f, 1.0000f);
+	PitchAlongTrunk.ResizeRampPoints(2);
+	PitchAlongTrunk.AddRampPoint(0.0000f, 1.0000f);
+	PitchAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 	ScaleAlongBranch.ResizeRampPoints(2);
 	ScaleAlongBranch.AddRampPoint(0.0000f, 1.0000f);
 	ScaleAlongBranch.AddRampPoint(1.0000f, 1.0000f);
@@ -526,8 +533,14 @@ void FTcrTreeLeafScatter::Cook()
 							FVector3f axis = vex_cross(dir_fwd, dir);
 							float pitch_percent = branch_percent;
 							if(pitch_adv > 0)
-							pitch_percent = PitchRamp.Lookup(branch_percent);
+							{
+							pitch_percent = PitchRemap.Lookup(branch_percent);
+							}
 							float pt_pitch = vex_lerp(pitch_range.X, pitch_range.Y, pitch_percent);
+							if(pitch_adv > 0)
+							{
+							pt_pitch *= PitchAlongTrunk.Lookup(trunk_percent);
+							}
 							FVector4f qpitch = vex_quaternion(pt_pitch, axis);
 							dir_fwd = vex_qrotate(qpitch, dir_fwd);
 							    // OFFSET from radius
