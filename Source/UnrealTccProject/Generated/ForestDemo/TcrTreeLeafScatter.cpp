@@ -68,6 +68,7 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	Node->YawAdv = YawAdv;
 	Node->PitchR = PitchR;
 	Node->RollR = RollR;
+	Node->AroundRange = AroundRange;
 	Node->YawOffset = YawOffset;
 	Node->YawOffsetR = YawOffsetR;
 	Node->YawSep = YawSep;
@@ -447,6 +448,8 @@ void FTcrTreeLeafScatter::Cook()
 						const int32 yaw_adv = YawAdv;
 						const float pitch_r = vex_radians(PitchR);
 						const float roll_r = vex_radians(RollR);
+						const FVector2f around_range = vex_radians(AroundRange);
+						const float around_angle = around_range.Y - around_range.X;
 						const float yaw_offset = vex_radians(YawOffset);
 						const float yaw_offset_r = vex_radians(YawOffsetR);
 						const float yaw_sep = vex_radians(YawSep);
@@ -527,6 +530,11 @@ void FTcrTreeLeafScatter::Cook()
 							y_offset += vex_fit01(vex_rand(seed + 71),  - yaw_offset_r, yaw_offset_r);
 							}
 							float pt_yaw = pt_index * yaw_sep + y_offset;
+							if(around_angle > 0.f)
+							{
+							        // limit to around_range
+							pt_yaw = vex_frac(pt_yaw / around_angle) * around_angle + around_range.X;
+							}
 							FVector4f qyaw = vex_quaternion(pt_yaw, dir);
 							FVector3f dir_fwd = vex_qrotate(qyaw, dir_perp);
 							    // OFFSET from radius
@@ -647,7 +655,6 @@ void FTcrTreeLeafScatter::Cook()
 		tcc_instancer2->SetInput(0, GetInput(1));
 		tcc_instancer2->SetInput(1, use_instance_id);
 		tcc_instancer2->Useidattrib = int32(UseInstanceId);
-		tcc_instancer2->Idattrib = TEXT("instance_id");
 		tcc_instancer2->Cook();
 	}
 	SetGeoResult(UTcrTreeLeafScatter::output0, tcc_instancer2->GetGeoResult(0));

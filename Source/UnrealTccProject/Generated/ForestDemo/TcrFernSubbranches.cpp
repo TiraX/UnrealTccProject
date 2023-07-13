@@ -28,6 +28,9 @@
 	Shape.AddRampPoint(0.7965f, 0.8125f);
 	Shape.AddRampPoint(0.9296f, 0.4167f);
 	Shape.AddRampPoint(1.0000f, 0.0000f);
+	YawRamp.ResizeRampPoints(2);
+	YawRamp.AddRampPoint(0.0000f, 0.0000f);
+	YawRamp.AddRampPoint(1.0000f, 1.0000f);
 	ScaleRamp.ResizeRampPoints(5);
 	ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
 	ScaleRamp.AddRampPoint(0.0638f, 0.7667f);
@@ -46,12 +49,14 @@ void UTcrFernSubbranches::SyncParams(FTccNodePtr InNode)
 	TSharedPtr<FTcrFernSubbranches> Node = StaticCastSharedPtr<FTcrFernSubbranches>(InNode);
 	Node->RadiusShape = RadiusShape;
 	Node->Shape = Shape;
+	Node->YawRamp = YawRamp;
 	Node->ScaleRamp = ScaleRamp;
 	Node->Gseed = Gseed;
 	Node->TreeAge = TreeAge;
 	Node->Pitch0 = Pitch0;
 	Node->Pitch1 = Pitch1;
 	Node->PitchLerpRange = PitchLerpRange;
+	Node->Gravity = Gravity;
 	Node->Radius = Radius;
 	Node->Size = Size;
 	Node->Rows = Rows;
@@ -64,6 +69,8 @@ void UTcrFernSubbranches::SyncParams(FTccNodePtr InNode)
 	Node->DropR = DropR;
 	Node->Mirror = Mirror;
 	Node->Yaw = Yaw;
+	Node->YawShowAdv = YawShowAdv;
+	Node->YawAdv = YawAdv;
 	Node->PitchR = PitchR;
 	Node->RollR = RollR;
 	Node->Scale = Scale;
@@ -105,6 +112,9 @@ void UTcrFernSubbranches::SyncParams(FTccNodePtr InNode)
 	Shape.AddRampPoint(0.7965f, 0.8125f);
 	Shape.AddRampPoint(0.9296f, 0.4167f);
 	Shape.AddRampPoint(1.0000f, 0.0000f);
+	YawRamp.ResizeRampPoints(2);
+	YawRamp.AddRampPoint(0.0000f, 0.0000f);
+	YawRamp.AddRampPoint(1.0000f, 1.0000f);
 	ScaleRamp.ResizeRampPoints(5);
 	ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
 	ScaleRamp.AddRampPoint(0.0638f, 0.7667f);
@@ -181,8 +191,9 @@ void FTcrFernSubbranches::Cook()
 		branch1->Pitch0 = float(Pitch0);
 		branch1->Pitch1 = float(Pitch1);
 		branch1->PitchLerpRange = FVector2f(PitchLerpRange.X, PitchLerpRange.Y);
-		branch1->Curl = 0.524000f;
+		branch1->Curl = 0.117000f;
 		branch1->CurlFreq = 0.342000f;
+		branch1->Force = float(Gravity);
 		branch1->Cook();
 	}
 	{
@@ -214,7 +225,7 @@ void FTcrFernSubbranches::Cook()
 		fern_leaf->Cols = int32(Cols);
 		fern_leaf->Stem = float(Stem);
 		fern_leaf->Bend = float(Bend);
-		fern_leaf->Curl = float(Curl);
+		fern_leaf->EnableCurl = 0;
 		fern_leaf->Cook();
 	}
 	{
@@ -235,10 +246,7 @@ void FTcrFernSubbranches::Cook()
 		fern_leaf_scatter->AgeDisRamp.ResizeRampPoints(2);
 		fern_leaf_scatter->AgeDisRamp.AddRampPoint(0.0000f, 1.0000f);
 		fern_leaf_scatter->AgeDisRamp.AddRampPoint(1.0000f, 1.0000f);
-		fern_leaf_scatter->YawRamp = ETccRampInterp::Linear;
-		fern_leaf_scatter->YawRamp.ResizeRampPoints(2);
-		fern_leaf_scatter->YawRamp.AddRampPoint(0.0000f, 0.0000f);
-		fern_leaf_scatter->YawRamp.AddRampPoint(1.0000f, 1.0000f);
+		fern_leaf_scatter->YawRamp = FTccRampFloat(YawRamp);
 		fern_leaf_scatter->PitchRemap = ETccRampInterp::Linear;
 		fern_leaf_scatter->PitchRemap.ResizeRampPoints(2);
 		fern_leaf_scatter->PitchRemap.AddRampPoint(0.0000f, 0.0000f);
@@ -258,6 +266,7 @@ void FTcrFernSubbranches::Cook()
 		fern_leaf_scatter->Mirror = int32(Mirror);
 		fern_leaf_scatter->DropR = float(DropR);
 		fern_leaf_scatter->Yaw = FVector2f(Yaw.X, Yaw.Y);
+		fern_leaf_scatter->YawAdv = int32(YawAdv);
 		fern_leaf_scatter->PitchR = float(PitchR);
 		fern_leaf_scatter->RollR = float(RollR);
 		fern_leaf_scatter->PitchRange = FVector2f(63.000000f, -54.000000f);

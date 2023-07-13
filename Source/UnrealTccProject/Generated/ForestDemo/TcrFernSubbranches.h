@@ -37,6 +37,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	FTccRampFloat Shape = ETccRampInterp::Linear;
 
+	// Yaw Range Ramp
+	UPROPERTY(EditAnywhere)
+	FTccRampFloat YawRamp = ETccRampInterp::Linear;
+
 	// Scale Ramp
 	UPROPERTY(EditAnywhere)
 	FTccRampFloat ScaleRamp = ETccRampInterp::Linear;
@@ -60,6 +64,10 @@ public:
 	// Pitch Lerp Range
 	UPROPERTY(EditAnywhere)
 	FVector2f PitchLerpRange = FVector2f(0.000000f, 2.390000f);
+
+	// Gravity
+	UPROPERTY(EditAnywhere)
+	float Gravity = 0.000000f;
 
 	// Base Radius
 	UPROPERTY(EditAnywhere)
@@ -108,6 +116,14 @@ public:
 	// Yaw Range
 	UPROPERTY(EditAnywhere)
 	FVector2f Yaw = FVector2f(44.000000f, -80.000000f);
+
+	// Show Advanced
+	UPROPERTY(EditAnywhere)
+	int32 YawShowAdv = 0;
+
+	// Advanced
+	UPROPERTY(EditAnywhere)
+	int32 YawAdv = 0;
 
 	// Pitch Random, Make pitch random in [-pitch_r, pitch_r].
 	UPROPERTY(EditAnywhere)
@@ -149,6 +165,9 @@ public:
 	// Shape
 	FTccRampFloat Shape = ETccRampInterp::Linear;
 
+	// Yaw Range Ramp
+	FTccRampFloat YawRamp = ETccRampInterp::Linear;
+
 	// Scale Ramp
 	FTccRampFloat ScaleRamp = ETccRampInterp::Linear;
 
@@ -166,6 +185,9 @@ public:
 
 	// Pitch Lerp Range
 	FVector2f PitchLerpRange = FVector2f(0.000000f, 2.390000f);
+
+	// Gravity
+	float Gravity = 0.000000f;
 
 	// Base Radius
 	float Radius = 0.100000f;
@@ -202,6 +224,12 @@ public:
 
 	// Yaw Range
 	FVector2f Yaw = FVector2f(44.000000f, -80.000000f);
+
+	// Show Advanced
+	int32 YawShowAdv = 0;
+
+	// Advanced
+	int32 YawAdv = 0;
 
 	// Pitch Random, Make pitch random in [-pitch_r, pitch_r].
 	float PitchR = 5.000000f;

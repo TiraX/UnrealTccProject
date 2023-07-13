@@ -31,6 +31,7 @@ void UTcrTreeTrunkGrowth::SyncParams(FTccNodePtr InNode)
 	Node->TreeAge = TreeAge;
 	Node->MaxAge = MaxAge;
 	Node->SegLen = SegLen;
+	Node->VOffset = VOffset;
 	Node->Radius = Radius;
 	Node->CurlForce = CurlForce;
 	Node->CurlFreq = CurlFreq;
@@ -66,6 +67,7 @@ void FTcrTreeTrunkGrowth::Cook()
 			const float trunk_age = vex_min(max_age, tree_age);
 			const float trunk_age_inv = 1.f / trunk_age;
 			const float max_seg_len = SegLen;
+			const float v_off = VOffset;
 			const float radius = Radius;
 			const float curl_force = CurlForce;
 			const float curl_freq = CurlFreq;
@@ -89,7 +91,7 @@ void FTcrTreeTrunkGrowth::Cook()
 			vex_resize(dirs, num_segs);
 			vex_resize(rads, num_segs);
 			// first point always at 0
-			FVector3f last_pos = vex_set(0, 0, 0);
+			FVector3f last_pos = vex_set(0, v_off, 0);
 			float local_age = 0.f;
 			poses [ 0] = last_pos;
 			ages [ 0] = local_age;

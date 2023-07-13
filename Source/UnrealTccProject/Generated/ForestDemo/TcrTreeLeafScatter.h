@@ -134,6 +134,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float RollR = 0.000000f;
 
+	// Around range, Make roll random in [-roll_r, roll_r].
+	UPROPERTY(EditAnywhere)
+	FVector2f AroundRange = FVector2f(0.000000f, 0.000000f);
+
 	// Yaw Offset, Make roll random in [-roll_r, roll_r].
 	UPROPERTY(EditAnywhere)
 	float YawOffset = 0.000000f;
@@ -259,6 +263,9 @@ public:
 
 	// Roll Random, Make roll random in [-roll_r, roll_r].
 	float RollR = 0.000000f;
+
+	// Around range, Make roll random in [-roll_r, roll_r].
+	FVector2f AroundRange = FVector2f(0.000000f, 0.000000f);
 
 	// Yaw Offset, Make roll random in [-roll_r, roll_r].
 	float YawOffset = 0.000000f;
