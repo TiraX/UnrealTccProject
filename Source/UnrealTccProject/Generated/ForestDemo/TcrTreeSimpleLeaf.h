@@ -71,13 +71,13 @@ public:
 
 };
 
-class FTccGrid;
 class FTccVex;
 class FTccSwitch;
 class FTccBend;
 class FTccAttribPromote;
 class FTccAttribRename;
 class FTccTransform;
+class FTccGrid;
 class FTccMerge;
 class UNREALTCCPROJECT_API FTcrTreeSimpleLeaf : public FTccNode
 {
@@ -117,7 +117,7 @@ public:
 	// Curl
 	float Curl = -30.000000f;
 
-	FTccGrid* tcc_grid1 = nullptr;
+	FTccVex* custom_grid = nullptr;
 
 	FTccVex* leaf_shape3 = nullptr;
 

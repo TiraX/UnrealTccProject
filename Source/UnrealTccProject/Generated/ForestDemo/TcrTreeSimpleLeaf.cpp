@@ -45,8 +45,8 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
  FTcrTreeSimpleLeaf::FTcrTreeSimpleLeaf() 
 {
 	InitInputsCount(0);
-	tcc_grid1 = new FTccGrid();
-	tcc_grid1->InitMultiRefs(false); // RefCount = 1
+	custom_grid = new FTccVex();
+	custom_grid->InitMultiRefs(false); // RefCount = 1
 	leaf_shape3 = new FTccVex();
 	leaf_shape3->InitMultiRefs(false); // RefCount = 1
 	enable_bend = new FTccSwitch();
@@ -80,7 +80,7 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 }
  FTcrTreeSimpleLeaf::~FTcrTreeSimpleLeaf() 
 {
-	delete tcc_grid1; 
+	delete custom_grid; 
 	delete leaf_shape3; 
 	delete enable_bend; 
 		delete bend_z; 
@@ -96,16 +96,100 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 void FTcrTreeSimpleLeaf::Cook() 
 {
 	{
-		// Node: tcc_grid1
-		tcc_grid1->Size = FVector2f(Size.X, Size.Y);
-		tcc_grid1->T = FVector3f(0.000000f, tcc_grid1->Size.Y * 0.5f, 0.000000f);
-		tcc_grid1->Rows = int32(Rows);
-		tcc_grid1->Cols = int32(Cols);
-		tcc_grid1->Cook();
+		// Node: custom_grid
+		FVector2f _size = FVector2f(Size.X, Size.Y);
+		int32 _rows = int32(Rows);
+		int32 _cols = int32(Cols);
+		custom_grid->Cook();
+		{
+			FTccGeometryPtr Geo0 = custom_grid->GetGeoRef(0);
+			const FVector2f s = _size;
+			const int32 rows_ = _rows;
+			const int32 cols_ = _cols;
+			int32 total_pts = (rows_ - 2) * cols_ + 2 + 1;
+			TArray < FVector3f > poses;
+			vex_resize(poses, total_pts);
+			float x_half = s.X * 0.5f;
+			float x_step = s.X / (cols_ - 1);
+			float z_step = s.Y / (rows_ - 1);
+			// left 2 points
+			poses [ 0] = vex_set( - x_half, 0.f, 0.f);
+			poses [ 1] = vex_set(x_half, 0.f, 0.f);
+			// middle ones
+			int32 pt_index = 2;
+			for(int z = 0;z < rows_ - 2;z ++)
+			{
+			float pos_z = z_step * (z + 1);
+			for(int x = 0;x < cols_;x ++)
+			{
+			poses [ pt_index] = vex_set( - x_half + x_step * x, 0.f, pos_z);
+			pt_index ++;
+			}
+			}
+			// last 1 point
+			poses [ pt_index] = vex_set(0.f, 0.f, z_step * (rows_ - 1));
+			TArray < int32 > pts= vex_addpoints(Geo0, poses);
+			int32 total_tris = (rows_ - 3) * (cols_ - 1) * 2 + cols_ + cols_ - 1;
+			TArray < int32 > indices;
+			vex_resize(indices, total_tris * 3);
+			int32 id_index = 0;
+			// prims in 1st row
+			int32 mid_pt = cols_ / 2 + 2;
+			indices [ 0] = 0;
+			indices [ 1] = 1;
+			indices [ 2] = mid_pt;
+			id_index += 3;
+			for(int x = 0;x < cols_ - 1;x ++)
+			{
+			if(x < mid_pt - 2)
+			{
+			indices [ id_index] = x + 2 + 1;
+			indices [ id_index + 1] = x + 2;
+			indices [ id_index + 2] = 0;
+			}
+			else
+			{
+			indices [ id_index] = x + 2 + 1;
+			indices [ id_index + 1] = x + 2;
+			indices [ id_index + 2] = 1;
+			}
+			id_index += 3;
+			}
+			// mid rows
+			for(int z = 0;z < rows_ - 3;z ++)
+			{
+			for(int x = 0;x < cols_ - 1;x ++)
+			{
+			int32 z1 = z * cols_ + x + 2;
+			int32 z2 = (z + 1) * cols_ + x + 2;
+			        
+			indices [ id_index] = z1;
+			indices [ id_index + 1] = z1 + 1;
+			indices [ id_index + 2] = z2 + 1;
+			id_index += 3;
+			        
+			indices [ id_index] = z1;
+			indices [ id_index + 1] = z2 + 1;
+			indices [ id_index + 2] = z2;
+			id_index += 3;
+			}
+			}
+			// last row
+			int32 last_pt = total_pts - 1;
+			for(int x = 0;x < cols_ - 1;x ++)
+			{
+			int32 z1 = (rows_ - 3) * cols_ + x + 2;
+			indices [ id_index] = z1;
+			indices [ id_index + 1] = z1 + 1;
+			indices [ id_index + 2] = last_pt;
+			id_index += 3;
+			}
+			vex_addprims(Geo0, "poly", indices);
+		}
 	}
 	{
 		// Node: leaf_shape3
-		leaf_shape3->SetInput(0, tcc_grid1);
+		leaf_shape3->SetInput(0, custom_grid);
 		float _shrink = 0.900000f;
 		leaf_shape3->Cook();
 		{

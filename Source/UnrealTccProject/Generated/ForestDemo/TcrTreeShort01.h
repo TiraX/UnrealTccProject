@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeShort01 : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From tcr_tree_leaf_scatter1
+		output0,  // From tcc_attrib_blur1
 		OUT_Count,
 	};
 
@@ -33,13 +33,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Gseed = 0;
 
+	// Dbg Divs
+	UPROPERTY(EditAnywhere)
+	int32 Divs = 3;
+
 };
 
-class FTcrTreeTrunkGrowth;
-class FTcrFernSubbranches;
-class FTccVex;
-class FTccMerge;
-class FTcrTreeLeafScatter;
+class FTcrTreeSimpleLeaf;
+class FTccPolyextrude;
+class FTccAttribBlur;
 class UNREALTCCPROJECT_API FTcrTreeShort01 : public FTccNode
 {
 public:
@@ -51,23 +53,14 @@ public:
 	// Seed
 	int32 Gseed = 0;
 
-	FTcrTreeTrunkGrowth* tcr_tree_trunk_growth1 = nullptr;
+	// Dbg Divs
+	int32 Divs = 3;
 
-	FTcrFernSubbranches* branch1 = nullptr;
+	FTcrTreeSimpleLeaf* tcr_tree_simple_leaf1 = nullptr;
 
-	FTccVex* instance_id1 = nullptr;
+	FTccPolyextrude* tcc_polyextrude1 = nullptr;
 
-	FTcrFernSubbranches* branch2 = nullptr;
-
-	FTccVex* instance_id2 = nullptr;
-
-	FTcrFernSubbranches* branch3 = nullptr;
-
-	FTccVex* instance_id3 = nullptr;
-
-	FTccMerge* tcc_merge2 = nullptr;
-
-	FTcrTreeLeafScatter* tcr_tree_leaf_scatter1 = nullptr;
+	FTccAttribBlur* tcc_attrib_blur1 = nullptr;
 
 };
 
