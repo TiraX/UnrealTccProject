@@ -121,13 +121,13 @@ public:
 
 	FTccVex* leaf_shape3 = nullptr;
 
-	FTccSwitch* enable_bend = nullptr;
-
-	FTccBend* bend_z = nullptr;
-
 	FTccSwitch* enable_curl = nullptr;
 
 	FTccBend* bend_l = nullptr;
+
+	FTccSwitch* enable_bend = nullptr;
+
+	FTccBend* bend_z = nullptr;
 
 	FTccAttribPromote* uv_to_vertices = nullptr;
 

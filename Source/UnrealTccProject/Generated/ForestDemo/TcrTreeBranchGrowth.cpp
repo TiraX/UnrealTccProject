@@ -60,6 +60,7 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
 	Node->Pitch1Ramp = Pitch1Ramp;
 	Node->Soft = Soft;
 	Node->Gseed = Gseed;
+	Node->IgnorePercent = IgnorePercent;
 	Node->MaxCount = MaxCount;
 	Node->MaxCountShowAdv = MaxCountShowAdv;
 	Node->MaxCountAdv = MaxCountAdv;
@@ -98,6 +99,16 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
  FTcrTreeBranchGrowth::FTcrTreeBranchGrowth() 
 {
 	InitInputsCount(1);
+	emtpy = new FTccVex();
+	emtpy->InitMultiRefs(true); // RefCount = 2
+	ignore_branches = new FTccSwitch();
+	ignore_branches->InitMultiRefs(false); // RefCount = 1
+		calc_rand = new FTccVex();
+		calc_rand->InitMultiRefs(false); // RefCount = 1
+		tcc_blast_by_feature1 = new FTccBlastByFeature();
+		tcc_blast_by_feature1->InitMultiRefs(false); // RefCount = 1
+		tcc_attrib_delete1 = new FTccAttribDelete();
+		tcc_attrib_delete1->InitMultiRefs(false); // RefCount = 1
 	foreach_begin4 = new FTccForBlock();
 	foreach_begin4->InitMultiRefs(false); // RefCount = 1
 	foreach_begin4->InitInputsCount(1);
@@ -136,6 +147,11 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
 }
  FTcrTreeBranchGrowth::~FTcrTreeBranchGrowth() 
 {
+	delete emtpy; 
+	delete ignore_branches; 
+		delete calc_rand; 
+		delete tcc_blast_by_feature1; 
+		delete tcc_attrib_delete1; 
 	delete foreach_begin4; 
 		delete branch1; 
 	delete tcc_vex2; 
@@ -143,8 +159,82 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
 void FTcrTreeBranchGrowth::Cook() 
 {
 	{
+		// Node: emtpy
+		emtpy->SetInput(0, GetInput(0));
+		emtpy->Cook();
+		{
+			FTccGeometryPtr Geo0 = emtpy->GetGeoRef(0);
+		}
+	}
+	{
+		// Node: ignore_branches
+		ignore_branches->SetInput(0, emtpy);
+		ignore_branches->Input = int32(IgnorePercent > 0);
+		ignore_branches->NumCases = 2;
+		ignore_branches->Cook();
+		FTccGeometryPtr SwitchResult = nullptr;
+		const int32 Selection = ignore_branches->Input;
+		switch (Selection)
+		{
+			case 0:
+			{
+				
+				
+				
+				SwitchResult = nullptr;
+			}
+			break;
+			case 1:
+			{
+				{
+					// Node: calc_rand
+					calc_rand->SetInput(0, emtpy);
+					calc_rand->Cook();
+					{
+						FTccGeometryPtr Geo0 = calc_rand->GetGeoRef(0);
+						FTccAttribPtr attr___rate = Geo0->AddPrimAttrib("__rate", ETccAttribType::F);
+						const int32 gseed = Gseed;
+						const int32 _numprim = Geo0->GetNumPrims();
+						for(int32 i = 0; i < _numprim; i++)
+						{
+							const int32 _primnum = i;
+							float& ___rate = attr___rate->GetData<float>()[i];
+							___rate = vex_rand(gseed + _primnum);
+						}
+					}
+				}
+				
+				{
+					// Node: tcc_blast_by_feature1
+					tcc_blast_by_feature1->SetInput(0, calc_rand);
+					tcc_blast_by_feature1->ByAttrib = 1;
+					tcc_blast_by_feature1->Attrib = TEXT("__rate");
+					tcc_blast_by_feature1->Op = UTccBlastByFeature::Less;
+					tcc_blast_by_feature1->Value = float(IgnorePercent);
+					tcc_blast_by_feature1->Cook();
+				}
+				
+				{
+					// Node: tcc_attrib_delete1
+					tcc_attrib_delete1->SetInput(0, tcc_blast_by_feature1);
+					tcc_attrib_delete1->Primdel = TEXT("__rate");
+					tcc_attrib_delete1->Cook();
+				}
+				
+				SwitchResult = tcc_attrib_delete1->GetGeoResult(0);
+			}
+			break;
+			default:
+			{
+				checkNoEntry();
+			}
+			break;
+		}
+		ignore_branches->SetValidGeoResult(0, SwitchResult);
+	}
+	{
 		// Node: foreach_begin4
-		foreach_begin4->SetInput(0, GetInput(0));
+		foreach_begin4->SetInput(0, ignore_branches);
 		foreach_begin4->Itermethod = UTccForBlock::ByPiecesOrPoints;
 		foreach_begin4->Method = UTccForBlock::MergeEachIteration;
 		foreach_begin4->Class = UTccForBlock::Primitives;
@@ -481,11 +571,11 @@ void FTcrTreeBranchGrowth::Cook()
 	{
 		// Node: tcc_vex2
 		tcc_vex2->SetInput(0, foreach_begin4);
-		tcc_vex2->SetInput(1, GetInput(0));
+		tcc_vex2->SetInput(1, emtpy);
 		tcc_vex2->Cook();
 		{
 			FTccGeometryPtr Geo0 = tcc_vex2->GetGeoRef(0);
-			FTccGeometryConstPtr Geo1 = GetInput(0)->GetConstGeoResult(0);
+			FTccGeometryConstPtr Geo1 = emtpy->GetConstGeoResult(0);
 			FTccAttribPtr attr_global_radius_base = Geo0->AddDetailAttrib("global_radius_base", ETccAttribType::F);
 			FTccAttribPtr attr_global_radius_min = Geo0->AddDetailAttrib("global_radius_min", ETccAttribType::F);
 			FTccAttribPtr attr_global_seg_len = Geo0->AddDetailAttrib("global_seg_len", ETccAttribType::F);

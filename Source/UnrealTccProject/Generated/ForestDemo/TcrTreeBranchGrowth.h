@@ -69,6 +69,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Gseed = 0;
 
+	// Ignore Percent, Ignore some branches, do not grow on them
+	UPROPERTY(EditAnywhere)
+	float IgnorePercent = 0.000000f;
+
 	// Max Count
 	UPROPERTY(EditAnywhere)
 	int32 MaxCount = 0;
@@ -203,8 +207,11 @@ public:
 
 };
 
-class FTccForBlock;
 class FTccVex;
+class FTccSwitch;
+class FTccBlastByFeature;
+class FTccAttribDelete;
+class FTccForBlock;
 class UNREALTCCPROJECT_API FTcrTreeBranchGrowth : public FTccNode
 {
 public:
@@ -242,6 +249,9 @@ public:
 
 	// Seed
 	int32 Gseed = 0;
+
+	// Ignore Percent, Ignore some branches, do not grow on them
+	float IgnorePercent = 0.000000f;
 
 	// Max Count
 	int32 MaxCount = 0;
@@ -341,6 +351,16 @@ public:
 
 	// Attract Dir
 	FVector3f AttractDir = FVector3f(1.000000f, 0.000000f, 1.000000f);
+
+	FTccVex* emtpy = nullptr;
+
+	FTccSwitch* ignore_branches = nullptr;
+
+	FTccVex* calc_rand = nullptr;
+
+	FTccBlastByFeature* tcc_blast_by_feature1 = nullptr;
+
+	FTccAttribDelete* tcc_attrib_delete1 = nullptr;
 
 	FTccForBlock* foreach_begin4 = nullptr;
 

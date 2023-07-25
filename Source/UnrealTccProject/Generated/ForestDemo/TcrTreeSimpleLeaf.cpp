@@ -49,14 +49,14 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 	custom_grid->InitMultiRefs(false); // RefCount = 1
 	leaf_shape3 = new FTccVex();
 	leaf_shape3->InitMultiRefs(false); // RefCount = 1
-	enable_bend = new FTccSwitch();
-	enable_bend->InitMultiRefs(false); // RefCount = 1
-		bend_z = new FTccBend();
-		bend_z->InitMultiRefs(false); // RefCount = 1
 	enable_curl = new FTccSwitch();
 	enable_curl->InitMultiRefs(false); // RefCount = 1
 		bend_l = new FTccBend();
 		bend_l->InitMultiRefs(false); // RefCount = 1
+	enable_bend = new FTccSwitch();
+	enable_bend->InitMultiRefs(false); // RefCount = 1
+		bend_z = new FTccBend();
+		bend_z->InitMultiRefs(false); // RefCount = 1
 	uv_to_vertices = new FTccAttribPromote();
 	uv_to_vertices->InitMultiRefs(false); // RefCount = 1
 	rename_fmuv_to_uv = new FTccAttribRename();
@@ -82,10 +82,10 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 {
 	delete custom_grid; 
 	delete leaf_shape3; 
-	delete enable_bend; 
-		delete bend_z; 
 	delete enable_curl; 
 		delete bend_l; 
+	delete enable_bend; 
+		delete bend_z; 
 	delete uv_to_vertices; 
 	delete rename_fmuv_to_uv; 
 	delete stem; 
@@ -216,46 +216,8 @@ void FTcrTreeSimpleLeaf::Cook()
 		}
 	}
 	{
-		// Node: enable_bend
-		enable_bend->SetInput(0, leaf_shape3);
-		enable_bend->Input = int32(EnableBend);
-		enable_bend->NumCases = 2;
-		enable_bend->Cook();
-		FTccGeometryPtr SwitchResult = nullptr;
-		const int32 Selection = enable_bend->Input;
-		switch (Selection)
-		{
-			case 0:
-			{
-				
-				SwitchResult = nullptr;
-			}
-			break;
-			case 1:
-			{
-				{
-					// Node: bend_z
-					bend_z->SetInput(0, leaf_shape3);
-					bend_z->Bend = float(Bend);
-					bend_z->Origin = FVector3f(0.000000f, BendOffset, 0.000000f);
-					bend_z->Length = float(Size.Y);
-					bend_z->Cook();
-				}
-				
-				SwitchResult = bend_z->GetGeoResult(0);
-			}
-			break;
-			default:
-			{
-				checkNoEntry();
-			}
-			break;
-		}
-		enable_bend->SetValidGeoResult(0, SwitchResult);
-	}
-	{
 		// Node: enable_curl
-		enable_curl->SetInput(0, enable_bend);
+		enable_curl->SetInput(0, leaf_shape3);
 		enable_curl->Input = int32(EnableCurl);
 		enable_curl->NumCases = 2;
 		enable_curl->Cook();
@@ -273,7 +235,7 @@ void FTcrTreeSimpleLeaf::Cook()
 			{
 				{
 					// Node: bend_l
-					bend_l->SetInput(0, enable_bend);
+					bend_l->SetInput(0, leaf_shape3);
 					bend_l->Bend = float(Curl);
 					bend_l->Dir = FVector3f(1.000000f, 0.000000f, 0.000000f);
 					bend_l->Length = float(Size.X * 0.5f);
@@ -293,8 +255,46 @@ void FTcrTreeSimpleLeaf::Cook()
 		enable_curl->SetValidGeoResult(0, SwitchResult);
 	}
 	{
+		// Node: enable_bend
+		enable_bend->SetInput(0, enable_curl);
+		enable_bend->Input = int32(EnableBend);
+		enable_bend->NumCases = 2;
+		enable_bend->Cook();
+		FTccGeometryPtr SwitchResult = nullptr;
+		const int32 Selection = enable_bend->Input;
+		switch (Selection)
+		{
+			case 0:
+			{
+				
+				SwitchResult = nullptr;
+			}
+			break;
+			case 1:
+			{
+				{
+					// Node: bend_z
+					bend_z->SetInput(0, enable_curl);
+					bend_z->Bend = float(Bend);
+					bend_z->Origin = FVector3f(0.000000f, BendOffset, 0.000000f);
+					bend_z->Length = float(Size.Y);
+					bend_z->Cook();
+				}
+				
+				SwitchResult = bend_z->GetGeoResult(0);
+			}
+			break;
+			default:
+			{
+				checkNoEntry();
+			}
+			break;
+		}
+		enable_bend->SetValidGeoResult(0, SwitchResult);
+	}
+	{
 		// Node: uv_to_vertices
-		uv_to_vertices->SetInput(0, enable_curl);
+		uv_to_vertices->SetInput(0, enable_bend);
 		uv_to_vertices->Inname = TEXT("uv");
 		uv_to_vertices->Outclass = UTccAttribPromote::Vertices;
 		uv_to_vertices->Deletein = 1;
