@@ -96,7 +96,7 @@ void FTcrTreeTrunkGrowth::Cook()
 			poses [ 0] = last_pos;
 			ages [ 0] = local_age;
 			dirs [ 0] = vex_set(0, 1, 0);
-			rads [ 0] = radius;
+			rads [ 0] = radius * RadiusShape.Lookup(0.f);
 			for(int i = 1;i < num_segs;i ++)
 			{
 			float seg_len = vex_min(trunk_age - local_age, max_seg_len);

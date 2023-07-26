@@ -151,7 +151,7 @@ void FTcrSimpleFruit::Cook()
 		// Node: tcc_bend1
 		tcc_bend1->SetInput(0, switch1);
 		tcc_bend1->Bend = float(Bend);
-		tcc_bend1->Length = float(Stem);
+		tcc_bend1->Length = float(Stem + Height);
 		tcc_bend1->Cook();
 	}
 	SetGeoResult(UTcrSimpleFruit::output0, tcc_bend1->GetGeoResult(0));

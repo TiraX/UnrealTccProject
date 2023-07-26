@@ -15,7 +15,7 @@ class UNREALTCCPROJECT_API UTcrTreeShort01 : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From tcc_attrib_blur1
+		output0,  // From tcr_tree_leaf_scatter1
 		OUT_Count,
 	};
 
@@ -39,9 +39,11 @@ public:
 
 };
 
-class FTcrTreeSimpleLeaf;
-class FTccPolyextrude;
-class FTccAttribBlur;
+class FTcrTreeTrunkGrowth;
+class FTcrFernSubbranches;
+class FTccVex;
+class FTccMerge;
+class FTcrTreeLeafScatter;
 class UNREALTCCPROJECT_API FTcrTreeShort01 : public FTccNode
 {
 public:
@@ -56,11 +58,23 @@ public:
 	// Dbg Divs
 	int32 Divs = 3;
 
-	FTcrTreeSimpleLeaf* tcr_tree_simple_leaf1 = nullptr;
+	FTcrTreeTrunkGrowth* tcr_tree_trunk_growth1 = nullptr;
 
-	FTccPolyextrude* tcc_polyextrude1 = nullptr;
+	FTcrFernSubbranches* branch1 = nullptr;
 
-	FTccAttribBlur* tcc_attrib_blur1 = nullptr;
+	FTccVex* instance_id1 = nullptr;
+
+	FTcrFernSubbranches* branch2 = nullptr;
+
+	FTccVex* instance_id2 = nullptr;
+
+	FTcrFernSubbranches* branch3 = nullptr;
+
+	FTccVex* instance_id3 = nullptr;
+
+	FTccMerge* tcc_merge2 = nullptr;
+
+	FTcrTreeLeafScatter* tcr_tree_leaf_scatter1 = nullptr;
 
 };
 
