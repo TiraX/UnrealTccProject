@@ -57,9 +57,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Bend = -30.000000f;
 
-	// Bend Offset
+	// Bend Offset, Bend offset by percent of sizey
 	UPROPERTY(EditAnywhere)
 	float BendOffset = 0.000000f;
+
+	// Bend Len, Bend length by percent of sizey
+	UPROPERTY(EditAnywhere)
+	float BendLen = 1.000000f;
 
 	// Enable Curl
 	UPROPERTY(EditAnywhere)
@@ -108,8 +112,11 @@ public:
 	// Bend
 	float Bend = -30.000000f;
 
-	// Bend Offset
+	// Bend Offset, Bend offset by percent of sizey
 	float BendOffset = 0.000000f;
+
+	// Bend Len, Bend length by percent of sizey
+	float BendLen = 1.000000f;
 
 	// Enable Curl
 	int32 EnableCurl = 1;

@@ -49,6 +49,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Gseed = 0;
 
+	// Enable Instance Id
+	UPROPERTY(EditAnywhere)
+	int32 EnableId = 0;
+
+	// Instance Id
+	UPROPERTY(EditAnywhere)
+	int32 InsId = 0;
+
 	// Age, 1 age equals 1 meter
 	UPROPERTY(EditAnywhere)
 	float TreeAge = 2.710000f;
@@ -173,6 +181,12 @@ public:
 
 	// Seed
 	int32 Gseed = 0;
+
+	// Enable Instance Id
+	int32 EnableId = 0;
+
+	// Instance Id
+	int32 InsId = 0;
 
 	// Age, 1 age equals 1 meter
 	float TreeAge = 2.710000f;

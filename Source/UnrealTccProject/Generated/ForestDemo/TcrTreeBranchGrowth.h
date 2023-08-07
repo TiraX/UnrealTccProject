@@ -129,9 +129,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 MaxAgeShowAdv = 0;
 
-	// Advanced
+	// Enable
 	UPROPERTY(EditAnywhere)
 	int32 MaxAgeAdv = 0;
+
+	// Local Ramp
+	UPROPERTY(EditAnywhere)
+	int32 MaxAgeLocalRamp = 0;
 
 	// Yaw Offset
 	UPROPERTY(EditAnywhere)
@@ -140,6 +144,10 @@ public:
 	// Random
 	UPROPERTY(EditAnywhere)
 	float YawOffsetR = 0.000000f;
+
+	// Around range, Make roll random in [-roll_r, roll_r].
+	UPROPERTY(EditAnywhere)
+	FVector2f AroundRange = FVector2f(0.000000f, 0.000000f);
 
 	// Yaw Pattern
 	UPROPERTY(EditAnywhere)
@@ -295,14 +303,20 @@ public:
 	// Show Advanced
 	int32 MaxAgeShowAdv = 0;
 
-	// Advanced
+	// Enable
 	int32 MaxAgeAdv = 0;
+
+	// Local Ramp
+	int32 MaxAgeLocalRamp = 0;
 
 	// Yaw Offset
 	float YawOffset = 0.000000f;
 
 	// Random
 	float YawOffsetR = 0.000000f;
+
+	// Around range, Make roll random in [-roll_r, roll_r].
+	FVector2f AroundRange = FVector2f(0.000000f, 0.000000f);
 
 	// Yaw Pattern
 	float Yaw = 137.500000f;

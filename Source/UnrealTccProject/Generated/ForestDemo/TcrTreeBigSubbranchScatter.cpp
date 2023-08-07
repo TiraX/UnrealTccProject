@@ -301,6 +301,7 @@ void FTcrTreeBigSubbranchScatter::Cook()
 		// Node: tcc_instancer1
 		tcc_instancer1->SetInput(0, GetInput(1));
 		tcc_instancer1->SetInput(1, foreach_begin1);
+		tcc_instancer1->Idattrib = TEXT("variant");
 		tcc_instancer1->Cook();
 	}
 	SetGeoResult(UTcrTreeBigSubbranchScatter::output0, tcc_instancer1->GetGeoResult(0));

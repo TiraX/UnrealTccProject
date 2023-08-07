@@ -7,6 +7,7 @@
 #include "TcrTreeBigSubbranchesGrowth.h"
 #include "TcrTreeBranchFrac.h"
 #include "TcrTreeBigSubbranchScatter.h"
+#include "TcrIvy.h"
 #include "Generated/TccTemplates.h"
 #include "TccForBlock.h"
 #include "TccSwitch.h"
@@ -57,7 +58,7 @@ void UTcrTreeBig01::SyncParams(FTccNodePtr InNode)
 	second_branch_skin = new FTcrTreeSkinGrowth();
 	second_branch_skin->InitMultiRefs(false); // RefCount = 1
 	tcc_merge6 = new FTccMerge();
-	tcc_merge6->InitMultiRefs(false); // RefCount = 1
+	tcc_merge6->InitMultiRefs(true); // RefCount = 2
 	mi_trunk = new FTccUnrealMaterial();
 	mi_trunk->InitMultiRefs(false); // RefCount = 1
 	tcc_pack4 = new FTccPack();
@@ -95,6 +96,12 @@ void UTcrTreeBig01::SyncParams(FTccNodePtr InNode)
 	grab_last_points->InitMultiRefs(false); // RefCount = 1
 	tcc_instancer2 = new FTccInstancer();
 	tcc_instancer2->InitMultiRefs(false); // RefCount = 1
+	tcc_circle1 = new FTccCircle();
+	tcc_circle1->InitMultiRefs(false); // RefCount = 1
+	tcc_scatter1 = new FTccScatter();
+	tcc_scatter1->InitMultiRefs(false); // RefCount = 1
+	tcr_ivy = new FTcrIvy();
+	tcr_ivy->InitMultiRefs(false); // RefCount = 1
 	tcc_merge7 = new FTccMerge();
 	tcc_merge7->InitMultiRefs(false); // RefCount = 1
 }
@@ -130,6 +137,9 @@ void UTcrTreeBig01::SyncParams(FTccNodePtr InNode)
 		delete instance_id1; 
 	delete grab_last_points; 
 	delete tcc_instancer2; 
+	delete tcc_circle1; 
+	delete tcc_scatter1; 
+	delete tcr_ivy; 
 	delete tcc_merge7; 
 }
 void FTcrTreeBig01::Cook() 
@@ -713,13 +723,44 @@ void FTcrTreeBig01::Cook()
 		tcc_instancer2->SetInput(0, foreach_begin3);
 		tcc_instancer2->SetInput(1, grab_last_points);
 		tcc_instancer2->Useidattrib = 1;
-		tcc_instancer2->Idattrib = TEXT("instance_id");
 		tcc_instancer2->Cook();
+	}
+	{
+		// Node: tcc_circle1
+		tcc_circle1->R = 2.740000f;
+		tcc_circle1->Divs = 6;
+		tcc_circle1->Cook();
+	}
+	{
+		// Node: tcc_scatter1
+		tcc_scatter1->SetInput(0, tcc_circle1);
+		tcc_scatter1->Npts = 12;
+		tcc_scatter1->Cook();
+	}
+	{
+		// Node: tcr_ivy
+		tcr_ivy->SetInput(0, tcc_merge6);
+		tcr_ivy->SetInput(1, tcc_scatter1);
+		tcr_ivy->Gseed = 30;
+		tcr_ivy->Steps = 94;
+		tcr_ivy->StepDis = 0.136000f;
+		tcr_ivy->StepDisR = 0.193000f;
+		tcr_ivy->Away = 0.016200f;
+		tcr_ivy->Distort = 0.541000f;
+		tcr_ivy->R = FVector2f(0.010000f, 0.018000f);
+		tcr_ivy->Yaw = 26.799999f;
+		tcr_ivy->YawR = 0.136000f;
+		tcr_ivy->Pitch = 25.900000f;
+		tcr_ivy->PitchR = 0.520000f;
+		tcr_ivy->Scale = 0.126000f;
+		tcr_ivy->ScaleR = 0.140000f;
+		tcr_ivy->Cook();
 	}
 	{
 		// Node: tcc_merge7
 		tcc_merge7->SetInput(0, tcc_pack4);
 		tcc_merge7->SetInput(1, tcc_instancer2);
+		tcc_merge7->SetInput(2, tcr_ivy);
 		tcc_merge7->Cook();
 	}
 	SetGeoResult(UTcrTreeBig01::output0, tcc_merge7->GetGeoResult(0));

@@ -48,6 +48,9 @@ class FTcrTreeBranchFrac;
 class FTccBlastByFeature;
 class FTcrTreeBigSubbranchScatter;
 class FTccInstancer;
+class FTccCircle;
+class FTccScatter;
+class FTcrIvy;
 class UNREALTCCPROJECT_API FTcrTreeBig01 : public FTccNode
 {
 public:
@@ -118,6 +121,12 @@ public:
 	FTccVex* grab_last_points = nullptr;
 
 	FTccInstancer* tcc_instancer2 = nullptr;
+
+	FTccCircle* tcc_circle1 = nullptr;
+
+	FTccScatter* tcc_scatter1 = nullptr;
+
+	FTcrIvy* tcr_ivy = nullptr;
 
 	FTccMerge* tcc_merge7 = nullptr;
 

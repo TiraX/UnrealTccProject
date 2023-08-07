@@ -139,6 +139,10 @@ void FTcrTreeMidPalm::Cook()
 		subbranch1->Shape.AddRampPoint(0.6039f, 0.9149f);
 		subbranch1->Shape.AddRampPoint(0.8527f, 0.7234f);
 		subbranch1->Shape.AddRampPoint(1.0000f, 0.0000f);
+		subbranch1->YawRamp = ETccRampInterp::Linear;
+		subbranch1->YawRamp.ResizeRampPoints(2);
+		subbranch1->YawRamp.AddRampPoint(0.0000f, 0.0000f);
+		subbranch1->YawRamp.AddRampPoint(1.0000f, 1.0000f);
 		subbranch1->ScaleRamp = ETccRampInterp::Linear;
 		subbranch1->ScaleRamp.ResizeRampPoints(6);
 		subbranch1->ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
@@ -157,7 +161,7 @@ void FTcrTreeMidPalm::Cook()
 		subbranch1->Bend = -18.500000f;
 		subbranch1->Curl = 0.000000f;
 		subbranch1->StartPercent = 0.143000f;
-		subbranch1->AgeDis = 0.100000f;
+		subbranch1->AgeDis = 0.090000f;
 		subbranch1->Yaw = FVector2f(16.000000f, -85.000000f);
 		subbranch1->ScaleShowAdv = 1;
 		subbranch1->Cook();
@@ -194,6 +198,10 @@ void FTcrTreeMidPalm::Cook()
 		subbranch2->Shape.AddRampPoint(0.6039f, 0.9149f);
 		subbranch2->Shape.AddRampPoint(0.8527f, 0.7234f);
 		subbranch2->Shape.AddRampPoint(1.0000f, 0.0000f);
+		subbranch2->YawRamp = ETccRampInterp::Linear;
+		subbranch2->YawRamp.ResizeRampPoints(2);
+		subbranch2->YawRamp.AddRampPoint(0.0000f, 0.0000f);
+		subbranch2->YawRamp.AddRampPoint(1.0000f, 1.0000f);
 		subbranch2->ScaleRamp = ETccRampInterp::Linear;
 		subbranch2->ScaleRamp.ResizeRampPoints(6);
 		subbranch2->ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
@@ -212,7 +220,7 @@ void FTcrTreeMidPalm::Cook()
 		subbranch2->Bend = -18.500000f;
 		subbranch2->Curl = 0.000000f;
 		subbranch2->StartPercent = 0.143000f;
-		subbranch2->AgeDis = 0.100000f;
+		subbranch2->AgeDis = 0.080000f;
 		subbranch2->Yaw = FVector2f(16.000000f, -85.000000f);
 		subbranch2->PitchR = 5.500000f;
 		subbranch2->Scale = 1.284000f;
@@ -251,6 +259,10 @@ void FTcrTreeMidPalm::Cook()
 		subbranch3->Shape.AddRampPoint(0.6039f, 0.9149f);
 		subbranch3->Shape.AddRampPoint(0.8527f, 0.7234f);
 		subbranch3->Shape.AddRampPoint(1.0000f, 0.0000f);
+		subbranch3->YawRamp = ETccRampInterp::Linear;
+		subbranch3->YawRamp.ResizeRampPoints(2);
+		subbranch3->YawRamp.AddRampPoint(0.0000f, 0.0000f);
+		subbranch3->YawRamp.AddRampPoint(1.0000f, 1.0000f);
 		subbranch3->ScaleRamp = ETccRampInterp::Linear;
 		subbranch3->ScaleRamp.ResizeRampPoints(6);
 		subbranch3->ScaleRamp.AddRampPoint(0.0000f, 0.2333f);
@@ -269,7 +281,7 @@ void FTcrTreeMidPalm::Cook()
 		subbranch3->Bend = -18.500000f;
 		subbranch3->Curl = 0.000000f;
 		subbranch3->StartPercent = 0.143000f;
-		subbranch3->AgeDis = 0.100000f;
+		subbranch3->AgeDis = 0.080000f;
 		subbranch3->DropR = 0.197000f;
 		subbranch3->Yaw = FVector2f(16.000000f, -85.000000f);
 		subbranch3->PitchR = 5.500000f;
@@ -337,7 +349,7 @@ void FTcrTreeMidPalm::Cook()
 		subbranch_scatter->StartPercent = 0.803000f;
 		subbranch_scatter->AgeDis = 0.059000f;
 		subbranch_scatter->RadiusShrink = 0.439000f;
-		subbranch_scatter->UseInstanceId = 1;
+		subbranch_scatter->UseInstanceId = UTcrTreeLeafScatter::Random;
 		subbranch_scatter->Method = UTcrTreeLeafScatter::AroundBranch;
 		subbranch_scatter->PitchRange = FVector2f(-40.000000f, 15.000000f);
 		subbranch_scatter->Scale = 0.683000f;

@@ -158,6 +158,10 @@ void FTcrTreeMid03::Cook()
 	}
 	{
 		// Node: tcr_broad_leaf
+		tcr_broad_leaf->RadRamp = ETccRampInterp::Linear;
+		tcr_broad_leaf->RadRamp.ResizeRampPoints(2);
+		tcr_broad_leaf->RadRamp.AddRampPoint(0.0000f, 0.0000f);
+		tcr_broad_leaf->RadRamp.AddRampPoint(1.0000f, 1.0000f);
 		tcr_broad_leaf->ShapeLeft = ETccRampInterp::Linear;
 		tcr_broad_leaf->ShapeLeft.ResizeRampPoints(7);
 		tcr_broad_leaf->ShapeLeft.AddRampPoint(0.0000f, 0.3000f);

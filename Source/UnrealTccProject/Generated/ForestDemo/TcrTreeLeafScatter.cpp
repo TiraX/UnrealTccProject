@@ -118,9 +118,11 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	use_instance_id = new FTccSwitch();
 	use_instance_id->InitMultiRefs(false); // RefCount = 1
 		tcc_attrib_promote1 = new FTccAttribPromote();
-		tcc_attrib_promote1->InitMultiRefs(false); // RefCount = 1
-		assign_piece_id = new FTccVex();
-		assign_piece_id->InitMultiRefs(false); // RefCount = 1
+		tcc_attrib_promote1->InitMultiRefs(true); // RefCount = 2
+		assign_ins_id_random = new FTccVex();
+		assign_ins_id_random->InitMultiRefs(false); // RefCount = 1
+		assign_ins_id_ordered = new FTccVex();
+		assign_ins_id_ordered->InitMultiRefs(false); // RefCount = 1
 	tcc_instancer2 = new FTccInstancer();
 	tcc_instancer2->InitMultiRefs(false); // RefCount = 1
 	StartPercentRamp.ResizeRampPoints(2);
@@ -165,7 +167,8 @@ void UTcrTreeLeafScatter::SyncParams(FTccNodePtr InNode)
 	delete empty; 
 	delete use_instance_id; 
 		delete tcc_attrib_promote1; 
-		delete assign_piece_id; 
+		delete assign_ins_id_random; 
+		delete assign_ins_id_ordered; 
 	delete tcc_instancer2; 
 }
 void FTcrTreeLeafScatter::Cook() 
@@ -591,7 +594,7 @@ void FTcrTreeLeafScatter::Cook()
 		// Node: use_instance_id
 		use_instance_id->SetInput(0, empty);
 		use_instance_id->Input = int32(UseInstanceId);
-		use_instance_id->NumCases = 2;
+		use_instance_id->NumCases = 3;
 		use_instance_id->Cook();
 		FTccGeometryPtr SwitchResult = nullptr;
 		const int32 Selection = use_instance_id->Input;
@@ -599,6 +602,7 @@ void FTcrTreeLeafScatter::Cook()
 		{
 			case 0:
 			{
+				
 				
 				
 				SwitchResult = nullptr;
@@ -617,12 +621,12 @@ void FTcrTreeLeafScatter::Cook()
 				}
 				
 				{
-					// Node: assign_piece_id
-					assign_piece_id->SetInput(0, empty);
-					assign_piece_id->SetInput(1, tcc_attrib_promote1);
-					assign_piece_id->Cook();
+					// Node: assign_ins_id_random
+					assign_ins_id_random->SetInput(0, empty);
+					assign_ins_id_random->SetInput(1, tcc_attrib_promote1);
+					assign_ins_id_random->Cook();
 					{
-						FTccGeometryPtr Geo0 = assign_piece_id->GetGeoRef(0);
+						FTccGeometryPtr Geo0 = assign_ins_id_random->GetGeoRef(0);
 						FTccGeometryConstPtr Geo1 = tcc_attrib_promote1->GetConstGeoResult(0);
 						FTccAttribPtr attr_instance_id = Geo0->AddPointAttrib("instance_id", ETccAttribType::I);
 						const int32 gseed = Gseed;
@@ -639,7 +643,48 @@ void FTcrTreeLeafScatter::Cook()
 					}
 				}
 				
-				SwitchResult = assign_piece_id->GetGeoResult(0);
+				
+				SwitchResult = assign_ins_id_random->GetGeoResult(0);
+			}
+			break;
+			case 2:
+			{
+				{
+					// Node: tcc_attrib_promote1
+					tcc_attrib_promote1->SetInput(0, GetInput(1));
+					tcc_attrib_promote1->Inname = TEXT("instance_id");
+					tcc_attrib_promote1->Inclass = UTccAttribPromote::PackedGeos;
+					tcc_attrib_promote1->Outclass = UTccAttribPromote::DetailOnlyOnce;
+					tcc_attrib_promote1->DoMax = 1;
+					tcc_attrib_promote1->Cook();
+				}
+				
+				
+				{
+					// Node: assign_ins_id_ordered
+					assign_ins_id_ordered->SetInput(0, empty);
+					assign_ins_id_ordered->SetInput(1, tcc_attrib_promote1);
+					assign_ins_id_ordered->Cook();
+					{
+						FTccGeometryPtr Geo0 = assign_ins_id_ordered->GetGeoRef(0);
+						FTccGeometryConstPtr Geo1 = tcc_attrib_promote1->GetConstGeoResult(0);
+						FTccAttribPtr attr_instance_id = Geo0->AddPointAttrib("instance_id", ETccAttribType::I);
+						const int32 max_id = vex_detaili(Geo1, "max_instance_id");
+						const int32 __mirror = Mirror;
+						const int32 num_pts = __mirror ? vex_npoints(Geo0) / 2 : vex_npoints(Geo0);
+						const float inv_rate = float(max_id + 1) / (num_pts);
+						const int32 _numpt = Geo0->GetNumPoints();
+						for(int32 i = 0; i < _numpt; i++)
+						{
+							const int32 _ptnum = i;
+							int32& _instance_id = attr_instance_id->GetData<int32>()[i];
+							int32 idx = _ptnum % num_pts;
+							_instance_id = (int)(idx * inv_rate);
+						}
+					}
+				}
+				
+				SwitchResult = assign_ins_id_ordered->GetGeoResult(0);
 			}
 			break;
 			default:
@@ -654,7 +699,7 @@ void FTcrTreeLeafScatter::Cook()
 		// Node: tcc_instancer2
 		tcc_instancer2->SetInput(0, GetInput(1));
 		tcc_instancer2->SetInput(1, use_instance_id);
-		tcc_instancer2->Useidattrib = int32(UseInstanceId);
+		tcc_instancer2->Useidattrib = 1;
 		tcc_instancer2->Cook();
 	}
 	SetGeoResult(UTcrTreeLeafScatter::output0, tcc_instancer2->GetGeoResult(0));

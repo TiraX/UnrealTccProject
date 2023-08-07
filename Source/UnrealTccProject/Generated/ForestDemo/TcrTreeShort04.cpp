@@ -399,7 +399,7 @@ void FTcrTreeShort04::Cook()
 		leaves1->ScaleAlongTrunk.AddRampPoint(0.6679f, 0.6667f);
 		leaves1->ScaleAlongTrunk.AddRampPoint(1.0000f, 0.6500f);
 		leaves1->StartPercent = 0.995000f;
-		leaves1->UseInstanceId = 1;
+		leaves1->UseInstanceId = UTcrTreeLeafScatter::Random;
 		leaves1->Method = UTcrTreeLeafScatter::AroundBranch;
 		leaves1->YawOffset = -90.000000f;
 		leaves1->YawOffsetR = 10.100000f;

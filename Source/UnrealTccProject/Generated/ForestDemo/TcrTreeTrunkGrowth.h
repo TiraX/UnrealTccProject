@@ -49,6 +49,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float SegLen = 0.100000f;
 
+	// Tolerance, Length per segment
+	UPROPERTY(EditAnywhere)
+	float Tor = 0.010000f;
+
 	// VOffset, Length per segment
 	UPROPERTY(EditAnywhere)
 	float VOffset = 0.000000f;
@@ -90,6 +94,9 @@ public:
 
 	// Seg Length, Length per segment
 	float SegLen = 0.100000f;
+
+	// Tolerance, Length per segment
+	float Tor = 0.010000f;
 
 	// VOffset, Length per segment
 	float VOffset = 0.000000f;

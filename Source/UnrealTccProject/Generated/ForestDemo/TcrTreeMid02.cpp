@@ -150,7 +150,7 @@ void FTcrTreeMid02::Cook()
 		branch1->Soft.ResizeRampPoints(2);
 		branch1->Soft.AddRampPoint(0.0000f, 0.0000f);
 		branch1->Soft.AddRampPoint(1.0000f, 1.0000f);
-		branch1->MaxCount = 5;
+		branch1->MaxCount = 9;
 		branch1->SegLen = 0.090000f;
 		branch1->StartPercent = 0.950000f;
 		branch1->AgeDis = 0.010000f;
@@ -259,7 +259,7 @@ void FTcrTreeMid02::Cook()
 		branch3->Soft.ResizeRampPoints(2);
 		branch3->Soft.AddRampPoint(0.0000f, 0.0000f);
 		branch3->Soft.AddRampPoint(1.0000f, 1.0000f);
-		branch3->MaxCount = 3;
+		branch3->MaxCount = 2;
 		branch3->SegLen = 0.090000f;
 		branch3->StartPercent = 0.861000f;
 		branch3->AgeDis = 0.070000f;

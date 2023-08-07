@@ -302,7 +302,7 @@ void FTcrTreeShort01::Cook()
 		tcr_tree_leaf_scatter1->ScaleAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 		tcr_tree_leaf_scatter1->Gseed = 2;
 		tcr_tree_leaf_scatter1->AgeDis = 0.050000f;
-		tcr_tree_leaf_scatter1->UseInstanceId = 1;
+		tcr_tree_leaf_scatter1->UseInstanceId = UTcrTreeLeafScatter::Random;
 		tcr_tree_leaf_scatter1->Method = UTcrTreeLeafScatter::AroundBranch;
 		tcr_tree_leaf_scatter1->AroundRange = FVector2f(-60.000000f, 60.000000f);
 		tcr_tree_leaf_scatter1->YawSep = 89.599998f;

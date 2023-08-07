@@ -132,7 +132,7 @@ void FTcrTreeShort05::Cook()
 		tcr_tree_trunk_growth1->MaxAge = 1.700000f;
 		tcr_tree_trunk_growth1->SegLen = 0.040000f;
 		tcr_tree_trunk_growth1->Radius = 0.460000f;
-		tcr_tree_trunk_growth1->CurlForce = 0.286000f;
+		tcr_tree_trunk_growth1->CurlForce = 0.121000f;
 		tcr_tree_trunk_growth1->CurlFreq = 1.000000f;
 		tcr_tree_trunk_growth1->Cook();
 	}
@@ -326,7 +326,7 @@ void FTcrTreeShort05::Cook()
 		tcr_tree_leaf_scatter1->StartPercent = 0.984000f;
 		tcr_tree_leaf_scatter1->AgeDis = 0.002000f;
 		tcr_tree_leaf_scatter1->RadiusShrink = 0.348000f;
-		tcr_tree_leaf_scatter1->UseInstanceId = 1;
+		tcr_tree_leaf_scatter1->UseInstanceId = UTcrTreeLeafScatter::Random;
 		tcr_tree_leaf_scatter1->Method = UTcrTreeLeafScatter::AroundBranch;
 		tcr_tree_leaf_scatter1->PitchRange = FVector2f(23.000000f, -20.400000f);
 		tcr_tree_leaf_scatter1->Scale = 0.514000f;

@@ -38,6 +38,7 @@ void UTcrTreeSimpleLeaf::SyncParams(FTccNodePtr InNode)
 	Node->EnableBend = EnableBend;
 	Node->Bend = Bend;
 	Node->BendOffset = BendOffset;
+	Node->BendLen = BendLen;
 	Node->EnableCurl = EnableCurl;
 	Node->Curl = Curl;
 }
@@ -276,8 +277,8 @@ void FTcrTreeSimpleLeaf::Cook()
 					// Node: bend_z
 					bend_z->SetInput(0, enable_curl);
 					bend_z->Bend = float(Bend);
-					bend_z->Origin = FVector3f(0.000000f, BendOffset, 0.000000f);
-					bend_z->Length = float(Size.Y);
+					bend_z->Origin = FVector3f(0.000000f, BendOffset * Size.Y, 0.000000f);
+					bend_z->Length = float(Size.Y * BendLen);
 					bend_z->Cook();
 				}
 				

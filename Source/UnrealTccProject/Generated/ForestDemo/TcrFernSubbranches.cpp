@@ -52,6 +52,8 @@ void UTcrFernSubbranches::SyncParams(FTccNodePtr InNode)
 	Node->YawRamp = YawRamp;
 	Node->ScaleRamp = ScaleRamp;
 	Node->Gseed = Gseed;
+	Node->EnableId = EnableId;
+	Node->InsId = InsId;
 	Node->TreeAge = TreeAge;
 	Node->Pitch0 = Pitch0;
 	Node->Pitch1 = Pitch1;
@@ -146,6 +148,7 @@ void FTcrFernSubbranches::Cook()
 		trunk_dummy->RadiusShape.AddRampPoint(1.0000f, 0.5000f);
 		trunk_dummy->TreeAge = float(TreeAge);
 		trunk_dummy->MaxAge = 0.100000f;
+		trunk_dummy->VOffset = -0.050000f;
 		trunk_dummy->Radius = float(Radius);
 		trunk_dummy->Cook();
 	}
@@ -284,6 +287,8 @@ void FTcrFernSubbranches::Cook()
 		// Node: pack_subbranch
 		pack_subbranch->SetInput(0, tcc_merge0);
 		pack_subbranch->GeoName = TEXT("fern_subbranch");
+		pack_subbranch->EnableId = int32(EnableId);
+		pack_subbranch->InsId = int32(InsId);
 		pack_subbranch->Cook();
 	}
 	SetGeoResult(UTcrFernSubbranches::output0, pack_subbranch->GetGeoResult(0));

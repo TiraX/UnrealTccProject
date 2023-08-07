@@ -76,8 +76,10 @@ void UTcrTreeBranchGrowth::SyncParams(FTccNodePtr InNode)
 	Node->MaxAge = MaxAge;
 	Node->MaxAgeShowAdv = MaxAgeShowAdv;
 	Node->MaxAgeAdv = MaxAgeAdv;
+	Node->MaxAgeLocalRamp = MaxAgeLocalRamp;
 	Node->YawOffset = YawOffset;
 	Node->YawOffsetR = YawOffsetR;
+	Node->AroundRange = AroundRange;
 	Node->Yaw = Yaw;
 	Node->YawR = YawR;
 	Node->Pitch0 = Pitch0;
@@ -260,6 +262,7 @@ void FTcrTreeBranchGrowth::Cook()
 						const float tree_age = vex_detailf(Geo1, "global_tree_age");
 						const float max_age_base = MaxAge;
 						const int32 max_age_adv = MaxAgeAdv;
+						const int32 max_age_local_ramp = MaxAgeLocalRamp;
 						const int32 max_count_base = MaxCount;
 						const int32 max_count_adv = MaxCountAdv;
 						const float seg_len_override = SegLen;
@@ -268,6 +271,8 @@ void FTcrTreeBranchGrowth::Cook()
 						const int32 start_range_adv = StartPercentAdv;
 						const float sep_range_base = AgeDis;
 						const int32 sep_range_adv = AgeDisAdv;
+						const FVector2f yaw_range = vex_radians(AroundRange);
+						const float yaw_range_angle = yaw_range.Y - yaw_range.X;
 						const float yaw_step = vex_radians(Yaw);
 						const float yaw_step_r = vex_radians(YawR);
 						const float yaw_offset = vex_radians(YawOffset);
@@ -402,21 +407,18 @@ void FTcrTreeBranchGrowth::Cook()
 						    // if (DoU > 0.99f)
 						    //     up = set(0, 0, 1);
 						    // vector axis = cross(dir, up);
-						float percent = 0.f;
-						if(use_parent_percent)
-						percent = parent_percent;
-						else
-						{
+						float local_percent = 0.f;
 						if(max_ages_generated == branch_start)
-						percent = 0.f;
+						local_percent = 0.f;
 						else
-						percent = (age - branch_start) / (max_ages_generated - branch_start);
-						}
+						local_percent = (age - branch_start) / (max_ages_generated - branch_start);
+						float percent = use_parent_percent > 0 ? parent_percent : local_percent;
 						    
 						float branch_max_age = max_age_base;
 						if(max_age_adv > 0)
 						{
-						branch_max_age *= MaxAgeRamp.Lookup(percent);
+						float max_age_percent = max_age_local_ramp > 0 ? local_percent : percent;
+						branch_max_age *= MaxAgeRamp.Lookup(max_age_percent);
 						}
 						float pitch_start = pitch_start_base;
 						if(pitch_start_adv > 0)
@@ -549,6 +551,11 @@ void FTcrTreeBranchGrowth::Cook()
 						if(yaw_step_r > 0.f)
 						{
 						yaw += vex_fit01(vex_rand(seed + 3),  - yaw_step_r, yaw_step_r);
+						}
+						if(yaw_range_angle > 0.f)
+						{
+						        // limit to around_range
+						yaw = vex_frac(yaw / yaw_range_angle) * yaw_range_angle + yaw_range.X;
 						}
 						float age_step = sep_range_base;
 						if(sep_range_adv > 0)

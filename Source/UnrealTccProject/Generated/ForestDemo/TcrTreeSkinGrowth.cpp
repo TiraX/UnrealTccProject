@@ -23,6 +23,7 @@ void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode)
 {
 	TSharedPtr<FTcrTreeSkinGrowth> Node = StaticCastSharedPtr<FTcrTreeSkinGrowth>(InNode);
 	Node->Gseed = Gseed;
+	Node->Endcaptype = Endcaptype;
 	Node->Cols = Cols;
 	Node->Incroll = Incroll;
 	Node->Noise = Noise;
@@ -45,8 +46,6 @@ void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode)
 		noise_worley->InitMultiRefs(false); // RefCount = 1
 	tcc_attrib_delete1 = new FTccAttribDelete();
 	tcc_attrib_delete1->InitMultiRefs(false); // RefCount = 1
-	tcc_normal2 = new FTccNormal();
-	tcc_normal2->InitMultiRefs(false); // RefCount = 1
 }
  FTcrTreeSkinGrowth::~FTcrTreeSkinGrowth() 
 {
@@ -56,7 +55,6 @@ void UTcrTreeSkinGrowth::SyncParams(FTccNodePtr InNode)
 		delete noise_perlin; 
 		delete noise_worley; 
 	delete tcc_attrib_delete1; 
-	delete tcc_normal2; 
 }
 void FTcrTreeSkinGrowth::Cook() 
 {
@@ -65,6 +63,7 @@ void FTcrTreeSkinGrowth::Cook()
 		tcc_poly_wire1->SetInput(0, GetInput(0));
 		tcc_poly_wire1->EnableRadiusAttrib = 1;
 		tcc_poly_wire1->RAttrib = TEXT("radius");
+		tcc_poly_wire1->Endcaptype = int32(Endcaptype);
 		tcc_poly_wire1->Divs = int32(Cols);
 		tcc_poly_wire1->Twist = float(Incroll);
 		tcc_poly_wire1->DoUv = 1;
@@ -176,11 +175,6 @@ void FTcrTreeSkinGrowth::Cook()
 		tcc_attrib_delete1->Dtldel = TEXT("*");
 		tcc_attrib_delete1->Cook();
 	}
-	{
-		// Node: tcc_normal2
-		tcc_normal2->SetInput(0, tcc_attrib_delete1);
-		tcc_normal2->Cook();
-	}
-	SetGeoResult(UTcrTreeSkinGrowth::output0, tcc_normal2->GetGeoResult(0));
+	SetGeoResult(UTcrTreeSkinGrowth::output0, tcc_attrib_delete1->GetGeoResult(0));
 }
 

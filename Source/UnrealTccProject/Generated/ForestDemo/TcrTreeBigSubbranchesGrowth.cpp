@@ -434,6 +434,7 @@ void FTcrTreeBigSubbranchesGrowth::Cook()
 		// Node: tcc_instancer1
 		tcc_instancer1->SetInput(0, tcr_tree_simple_leaf1);
 		tcc_instancer1->SetInput(1, foreach_begin1);
+		tcc_instancer1->Idattrib = TEXT("variant");
 		tcc_instancer1->Cook();
 	}
 	{

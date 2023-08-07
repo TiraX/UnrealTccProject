@@ -345,7 +345,7 @@ void FTcrTreeShort02::Cook()
 		leaf_top->ScaleAlongTrunk.AddRampPoint(1.0000f, 1.0000f);
 		leaf_top->StartPercent = 0.450000f;
 		leaf_top->AgeDis = 0.004000f;
-		leaf_top->UseInstanceId = 1;
+		leaf_top->UseInstanceId = UTcrTreeLeafScatter::Random;
 		leaf_top->Method = UTcrTreeLeafScatter::AroundBranch;
 		leaf_top->PitchRange = FVector2f(0.000000f, 55.000000f);
 		leaf_top->Scale = 0.704000f;
@@ -573,7 +573,7 @@ void FTcrTreeShort02::Cook()
 		leaf_bottom->MaxCount = 22;
 		leaf_bottom->StartPercent = 0.150000f;
 		leaf_bottom->AgeDis = 0.004000f;
-		leaf_bottom->UseInstanceId = 1;
+		leaf_bottom->UseInstanceId = UTcrTreeLeafScatter::Random;
 		leaf_bottom->Method = UTcrTreeLeafScatter::AroundBranch;
 		leaf_bottom->PitchRange = FVector2f(0.000000f, 20.000000f);
 		leaf_bottom->Scale = 0.609000f;

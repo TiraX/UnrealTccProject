@@ -29,6 +29,10 @@ public:
 	virtual FTccNodePtr CreateNode() override;
 	virtual void SyncParams(FTccNodePtr InNode) override;
 
+	// Radius Curve
+	UPROPERTY(EditAnywhere)
+	FTccRampFloat RadRamp = ETccRampInterp::Linear;
+
 	// Shape Left
 	UPROPERTY(EditAnywhere)
 	FTccRampFloat ShapeLeft = ETccRampInterp::Linear;
@@ -57,6 +61,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 USegs = 4;
 
+	// Angle
+	UPROPERTY(EditAnywhere)
+	float UAngle = 0.000000f;
+
 	// V Len
 	UPROPERTY(EditAnywhere)
 	float VLen = 1.000000f;
@@ -65,17 +73,37 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 VSegs = 4;
 
+	// Angle
+	UPROPERTY(EditAnywhere)
+	float VAngle = 0.000000f;
+
 	// Radius
 	UPROPERTY(EditAnywhere)
 	float Radius = 0.020000f;
+
+	// Show Curve
+	UPROPERTY(EditAnywhere)
+	int32 ShowRadiusCurve = 0;
 
 	// Stem
 	UPROPERTY(EditAnywhere)
 	float Stem = 0.050000f;
 
+	// U Bend
+	UPROPERTY(EditAnywhere)
+	float UBend = 0.000000f;
+
+	// Offset
+	UPROPERTY(EditAnywhere)
+	float UBendOffset = 0.000000f;
+
 	// V Bend
 	UPROPERTY(EditAnywhere)
 	float VBend = 15.000000f;
+
+	// Offset
+	UPROPERTY(EditAnywhere)
+	float VBendOffset = 0.000000f;
 
 	// Mirror
 	UPROPERTY(EditAnywhere)
@@ -85,6 +113,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float YawBeginLeft = 0.000000f;
 
+	// Yaw End
+	UPROPERTY(EditAnywhere)
+	float YawEndLeft = -90.000000f;
+
 	// Show Adv
 	UPROPERTY(EditAnywhere)
 	int32 YawAdvLeft = 0;
@@ -92,6 +124,10 @@ public:
 	// Yaw Begin
 	UPROPERTY(EditAnywhere)
 	float YawBeginRight = 0.000000f;
+
+	// Yaw End
+	UPROPERTY(EditAnywhere)
+	float YawEndRight = -90.000000f;
 
 	// Show Adv
 	UPROPERTY(EditAnywhere)
@@ -108,11 +144,10 @@ public:
 };
 
 class FTccLine;
-class FTccPolyFrame;
-class FTccVex;
-class FTccAttribDelete;
-class FTccCopyToPoint;
 class FTccBend;
+class FTccVex;
+class FTccBlastByFeature;
+class FTccCopyToPoint;
 class FTccForBlock;
 class FTccSkin;
 class FTccPolyWire;
@@ -124,6 +159,9 @@ public:
 	virtual ~FTcrBroadLeaf() ;
 
 	virtual void Cook() override;
+
+	// Radius Curve
+	FTccRampFloat RadRamp = ETccRampInterp::Linear;
 
 	// Shape Left
 	FTccRampFloat ShapeLeft = ETccRampInterp::Linear;
@@ -146,20 +184,38 @@ public:
 	// U Segs
 	int32 USegs = 4;
 
+	// Angle
+	float UAngle = 0.000000f;
+
 	// V Len
 	float VLen = 1.000000f;
 
 	// V Segs
 	int32 VSegs = 4;
 
+	// Angle
+	float VAngle = 0.000000f;
+
 	// Radius
 	float Radius = 0.020000f;
+
+	// Show Curve
+	int32 ShowRadiusCurve = 0;
 
 	// Stem
 	float Stem = 0.050000f;
 
+	// U Bend
+	float UBend = 0.000000f;
+
+	// Offset
+	float UBendOffset = 0.000000f;
+
 	// V Bend
 	float VBend = 15.000000f;
+
+	// Offset
+	float VBendOffset = 0.000000f;
 
 	// Mirror
 	int32 Mirror = 0;
@@ -167,11 +223,17 @@ public:
 	// Yaw Begin
 	float YawBeginLeft = 0.000000f;
 
+	// Yaw End
+	float YawEndLeft = -90.000000f;
+
 	// Show Adv
 	int32 YawAdvLeft = 0;
 
 	// Yaw Begin
 	float YawBeginRight = 0.000000f;
+
+	// Yaw End
+	float YawEndRight = -90.000000f;
 
 	// Show Adv
 	int32 YawAdvRight = 0;
@@ -184,17 +246,21 @@ public:
 
 	FTccLine* u_line = nullptr;
 
+	FTccBend* u_bend = nullptr;
+
+	FTccVex* info = nullptr;
+
 	FTccLine* v_line = nullptr;
 
-	FTccPolyFrame* dir = nullptr;
+	FTccVex* assign_id = nullptr;
+
+	FTccBlastByFeature* tcc_blast_by_feature1 = nullptr;
 
 	FTccVex* trans_left = nullptr;
 
-	FTccAttribDelete* delte_dir = nullptr;
-
 	FTccCopyToPoint* tcc_copy_to_point1 = nullptr;
 
-	FTccBend* tcc_bend1 = nullptr;
+	FTccBend* v_bend_left = nullptr;
 
 	FTccForBlock* foreach_begin1 = nullptr;
 
@@ -204,11 +270,9 @@ public:
 
 	FTccVex* trans_right = nullptr;
 
-	FTccAttribDelete* delte_dir1 = nullptr;
-
 	FTccCopyToPoint* tcc_copy_to_point2 = nullptr;
 
-	FTccBend* tcc_bend3 = nullptr;
+	FTccBend* v_bend_right = nullptr;
 
 	FTccForBlock* foreach_begin2 = nullptr;
 

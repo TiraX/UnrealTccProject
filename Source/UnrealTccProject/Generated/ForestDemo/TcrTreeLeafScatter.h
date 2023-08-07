@@ -18,6 +18,12 @@ public:
 		output0,  // From tcc_instancer2
 		OUT_Count,
 	};
+	enum EUseInstanceId
+	{
+		None,
+		Random,
+		Ordered,
+	};
 	enum EMethod
 	{
 		LayOnBranch,
@@ -90,7 +96,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 AgeDisShowAdv = 0;
 
-	// Advanced
+	// Enable
 	UPROPERTY(EditAnywhere)
 	int32 AgeDisAdv = 0;
 
@@ -108,7 +114,7 @@ public:
 
 	// Use Instance Id
 	UPROPERTY(EditAnywhere)
-	int32 UseInstanceId = 0;
+	int32 UseInstanceId = UTcrTreeLeafScatter::None;
 
 	// Method
 	UPROPERTY(EditAnywhere)
@@ -231,7 +237,7 @@ public:
 	// Show Advanced
 	int32 AgeDisShowAdv = 0;
 
-	// Advanced
+	// Enable
 	int32 AgeDisAdv = 0;
 
 	// Mirror
@@ -244,7 +250,7 @@ public:
 	float RadiusShrink = 0.800000f;
 
 	// Use Instance Id
-	int32 UseInstanceId = 0;
+	int32 UseInstanceId = UTcrTreeLeafScatter::None;
 
 	// Method
 	int32 Method = UTcrTreeLeafScatter::LayOnBranch;
@@ -327,7 +333,9 @@ public:
 
 	FTccAttribPromote* tcc_attrib_promote1 = nullptr;
 
-	FTccVex* assign_piece_id = nullptr;
+	FTccVex* assign_ins_id_random = nullptr;
+
+	FTccVex* assign_ins_id_ordered = nullptr;
 
 	FTccInstancer* tcc_instancer2 = nullptr;
 

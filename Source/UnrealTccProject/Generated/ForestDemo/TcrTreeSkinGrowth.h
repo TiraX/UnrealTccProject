@@ -15,12 +15,18 @@ class UNREALTCCPROJECT_API UTcrTreeSkinGrowth : public UTccRecipeGeoDefine
 public:
 	enum EOutputs
 	{
-		output0,  // From tcc_normal2
+		output0,  // From tcc_attrib_delete1
 		OUT_Count,
+	};
+	enum EEndCapType
+	{
+		NoCaps,
+		FlatTriangles,
+		Grid,
 	};
 	enum ENoise
 	{
-		None,
+		NoNoise,
 		Perlin,
 		Worley,
 	};
@@ -39,6 +45,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 Gseed = 0;
 
+	// End Cap Type
+	UPROPERTY(EditAnywhere)
+	int32 Endcaptype = UTcrTreeSkinGrowth::NoCaps;
+
 	// Tube Columns
 	UPROPERTY(EditAnywhere)
 	int32 Cols = 36;
@@ -49,7 +59,7 @@ public:
 
 	// Noise
 	UPROPERTY(EditAnywhere)
-	int32 Noise = UTcrTreeSkinGrowth::None;
+	int32 Noise = UTcrTreeSkinGrowth::NoNoise;
 
 	// Amp
 	UPROPERTY(EditAnywhere)
@@ -77,6 +87,9 @@ public:
 	// Seed
 	int32 Gseed = 0;
 
+	// End Cap Type
+	int32 Endcaptype = UTcrTreeSkinGrowth::NoCaps;
+
 	// Tube Columns
 	int32 Cols = 36;
 
@@ -84,7 +97,7 @@ public:
 	float Incroll = 0.000000f;
 
 	// Noise
-	int32 Noise = UTcrTreeSkinGrowth::None;
+	int32 Noise = UTcrTreeSkinGrowth::NoNoise;
 
 	// Amp
 	float Amp = 0.100000f;
@@ -103,8 +116,6 @@ public:
 	FTccVex* noise_worley = nullptr;
 
 	FTccAttribDelete* tcc_attrib_delete1 = nullptr;
-
-	FTccNormal* tcc_normal2 = nullptr;
 
 };
 
